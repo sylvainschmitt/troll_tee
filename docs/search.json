@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "TROLL TEE",
+    "section": "",
+    "text": "Introduction\nThe general idea is to test the ability of TROLL 4.0 (Maréchaux et al. 2024; Schmitt et al. 2024) to simulate a Throughfall Exclusion Experiment (TEE) in Amazonia based on the Tapajos experiment (Nepstad et al. 2002) compared to previous model intercomparisons (Powell et al. 2013) to assess its ability to model the response of tropical moist forests (TMF) to climate change (Joetzjer et al. 2014). Note: Water stress may be underrepresented due to the potential for pre-dawn drought, and this may be an opportunity to improve its representation with explicit tree hydraulic resistance."
+  },
+  {
+    "objectID": "index.html#poeple",
+    "href": "index.html#poeple",
+    "title": "TROLL TEE",
+    "section": "Poeple",
+    "text": "Poeple\n\nSylvain Schmitt (sylvain.schmitt@cirad.fr)\nJérôme Chave (jerome.chave@univ-tlse3.fr)\nIsabelle Maréchaux (isabelle.marechaux@inrae.fr)\n\n\n\n\n\nJoetzjer, E., C. Delire, H. Douville, P. Ciais, B. Decharme, R. Fisher, B. Christoffersen, et al. 2014. “Predicting the Response of the Amazon Rainforest to Persistent Drought Conditions Under Current and Future Climates: A Major Challenge for Global Land Surface Models.” Geoscientific Model Development 7 (6): 2933–50. https://doi.org/10.5194/gmd-7-2933-2014.\n\n\nMaréchaux, Isabelle, Fabian Jörg Fischer, Sylvain Schmitt, and Jérôme Chave. 2024. “TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model  Part 1: Model Description.” http://dx.doi.org/10.5194/egusphere-2024-3104.\n\n\nNepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot, D. Markewitz, R. Figueiredo, et al. 2002. “The Effects of Partial Throughfall Exclusion on Canopy Processes, Aboveground Production, and Biogeochemistry of an Amazon Forest.” Journal of Geophysical Research: Atmospheres 107 (D20). https://doi.org/10.1029/2001jd000360.\n\n\nPowell, Thomas L., David R. Galbraith, Bradley O. Christoffersen, Anna Harper, Hewlley M. A. Imbuzeiro, Lucy Rowland, Samuel Almeida, et al. 2013. “Confronting Model Predictions of Carbon Fluxes with Measurements of Amazon Forests Subjected to Experimental Drought.” New Phytologist 200 (2): 350–65. https://doi.org/10.1111/nph.12390.\n\n\nSchmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. “TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model  Part 2: Model Evaluation for Two Amazonian Sites.” http://dx.doi.org/10.5194/egusphere-2024-3106."
+  },
+  {
+    "objectID": "01_data.html",
+    "href": "01_data.html",
+    "title": "Data",
+    "section": "",
+    "text": "Water\n\nLBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Forcing Data https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1177 \nLBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004 https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1167 \nLBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1169 \nLBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1196 \nA lot use km 67 for control and Rainfall Exclusion for experiment\n\nLogging\n\nLBA-ECO CD-04 Logging Damage, km 83 Tower Site, Tapajos National Forest, Brazil https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1038 \nLBA-ECO CD-04 Soil Respiration, km 83 Tower Site, Tapajos National Forest, Brazil https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1039 \nLBA-ECO CD-04 LAI Estimated from Photos, km 83 Tower Site, Tapajos National Forest https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1103 \nbeaucoup … utiliser recherche sur km 83"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Joetzjer, E., C. Delire, H. Douville, P. Ciais, B. Decharme, R. Fisher,\nB. Christoffersen, et al. 2014. “Predicting the Response of the\nAmazon Rainforest to Persistent Drought Conditions Under Current and\nFuture Climates: A Major Challenge for Global Land Surface\nModels.” Geoscientific Model Development 7 (6): 2933–50.\nhttps://doi.org/10.5194/gmd-7-2933-2014.\n\n\nMaréchaux, Isabelle, Fabian Jörg Fischer, Sylvain Schmitt, and Jérôme\nChave. 2024. “TROLL 4.0: Representing Water and Carbon Fluxes,\nLeaf Phenology and Intraspecific Trait Variation in a Mixed-Species\nIndividual-Based Forest Dynamics Model  Part 1: Model\nDescription.” http://dx.doi.org/10.5194/egusphere-2024-3104.\n\n\nNepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot,\nD. Markewitz, R. Figueiredo, et al. 2002. “The Effects of Partial\nThroughfall Exclusion on Canopy Processes, Aboveground Production, and\nBiogeochemistry of an Amazon Forest.” Journal of Geophysical\nResearch: Atmospheres 107 (D20). https://doi.org/10.1029/2001jd000360.\n\n\nPowell, Thomas L., David R. Galbraith, Bradley O. Christoffersen, Anna\nHarper, Hewlley M. A. Imbuzeiro, Lucy Rowland, Samuel Almeida, et al.\n2013. “Confronting Model Predictions of Carbon Fluxes with\nMeasurements of Amazon Forests Subjected to Experimental\nDrought.” New Phytologist 200 (2): 350–65. https://doi.org/10.1111/nph.12390.\n\n\nSchmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion\nBoisseaux, Damien Bonal, Benoit Burban, et al. 2024. “TROLL 4.0:\nRepresenting Water and Carbon Fluxes, Leaf Phenology, and Intraspecific\nTrait Variation in a Mixed-Species Individual-Based Forest Dynamics\nModel  Part 2: Model Evaluation for Two Amazonian\nSites.” http://dx.doi.org/10.5194/egusphere-2024-3106."
+  }
+]
