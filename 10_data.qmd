@@ -1,0 +1,70 @@
+# Data {.unnumbered}
+
+We propose to take advantage of the extensive data collection from the Lartge Scale Biosphere-Atmosphere Experiment (LBA-ECO, <https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11>) available at the Oak Ridge National Laboratory Distributed Active Archive Center (ORNL DAAC).
+
+We differentiated data for three purposes according to three available sites near Santarém, Para, Brazil:
+
+-   **Undisturbed** data from the undisturbed plots, mainly at the km-67 site, used for model inputs and undisturbed model simulations validation
+-   **TEE** (Throughfall Exclusion Experiment) data from the TEE at the km 67 Seca Floresta site, used for model inputs and TEE model simulations validation. Note that control plots can be used as undisturbed data.
+-   **Logged** data from the TEE at the km-83 site, that might be later used for model inputs and logging model simulations validation. Note that control plots can be used as undisturbed data. Note that this is just to be listed but not to be used in this project.
+
+We further differentiated data depending on their usage following @schmitt2024 analyses:
+
+-   **Species** [input]{.underline} data for species parametrization mainly based on functional traits measurements.
+-   **Climate** [input]{.underline} data for simulation forcing mainly based on weather station and eddy flux towers.
+-   **Soil** [input]{.underline} data for simulation forcing.
+-   **Forest** [evaluation]{.underline} data for forest structure, composition, and dynamics evaluation mainly based on forest inventories (but can also include others such as lidar data).
+-   **Fluxes** [evaluation]{.underline} data for forest carbon, water, and leaf fluxes based on eddy flux data, phenological data, litter data, and soil measurements.
+-   **Microclimate** [evaluation]{.underline} data for finer microclimatic information not included in fluxes, mainly carbon, water and temperature vertical profiles. *Not sure if it will be included in the end or not.*
+
+Note that some datasets include data covering several usage. Below are listed all data by purpose and usage and they are illustrated in following pages.
+
+## Undisturbed
+
+Done
+
+-   **Forest &** **Fluxes** - LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004: *LAI, DBH, litterfall*
+
+To do
+
+-   LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data
+-   LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001
+-   LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006
+-   LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003 (species)
+-   LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil (species)
+-   LBA-ECO CD-03 Mesoscale Meteorological Data, Santarem Region, Para, Brazil: 1998-2006 (climate)
+-   LBA-ECO CD-10 CO2 & H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest (climate, fluxes)
+-   LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (fluxes)
+-   LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)
+-   LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)
+-   LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)
+-   LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)
+
+## TEE
+
+Done
+
+-   **Climate, Fluxes, & microclimate** - LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest: *precipitations, relative humidity, air temperature and dew point vertical profiles, volumetric water content*
+-   **Fluxes** - LBA-ECO ND-02 Soil Volumetric Water Content, Tapajos National Forest, Brazil: *volumetric water content*
+-   **Forest & Fluxes** - LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest: *LAI, DBH, mortality, litterfall*
+
+To do
+
+-   LBA-ECO ND-30 Water Chemistry, Rainfall Exclusion, km 67, Tapajos National Forest
+
+## Logged
+
+Logged data are listed but not illustrated in the data, there are only here for information for eventual future projects.
+
+-   **Climate** - LBA-ECO CD-04 Meteorological and Flux Data, km 83 Tower Site, Tapajos National Forest (Climate, fluxes)
+-   **Forest** - LBA-ECO TG-07 Ground-based Biometry Data at km 83 Site, Tapajos National Forest: 1997 (forest)
+-   **Forest** - LBA-ECO CD-04 Logging Damage, km 83 Tower Site, Tapajos National Forest, Brazil
+-   **Forest** - LBA-ECO CD-11 Biophysical Measurements of Logged and Fire-Treated Forests, Brazil
+-   **Forest** - LBA-ECO CD-04 Biomass Survey, km 83 Tower Site, Tapajos National Forest, Brazil
+-   **Forest** - LBA-ECO CD-04 Dendrometry, km 83 Tower Site, Tapajos National Forest, Brazil
+-   **Fluxes** - LBA-ECO CD-04 LAI Estimated from Photos, km 83 Tower Site, Tapajos National Forest
+-   **Fluxes** - LBA-ECO CD-04 Soil Respiration, km 83 Tower Site, Tapajos National Forest, Brazil
+-   **Fluxes** - LBA-ECO CD-04 Leaf Area Index, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)
+-   **Fluxes** - LBA-ECO CD-04 Leaf Litter Data, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)
+-   **Fluxes** - LBA-ECO CD-04 Soil Moisture Data, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)
+-   **Climate & Fluxes** - LBA-ECO CD-04 CO2 and Heat Flux, km 83 Gap Tower Site, Tapajos National Forest

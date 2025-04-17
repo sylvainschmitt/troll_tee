@@ -1,0 +1,40 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Climate {.unnumbered}
+
+## Undisturbed
+
+## TEE
+
+### LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest
+
+Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA http://dx.doi.org/10.3334/ORNLDAAC/1169
+
+```{r rainfall}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv",
+         skip = 12, na = "-9999") %>% 
+  rename_all(tolower) %>% 
+  mutate(date = paste0(str_sub(date, 1,4), "-",
+                       str_sub(date, 5,6), "-",
+                       str_sub(date, 7,8))) %>% 
+  mutate(date = as_date(date)) %>% 
+  gather(site, precipitation, -date, -exclusion) %>% 
+  mutate(site = recode(site, 
+                       "ppt_casa" = "Casa Onca (~1-km)",
+                       "ppt_ree_tower" = "Control plot tower")) %>% 
+  ggplot(aes(date, precipitation, fill = exclusion == 1)) +
+  geom_col() +
+  theme_bw() +
+  facet_wrap(~ site, nrow = 2) +
+  xlab("") +
+  ylab("Daily rainfall [mm]") +
+  scale_fill_discrete("Exclusion") +
+  theme(legend.position = "bottom")
+```
+
+Precipitation data to force the model.

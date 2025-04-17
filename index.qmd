@@ -1,6 +1,6 @@
 # Introduction {.unnumbered}
 
-The general idea is to test the ability of TROLL 4.0 [@maréchaux2024;@schmitt2024] to simulate a Throughfall Exclusion Experiment (TEE) in Amazonia based on the Tapajos experiment [@nepstad2002] compared to previous model intercomparisons [@powell2013] to assess its ability to model the response of tropical moist forests (TMF) to climate change [@joetzjer2014]. Note: Water stress may be underrepresented due to the potential for pre-dawn drought, and this may be an opportunity to improve its representation with explicit tree hydraulic resistance.
+The general idea is to test the ability of TROLL 4.0 [@maréchaux2024; @schmitt2024] to simulate a Throughfall Exclusion Experiment (TEE) in Amazonia based on the Tapajos experiment [@nepstad2002] compared to previous model intercomparisons [@powell2013] to assess its ability to model the response of tropical moist forests (TMF) to climate change [@joetzjer2014]. Note: Water stress may be underrepresented due to the potential for pre-dawn drought, and this may be an opportunity to improve its representation with explicit tree hydraulic resistance.
 
 ## Poeple
 

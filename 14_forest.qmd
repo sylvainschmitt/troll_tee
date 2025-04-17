@@ -1,0 +1,92 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Forest {.unnumbered}
+
+## Undisturbed
+
+### LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest
+
+Cite: Costa, M.H. and W. Cohen. 2013. LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. http://dx.doi.org/10.3334/ORNLDAAC/1167
+
+```{r dendrometer}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Dendrometer_measurements_2003_2004.csv", 
+         skip = 24, na = "-9999") %>% 
+  rename_all(tolower) %>% 
+  gather(date, dendrometer,
+         -plot, -subplot, -tree_no, -diameter, -comments) %>% 
+  mutate(date = gsub("band_", "", date)) %>% 
+  mutate(month = str_sub(date,1,2),
+         year = str_sub(date,3,6)) %>% 
+  mutate(date = as_date(paste0(year, "-", month, "-01"))) %>% 
+  select(-year, -month) %>% 
+  ggplot(aes(date, dendrometer, 
+             group = paste(plot, subplot, tree_no))) +
+  geom_line(alpha = .2) +
+  theme_bw() +
+  xlab("") +
+  ylab("Diameter (dendrometer) [ mm ]")
+```
+
+Dendrometer data available for fine temporal scale dynamics assessment.
+
+## TEE
+
+### LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest
+
+Cite: Nepstad, D.C. and P.R. Moutinho. 2013. LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA http://dx.doi.org/10.3334/ORNLDAAC/1196
+
+```{r dendrometer2}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", 
+         skip = 19, na = "-9999") %>% 
+  rename_all(tolower) %>% 
+  select(treatment, tree_id, life_form, family, genus_species, common_name,
+         height_m, starts_with("dbh_"), date_death, field_notes) %>% 
+  gather(date, dbh,
+         -treatment, -tree_id, -life_form, -family, 
+         -genus_species, -common_name,
+         -height_m, -dbh_init,  -date_death, -field_notes) %>% 
+  mutate(date = gsub("dbh_", "", date)) %>% 
+  mutate(month = str_sub(date,1,3),
+         year = str_sub(date,4,5)) %>% 
+  mutate(date = paste0(year, "-", month, "-01")) %>% 
+  mutate(date = as_date(date)) %>% 
+  select(-year, -month) %>% 
+  filter(life_form == "tree") %>% 
+  ggplot(aes(date, dbh, 
+             col = genus_species,
+             group = paste(treatment, tree_id))) +
+  geom_line(alpha = .2) +
+  theme_bw() +
+  xlab("") +
+  facet_wrap(~ treatment) +
+  ylab("Diameter at breast height [ cm ]") +
+  scale_color_discrete(guide = "none") +
+  scale_y_log10()
+```
+
+Can be used to assess TEE on dynamics simulation in TROLL.
+
+```{r inventory}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", skip = 15, na = "-9999") %>% 
+  rename_all(tolower) %>% 
+  filter(life_form == "TREE") %>% 
+  ggplot(aes(dbh_2000, fill = obs_final)) +
+  geom_histogram() +
+  theme_bw() +
+  facet_wrap(~ treatment, nrow = 2) +
+  scale_x_log10() +
+  scale_y_log10() +
+  ylab("") + xlab("DBH 2000 [ cm ]") +
+  scale_fill_discrete("")
+```
+
+To assess treatment effect on mortality and growth (DBH 2004 available).

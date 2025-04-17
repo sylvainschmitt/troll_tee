@@ -1,0 +1,37 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Microclimate {.unnumbered}
+
+## Undisturbed
+
+## TEE
+
+### LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest
+
+Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line \[[http://daac.ornl.gov\]](http://daac.ornl.gov]) from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA <http://dx.doi.org/10.3334/ORNLDAAC/1169>
+
+```{r microclim}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv",
+         skip = 16, na = "-9999") %>% 
+  rename_all(tolower) %>% 
+  mutate(date = paste0(str_sub(date, 1,4), "-",
+                       str_sub(date, 5,6), "-",
+                       str_sub(date, 7,8))) %>% 
+  mutate(datetime = as_datetime(paste(date, time))) %>% 
+  select(-date, -time) %>% 
+  gather(variable, value, -treatment, -sensor_code, -location, -height, -datetime) %>% 
+  ggplot(aes(datetime, value, group = sensor_code, col = paste(treatment, location))) +
+  geom_line() +
+  facet_wrap(~ paste(variable, height, "m"), nrow = 3, scales = "free_y") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  scale_color_discrete("") +
+  theme(axis.title = element_blank())
+```
+
+Possible evaluation data for microclimate buffering.
