@@ -173,13 +173,30 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+            <a href="./20_experiments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Experiments</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21_dummy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dummy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -224,6 +241,9 @@ div.csl-indent {
 
 </header>
 
+<blockquote class="blockquote">
+<p><strong>Summary</strong>. We propose to take advantage of the extensive data collection from the Large Scale Biosphere-Atmosphere Experiment near Santarém, Para, Brazil available at the Oak Ridge National Laboratory Distributed Active Archive Center, differentiating data from undisturbed plots and Throughfall Exclusion Experiment (TEE) used for model inputs and simulations validation. For species input, only LA, SLA, C, and N values are available and alometric parameters can be derived from inventories (see Data/Forest). Additional data will be needed from TRY <span class="citation" data-cites="kattge2019">(<a href="references.html#ref-kattge2019" role="doc-biblioref">Kattge et al. 2019</a>)</span>, TALLO <span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, and <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. For climate input data are available for both Km67 and Km83 with needed TROLL inputs: rainfall, snet, temperature, wind speed, and VPD (to derive from humidity). But we need to explore how to model the effect of TEE using <span class="citation" data-cites="nepstad2002">D. C. Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span> and <span class="citation" data-cites="nepstad2007">Daniel C. Nepstad et al. (<a href="references.html#ref-nepstad2007" role="doc-biblioref">2007</a>)</span> validating with the measured dynamics of soil water. For soil input, there are no data available but we can use the data from @schmitt2024 gathered by Jeremy Lichstein (pers. com.). For forest structure, composition and dynamics evaluation, we have spatialized repeated inventories with taxonomy for forest dynamics (recruitment, growth, mortality), structure, and composition including control and TEE plots. We can also leverage back LIDAR scanning from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. For forest fluxes evaluation, we have eddy flux data (evapotranspiration, gross primary productivity, PAR), soil water, litterfall, and leaf area index including control and TEE plots. Midday and predawn potential are available for a few species to assess individual tree hydric stress and stomatal control in the model. We do not schedule microclimate evaluation, however, we have access to vertiacal profiles of H2O, temperature, Dewpoint and relative humidity including control and TEE plots. The next step is thus to consolidate inputs and evaluation data.</p>
+</blockquote>
 <p>We propose to take advantage of the extensive data collection from the Lartge Scale Biosphere-Atmosphere Experiment (LBA-ECO, <a href="https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11" class="uri">https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11</a>) available at the Oak Ridge National Laboratory Distributed Active Archive Center (ORNL DAAC).</p>
 <p>We differentiated data for three purposes according to three available sites near Santarém, Para, Brazil:</p>
 <ul>
@@ -245,22 +265,18 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="undisturbed">Undisturbed</h2>
 <p>Done</p>
 <ul>
+<li><strong>Climate</strong> - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: <em>km-67 2002:2004 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration</em></li>
+<li><strong>Climate &amp; Fluxes</strong> - LBA-ECO CD-10 CO2 &amp; H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest: <em>among others temperature, dewpoint, wind speed, wind direction, heat flux, CO2, H2O, pressure, sensible heat, latent heat, net Radiation, PAR, precipitation, NEE, respiration, GEE</em></li>
+<li><strong>Species</strong> - LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006: <em>fine photosynthetic quantification (A, Ci, …) not developed in the following pages</em></li>
+<li><strong>Species</strong> - LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003: <em>LA, SLA</em></li>
+<li><strong>Species</strong> - LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil: <em>LA, C, N, and fine photosynthetic quantification (A, Ci, …)</em></li>
 <li><strong>Forest &amp;</strong> <strong>Fluxes</strong> - LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004: <em>LAI, DBH, litterfall</em></li>
-</ul>
-<p>To do</p>
-<ul>
-<li>LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data</li>
-<li>LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001</li>
-<li>LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006</li>
-<li>LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003 (species)</li>
-<li>LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil (species)</li>
-<li>LBA-ECO CD-03 Mesoscale Meteorological Data, Santarem Region, Para, Brazil: 1998-2006 (climate)</li>
-<li>LBA-ECO CD-10 CO2 &amp; H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest (climate, fluxes)</li>
-<li>LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (fluxes)</li>
-<li>LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)</li>
-<li>LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)</li>
-<li>LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)</li>
-<li>LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)</li>
+<li><strong>Forest</strong> - LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>DBH, H, WD, mortality, recruitment, coordinates, taxonomy</em></li>
+<li><strong>Forest</strong> - LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>DBH, H, coordinates, taxonomy</em></li>
+<li><strong>Fluxes</strong> - LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001: <em>pre-dawn and midday leaf water potential on 8 species and 4 dates</em></li>
+<li><strong>Fluxes</strong> - LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>fruit, leaf, wood, misc and total litterfall from 2000 to 2005</em></li>
+<li><strong>Microclimate</strong> - LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>2002 to 2006 vertical profile of H2O concentration at 8 heights</em></li>
+<li><strong>Microclimate</strong> - LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>2002 to 2006 vertical profile of H2O concentration at 9 heights</em></li>
 </ul>
 </section>
 <section id="tee" class="level2">
@@ -271,14 +287,15 @@ div.csl-indent {
 <li><strong>Fluxes</strong> - LBA-ECO ND-02 Soil Volumetric Water Content, Tapajos National Forest, Brazil: <em>volumetric water content</em></li>
 <li><strong>Forest &amp; Fluxes</strong> - LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest: <em>LAI, DBH, mortality, litterfall</em></li>
 </ul>
-<p>To do</p>
-<ul>
-<li>LBA-ECO ND-30 Water Chemistry, Rainfall Exclusion, km 67, Tapajos National Forest</li>
-</ul>
 </section>
 <section id="logged" class="level2">
 <h2 class="anchored" data-anchor-id="logged">Logged</h2>
 <p>Logged data are listed but not illustrated in the data, there are only here for information for eventual future projects.</p>
+<p>Done</p>
+<ul>
+<li><strong>Climate</strong> - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: <em>km-83 2001:2003 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration</em></li>
+</ul>
+<p>To do</p>
 <ul>
 <li><strong>Climate</strong> - LBA-ECO CD-04 Meteorological and Flux Data, km 83 Tower Site, Tapajos National Forest (Climate, fluxes)</li>
 <li><strong>Forest</strong> - LBA-ECO TG-07 Ground-based Biometry Data at km 83 Site, Tapajos National Forest: 1997 (forest)</li>
@@ -296,6 +313,18 @@ div.csl-indent {
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-jucker2022" class="csl-entry" role="listitem">
+Jucker, Tommaso, Fabian Jörg Fischer, Jérôme Chave, David A. Coomes, John Caspersen, Arshad Ali, Grace Jopaul Loubota Panzou, et al. 2022. <span>“Tallo: A Global Tree Allometry and Crown Architecture Database.”</span> <em>Global Change Biology</em> 28 (17): 5254–68. <a href="https://doi.org/10.1111/gcb.16302">https://doi.org/10.1111/gcb.16302</a>.
+</div>
+<div id="ref-kattge2019" class="csl-entry" role="listitem">
+Kattge, Jens, Gerhard Bönisch, Sandra Díaz, Sandra Lavorel, Iain Colin Prentice, Paul Leadley, Susanne Tautenhahn, et al. 2019. <span>“TRY Plant Trait Database <span></span> Enhanced Coverage and Open Access.”</span> <em>Global Change Biology</em> 26 (1): 119–88. <a href="https://doi.org/10.1111/gcb.14904">https://doi.org/10.1111/gcb.14904</a>.
+</div>
+<div id="ref-nepstad2002" class="csl-entry" role="listitem">
+Nepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot, D. Markewitz, R. Figueiredo, et al. 2002. <span>“The Effects of Partial Throughfall Exclusion on Canopy Processes, Aboveground Production, and Biogeochemistry of an Amazon Forest.”</span> <em>Journal of Geophysical Research: Atmospheres</em> 107 (D20). <a href="https://doi.org/10.1029/2001jd000360">https://doi.org/10.1029/2001jd000360</a>.
+</div>
+<div id="ref-nepstad2007" class="csl-entry" role="listitem">
+Nepstad, Daniel C., Ingrid Marisa Tohver, David Ray, Paulo Moutinho, and Georgina Cardinot. 2007. <span>“MORTALITY OF LARGE TREES AND LIANAS FOLLOWING EXPERIMENTAL DROUGHT IN AN AMAZON FOREST.”</span> <em>Ecology</em> 88 (9): 2259–69. <a href="https://doi.org/10.1890/06-1046.1">https://doi.org/10.1890/06-1046.1</a>.
+</div>
 <div id="ref-schmitt2024" class="csl-entry" role="listitem">
 Schmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. <span>“TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model <span></span> Part 2: Model Evaluation for Two Amazonian Sites.”</span> <a href="http://dx.doi.org/10.5194/egusphere-2024-3106">http://dx.doi.org/10.5194/egusphere-2024-3106</a>.
 </div>

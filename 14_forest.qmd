@@ -5,7 +5,60 @@ library(tidyverse)
 
 # Forest {.unnumbered}
 
+We have spatialized repeated inventories with taxonomy for forest dynamics (recruitment, growth, mortality), structure, and composition including control and TEE plots to evaluate and calibrate TROLL simulations. We can also leverage back lidar scanning from @schmitt2024.
+
 ## Undisturbed
+
+### LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST
+
+Cite: Wofsy, S. C., S. R. Saleska, E. H. Pyleand L. R. Hutyra. 2008. LBA-ECO CD-10 Tree DBH Measurements at the km 67 Tower Site, Tapajos National Forest.Data set. Available on-line \[http://www.daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/859
+
+```{r inveotry1}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv",
+  na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  select(trans, tag, sci_name, fam, x, y, dbh_99, dbh_01, dbh_05, wood_dens) %>%
+  gather(year, dbh, -trans, -tag, -sci_name, -fam, -x, -y, -wood_dens) %>%
+  mutate(year = as.numeric(recode(year, "dbh_99" = "1999",
+                                  "dbh_01" = "2001", "dbh_05" = "2005"))) %>%
+  mutate(dbh = as.numeric(dbh)) %>%
+  ggplot(aes(x, y, size = dbh, col = wood_dens)) +
+  facet_grid(trans ~ year) +
+  geom_point() +
+  theme_bw() +
+  theme(axis.title = element_blank()) +
+  scale_color_viridis_c() +
+  scale_size_continuous(range = c(0.5, 3))
+```
+
+### LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST
+
+Cite: Rice, A. H., E. P. Hammond, S. R. Saleska, L. Hutyra, M. Palace, M. Keller,P. B. de Carmargo, K. Portilho, D. Marques and S. C.Wofsy. 2007. LBA-ECO CD-10 Ground-based Biometry Data at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line \[http://www.daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/854
+
+```{r inveotry2}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD10_Biometry_Tapajos_854/data/lba_km67_dend_dbhs_filled_archive.txt", na = "-9999") %>% #nolint
+  rename_all(tolower) %>%
+  select(t, tag, family, genus, spp, x, y, starts_with("doysince")) %>%
+  gather(date, dbh, -t, -tag, -family, -genus, -spp, -x, -y) %>%
+  mutate(date = as.numeric(gsub("doysince1999.", "", date))) %>%
+  mutate(date = as_date("1999/1/1") + date) %>%
+  mutate(dbh = as.numeric(dbh)) %>%
+  ggplot(aes(date, dbh,
+    col = paste(family, genus, spp),
+    group = paste(t, tag)
+  )) +
+  geom_line(alpha = 0.2) +
+  theme_bw() +
+  scale_y_log10() +
+  ylab("Diameter at breast height [ cm ]") +
+  scale_color_discrete(guide = "none") +
+  ggtitle("Spatialised with height")
+```
 
 ### LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest
 
@@ -14,18 +67,24 @@ Cite: Costa, M.H. and W. Cohen. 2013. LBA-ECO CD-15 LAI and Productivity Data, k
 ```{r dendrometer}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Dendrometer_measurements_2003_2004.csv", 
-         skip = 24, na = "-9999") %>% 
-  rename_all(tolower) %>% 
-  gather(date, dendrometer,
-         -plot, -subplot, -tree_no, -diameter, -comments) %>% 
-  mutate(date = gsub("band_", "", date)) %>% 
-  mutate(month = str_sub(date,1,2),
-         year = str_sub(date,3,6)) %>% 
-  mutate(date = as_date(paste0(year, "-", month, "-01"))) %>% 
-  select(-year, -month) %>% 
-  ggplot(aes(date, dendrometer, 
-             group = paste(plot, subplot, tree_no))) +
+read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Dendrometer_measurements_2003_2004.csv", #nolint
+  skip = 24, na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  gather(
+    date, dendrometer,
+    -plot, -subplot, -tree_no, -diameter, -comments
+  ) %>%
+  mutate(date = gsub("band_", "", date)) %>%
+  mutate(
+    month = str_sub(date, 1, 2),
+    year = str_sub(date, 3, 6)
+  ) %>%
+  mutate(date = as_date(paste0(year, "-", month, "-01"))) %>%
+  select(-year, -month) %>%
+  ggplot(aes(date, dendrometer,
+    group = paste(plot, subplot, tree_no)
+  )) +
   geom_line(alpha = .2) +
   theme_bw() +
   xlab("") +
@@ -43,29 +102,37 @@ Cite: Nepstad, D.C. and P.R. Moutinho. 2013. LBA-ECO LC-14 Biophysical Measureme
 ```{r dendrometer2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", 
-         skip = 19, na = "-9999") %>% 
-  rename_all(tolower) %>% 
-  select(treatment, tree_id, life_form, family, genus_species, common_name,
-         height_m, starts_with("dbh_"), date_death, field_notes) %>% 
-  gather(date, dbh,
-         -treatment, -tree_id, -life_form, -family, 
-         -genus_species, -common_name,
-         -height_m, -dbh_init,  -date_death, -field_notes) %>% 
-  mutate(date = gsub("dbh_", "", date)) %>% 
-  mutate(month = str_sub(date,1,3),
-         year = str_sub(date,4,5)) %>% 
-  mutate(date = paste0(year, "-", month, "-01")) %>% 
-  mutate(date = as_date(date)) %>% 
-  select(-year, -month) %>% 
-  filter(life_form == "tree") %>% 
-  ggplot(aes(date, dbh, 
-             col = genus_species,
-             group = paste(treatment, tree_id))) +
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", #nolint
+  skip = 19, na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  select(
+    treatment, tree_id, life_form, family, genus_species, common_name,
+    height_m, starts_with("dbh_"), date_death, field_notes
+  ) %>%
+  gather(
+    date, dbh,
+    -treatment, -tree_id, -life_form, -family,
+    -genus_species, -common_name,
+    -height_m, -dbh_init, -date_death, -field_notes
+  ) %>%
+  mutate(date = gsub("dbh_", "", date)) %>%
+  mutate(
+    month = str_sub(date, 1, 3),
+    year = str_sub(date, 4, 5)
+  ) %>%
+  mutate(date = paste0(year, "-", month, "-01")) %>%
+  mutate(date = as_date(date)) %>%
+  select(-year, -month) %>%
+  filter(life_form == "tree") %>%
+  ggplot(aes(date, dbh,
+    col = genus_species,
+    group = paste(treatment, tree_id)
+  )) +
   geom_line(alpha = .2) +
   theme_bw() +
   xlab("") +
-  facet_wrap(~ treatment) +
+  facet_wrap(~treatment) +
   ylab("Diameter at breast height [ cm ]") +
   scale_color_discrete(guide = "none") +
   scale_y_log10()
@@ -76,16 +143,17 @@ Can be used to assess TEE on dynamics simulation in TROLL.
 ```{r inventory}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", skip = 15, na = "-9999") %>% 
-  rename_all(tolower) %>% 
-  filter(life_form == "TREE") %>% 
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", skip = 15, na = "-9999") %>% #nolint
+  rename_all(tolower) %>%
+  filter(life_form == "TREE") %>%
   ggplot(aes(dbh_2000, fill = obs_final)) +
   geom_histogram() +
   theme_bw() +
-  facet_wrap(~ treatment, nrow = 2) +
+  facet_wrap(~treatment, nrow = 2) +
   scale_x_log10() +
   scale_y_log10() +
-  ylab("") + xlab("DBH 2000 [ cm ]") +
+  ylab("") +
+  xlab("DBH 2000 [ cm ]") +
   scale_fill_discrete("")
 ```
 

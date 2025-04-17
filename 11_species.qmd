@@ -4,3 +4,60 @@ library(tidyverse)
 ```
 
 # Species {.unnumbered}
+
+Currently only LA, SLA, C, and N values are available and alometric parameters can be derived from inventories (see Data/Forest). Additional data will be needed from TRY [@kattge2019], TALLO [@jucker2022], and @schmitt2024.
+
+### LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003
+
+Cite: Ehleringer, J., L.A. Martinelli and J.P. Ometto. 2011. LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/1009
+
+```{r sp1}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD02_Forest_Canopy_Structure_1009/data/CD02_SLA_measurements_TNF.csv", skip = 22, na = "-9999") %>% #nolint
+  rename_all(tolower) %>%
+  filter(functional_group == "Tree", species != "Not provided") %>%
+  select(species, leaf_area, sla) %>%
+  gather(trait, value, -species) %>%
+  na.omit() %>%
+  group_by(species, trait) %>%
+  summarise(value = mean(value)) %>%
+  mutate(trait = recode(trait,
+    "leaf_area" = "LA [m2]",
+    "sla" = "SLA [m2/g]"
+  )) %>%
+  ggplot(aes(value)) +
+  geom_density() +
+  facet_wrap(~trait, scales = "free") +
+  theme_bw() +
+  theme(axis.title = element_blank()) +
+  ggtitle("N = 54")
+```
+
+### LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil
+
+Cite: Ehleringer, J., L.A. Martinelli, C. Cook, T.F. Domingues, L. Flanagan, J. Berry, and J.P. Ometto. 2011. LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/1010
+
+```{r sp2}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD02_Leaf_Level_Gas_Exchange_1010/data/CD02_Leaf_Level_Gas_Exchange.csv", skip = 48, na = "-9999") %>% #nolint
+  rename_all(tolower) %>%
+  filter(functional_group == "Tree", species != "Not provided") %>%
+  select(species, leaf_area, c_conc, n_conc) %>%
+  gather(trait, value, -species) %>%
+  na.omit() %>%
+  group_by(species, trait) %>%
+  summarise(value = mean(value)) %>%
+  mutate(trait = recode(trait,
+    "leaf_area" = "LA [m2]",
+    "c_conc" = "C [%]",
+    "n_conc" = "N [%]"
+  )) %>%
+  ggplot(aes(value)) +
+  geom_density() +
+  facet_wrap(~trait, scales = "free") +
+  theme_bw() +
+  theme(axis.title = element_blank()) +
+  ggtitle("N = 20")
+```

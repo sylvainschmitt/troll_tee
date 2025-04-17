@@ -1,5 +1,7 @@
 # Data {.unnumbered}
 
+> **Summary**. We propose to take advantage of the extensive data collection from the Large Scale Biosphere-Atmosphere Experiment near Santarém, Para, Brazil available at the Oak Ridge National Laboratory Distributed Active Archive Center, differentiating data from undisturbed plots and Throughfall Exclusion Experiment (TEE) used for model inputs and simulations validation. For species input, only LA, SLA, C, and N values are available and alometric parameters can be derived from inventories (see Data/Forest). Additional data will be needed from TRY [@kattge2019], TALLO [@jucker2022], and @schmitt2024. For climate input data are available for both Km67 and Km83 with needed TROLL inputs: rainfall, snet, temperature, wind speed, and VPD (to derive from humidity). But we need to explore how to model the effect of TEE using @nepstad2002 and @nepstad2007 validating with the measured dynamics of soil water. For soil input, there are no data available but we can use the data from \@schmitt2024 gathered by Jeremy Lichstein (pers. com.). For forest structure, composition and dynamics evaluation, we have spatialized repeated inventories with taxonomy for forest dynamics (recruitment, growth, mortality), structure, and composition including control and TEE plots. We can also leverage back LIDAR scanning from @schmitt2024. For forest fluxes evaluation, we have eddy flux data (evapotranspiration, gross primary productivity, PAR), soil water, litterfall, and leaf area index including control and TEE plots. Midday and predawn potential are available for a few species to assess individual tree hydric stress and stomatal control in the model. We do not schedule microclimate evaluation, however, we have access to vertiacal profiles of H2O, temperature, Dewpoint and relative humidity including control and TEE plots. The next step is thus to consolidate inputs and evaluation data.
+
 We propose to take advantage of the extensive data collection from the Lartge Scale Biosphere-Atmosphere Experiment (LBA-ECO, <https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11>) available at the Oak Ridge National Laboratory Distributed Active Archive Center (ORNL DAAC).
 
 We differentiated data for three purposes according to three available sites near Santarém, Para, Brazil:
@@ -23,22 +25,18 @@ Note that some datasets include data covering several usage. Below are listed al
 
 Done
 
+-   **Climate** - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: *km-67 2002:2004 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration*
+-   **Climate & Fluxes** - LBA-ECO CD-10 CO2 & H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest: *among others temperature, dewpoint, wind speed, wind direction, heat flux, CO2, H2O, pressure, sensible heat, latent heat, net Radiation, PAR, precipitation, NEE, respiration, GEE*
+-   **Species** - LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006: *fine photosynthetic quantification (A, Ci, ...) not developed in the following pages*
+-   **Species** - LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003: *LA, SLA*
+-   **Species** - LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil: *LA, C, N, and fine photosynthetic quantification (A, Ci, ...)*
 -   **Forest &** **Fluxes** - LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004: *LAI, DBH, litterfall*
-
-To do
-
--   LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data
--   LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001
--   LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006
--   LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003 (species)
--   LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil (species)
--   LBA-ECO CD-03 Mesoscale Meteorological Data, Santarem Region, Para, Brazil: 1998-2006 (climate)
--   LBA-ECO CD-10 CO2 & H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest (climate, fluxes)
--   LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (fluxes)
--   LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)
--   LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)
--   LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (microclimate)
--   LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST (forest)
+-   **Forest** - LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: *DBH, H, WD, mortality, recruitment, coordinates, taxonomy*
+-   **Forest** - LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: *DBH, H, coordinates, taxonomy*
+-   **Fluxes** - LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001: *pre-dawn and midday leaf water potential on 8 species and 4 dates*
+-   **Fluxes** - LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: *fruit, leaf, wood, misc and total litterfall from 2000 to 2005*
+-   **Microclimate** - LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: *2002 to 2006 vertical profile of H2O concentration at 8 heights*
+-   **Microclimate** - LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: *2002 to 2006 vertical profile of H2O concentration at 9 heights*
 
 ## TEE
 
@@ -48,13 +46,15 @@ Done
 -   **Fluxes** - LBA-ECO ND-02 Soil Volumetric Water Content, Tapajos National Forest, Brazil: *volumetric water content*
 -   **Forest & Fluxes** - LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest: *LAI, DBH, mortality, litterfall*
 
-To do
-
--   LBA-ECO ND-30 Water Chemistry, Rainfall Exclusion, km 67, Tapajos National Forest
-
 ## Logged
 
 Logged data are listed but not illustrated in the data, there are only here for information for eventual future projects.
+
+Done
+
+-   **Climate** - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: *km-83 2001:2003 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration*
+
+To do
 
 -   **Climate** - LBA-ECO CD-04 Meteorological and Flux Data, km 83 Tower Site, Tapajos National Forest (Climate, fluxes)
 -   **Forest** - LBA-ECO TG-07 Ground-based Biometry Data at km 83 Site, Tapajos National Forest: 1997 (forest)

@@ -16,6 +16,9 @@ book:
         - 14_forest.qmd
         - 15_fluxes.qmd
         - 16_microclimate.qmd
+    - part: 20_experiments.qmd
+      chapters: 
+        - 21_dummy.qmd
   appendices:
     - references.qmd
 

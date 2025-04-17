@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./17_old.html" rel="next">
+<link href="./20_experiments.html" rel="next">
 <link href="./15_fluxes.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -150,23 +184,34 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Microclimate</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./20_experiments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Experiments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./17_old.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Old</span></a>
+  <a href="./21_dummy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dummy</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -181,7 +226,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#undisturbed" id="toc-undisturbed" class="nav-link active" data-scroll-target="#undisturbed">Undisturbed</a>
+  <ul class="collapse">
+  <li><a href="#lba-eco-cd-10-h2o-profiles-at-km-67-tower-site-tapajos-national-forest" id="toc-lba-eco-cd-10-h2o-profiles-at-km-67-tower-site-tapajos-national-forest" class="nav-link" data-scroll-target="#lba-eco-cd-10-h2o-profiles-at-km-67-tower-site-tapajos-national-forest">LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST</a></li>
+  <li><a href="#lba-eco-cd-10-temperature-profiles-at-km-67-tower-site-tapajos-national-forest" id="toc-lba-eco-cd-10-temperature-profiles-at-km-67-tower-site-tapajos-national-forest" class="nav-link" data-scroll-target="#lba-eco-cd-10-temperature-profiles-at-km-67-tower-site-tapajos-national-forest">LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST</a></li>
+  </ul></li>
+  <li><a href="#tee" id="toc-tee" class="nav-link" data-scroll-target="#tee">TEE</a>
+  <ul class="collapse">
+  <li><a href="#lba-eco-cd-05-soil-vwc-and-meteorology-rainfall-exclusion-tapajos-national-forest" id="toc-lba-eco-cd-05-soil-vwc-and-meteorology-rainfall-exclusion-tapajos-national-forest" class="nav-link" data-scroll-target="#lba-eco-cd-05-soil-vwc-and-meteorology-rainfall-exclusion-tapajos-national-forest">LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -203,8 +262,98 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>We will probably not explore microclimate modelling here, unless the test shows that we are lacking it to reproduce the trajectories of the TEE. However, we have access to vertiacal profiles of H2O, temperature, Dewpoint and relative humidity including control and TEE plots to evaluate and calibrate TROLL simulations.</p>
+<section id="undisturbed" class="level2">
+<h2 class="anchored" data-anchor-id="undisturbed">Undisturbed</h2>
+<section id="lba-eco-cd-10-h2o-profiles-at-km-67-tower-site-tapajos-national-forest" class="level3">
+<h3 class="anchored" data-anchor-id="lba-eco-cd-10-h2o-profiles-at-km-67-tower-site-tapajos-national-forest">LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST</h3>
+<p>Cite: Hutyra, L.R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo and S. C. Wofsy. 2008. LBA-ECO CD-10 H2O Profiles at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line [http://daac.ornl.gov] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/861</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"data/raw_data/CD10_H2O_Profiles_Tapajos_861/data/km67_h2o_profile_2002_2006.txt"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">decimal_day =</span> <span class="st">`</span><span class="at">JDstart(GMT)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="st">"2000/1/1"</span>) <span class="sc">+</span> <span class="fu">floor</span>(decimal_day)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_datetime</span>(date) <span class="sc">+</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>           (decimal_day<span class="sc">-</span><span class="fu">floor</span>(decimal_day))<span class="sc">*</span><span class="dv">24</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">60</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">60</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>decimal_day, <span class="sc">-</span><span class="st">"9"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(height, h2o, <span class="sc">-</span>date) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">as.integer</span>(height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">c</span>(<span class="fl">62.24</span>, <span class="fl">50.05</span>, <span class="fl">39.41</span>, <span class="fl">28.71</span>, <span class="fl">19.57</span>, <span class="fl">10.42</span>, <span class="fl">3.05</span>, <span class="fl">0.91</span>)[height]) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, h2o)) <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> height, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">strip.position =</span> <span class="st">"right"</span>) <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"H2O concentration [ppt]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="16_microclimate_files/figure-html/h2o-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="lba-eco-cd-10-temperature-profiles-at-km-67-tower-site-tapajos-national-forest" class="level3">
+<h3 class="anchored" data-anchor-id="lba-eco-cd-10-temperature-profiles-at-km-67-tower-site-tapajos-national-forest">LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST</h3>
+<p>Cite: Hutyra, L. R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo and S. C. Wofsy. 2008. LBA-ECO CD-10 Temperature Profiles at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line [http://daac.ornl.gov] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/863</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"data/raw_data/CD10_Temperature_Profiles_Tapajos_863/data/km67_temp_profile_2002_2006.txt"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">decimal_day =</span> <span class="st">`</span><span class="at">JDstart(GMT)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="st">"2000/1/1"</span>) <span class="sc">+</span> <span class="fu">floor</span>(decimal_day)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_datetime</span>(date) <span class="sc">+</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>           (decimal_day<span class="sc">-</span><span class="fu">floor</span>(decimal_day))<span class="sc">*</span><span class="dv">24</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">60</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">60</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>decimal_day, <span class="sc">-</span>T.C.<span class="fl">57.8</span>m.est) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">T.C.57.8m =</span> T.C.filled.<span class="fl">57.8</span>m) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(height, temperature, <span class="sc">-</span>date) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">gsub</span>(<span class="st">"T.C."</span>, <span class="st">""</span>, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">gsub</span>(<span class="st">"m"</span>, <span class="st">""</span>, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">as.numeric</span>(height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, temperature)) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> height, <span class="at">nrow =</span> <span class="dv">9</span>, <span class="at">strip.position =</span> <span class="st">"right"</span>) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Temperature [°C]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="16_microclimate_files/figure-html/temp-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="tee" class="level2">
+<h2 class="anchored" data-anchor-id="tee">TEE</h2>
+<section id="lba-eco-cd-05-soil-vwc-and-meteorology-rainfall-exclusion-tapajos-national-forest" class="level3">
+<h3 class="anchored" data-anchor-id="lba-eco-cd-05-soil-vwc-and-meteorology-rainfall-exclusion-tapajos-national-forest">LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest</h3>
+<p>Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line [<a href="http://daac.ornl.gov%5D" class="uri">http://daac.ornl.gov%5D</a> from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA <a href="http://dx.doi.org/10.3334/ORNLDAAC/1169" class="uri">http://dx.doi.org/10.3334/ORNLDAAC/1169</a></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv"</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">skip =</span> <span class="dv">16</span>, <span class="at">na =</span> <span class="st">"-9999"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tolower) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(date, <span class="dv">1</span>,<span class="dv">4</span>), <span class="st">"-"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">str_sub</span>(date, <span class="dv">5</span>,<span class="dv">6</span>), <span class="st">"-"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">str_sub</span>(date, <span class="dv">7</span>,<span class="dv">8</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">datetime =</span> <span class="fu">as_datetime</span>(<span class="fu">paste</span>(date, time))) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>date, <span class="sc">-</span>time) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, value, <span class="sc">-</span>treatment, <span class="sc">-</span>sensor_code, <span class="sc">-</span>location, <span class="sc">-</span>height, <span class="sc">-</span>datetime) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(datetime, value, <span class="at">group =</span> sensor_code, <span class="at">col =</span> <span class="fu">paste</span>(treatment, location))) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">paste</span>(variable, height, <span class="st">"m"</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="16_microclimate_files/figure-html/microclim-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Possible evaluation data for microclimate buffering.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -447,8 +596,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./17_old.html" class="pagination-link">
-        <span class="nav-page-text">Old</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./20_experiments.html" class="pagination-link">
+        <span class="nav-page-text">Experiments</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

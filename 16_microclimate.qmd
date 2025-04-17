@@ -5,27 +5,82 @@ library(tidyverse)
 
 # Microclimate {.unnumbered}
 
+We will probably not explore microclimate modelling here, unless the test shows that we are lacking it to reproduce the trajectories of the TEE. However, we have access to vertiacal profiles of H2O, temperature, Dewpoint and relative humidity including control and TEE plots to evaluate and calibrate TROLL simulations.
+
 ## Undisturbed
+
+### LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST
+
+Cite: Hutyra, L.R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo and S. C. Wofsy. 2008. LBA-ECO CD-10 H2O Profiles at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/861
+
+```{r h2o}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD10_H2O_Profiles_Tapajos_861/data/km67_h2o_profile_2002_2006.txt") %>% #nolint
+  rename(decimal_day = `JDstart(GMT)`) %>%
+  mutate(date = as_date("2000/1/1") + floor(decimal_day)) %>%
+  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% #nolint
+  select(-decimal_day, -"9") %>%
+  gather(height, h2o, -date) %>%
+  mutate(height = as.integer(height)) %>%
+  mutate(height = c(62.24, 50.05, 39.41, 28.71, 19.57, 10.42, 3.05, 0.91)[height]) %>% #nolint
+  ggplot(aes(date, h2o)) +
+  geom_line() +
+  facet_wrap(~height, nrow = 8, strip.position = "right") +
+  theme_bw() +
+  xlab("") +
+  ylab("H2O concentration [ppt]")
+```
+
+### LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST
+
+Cite: Hutyra, L. R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo and S. C. Wofsy. 2008. LBA-ECO CD-10 Temperature Profiles at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/863
+
+```{r temp}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD10_Temperature_Profiles_Tapajos_863/data/km67_temp_profile_2002_2006.txt") %>% #nolint
+  rename(decimal_day = `JDstart(GMT)`) %>%
+  mutate(date = as_date("2000/1/1") + floor(decimal_day)) %>%
+  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% #nolint
+  select(-decimal_day, -T.C.57.8m.est) %>%
+  rename(T.C.57.8m = T.C.filled.57.8m) %>%
+  gather(height, temperature, -date) %>%
+  mutate(height = gsub("T.C.", "", height)) %>%
+  mutate(height = gsub("m", "", height)) %>%
+  mutate(height = as.numeric(height)) %>%
+  ggplot(aes(date, temperature)) +
+  geom_line() +
+  facet_wrap(~height, nrow = 9, strip.position = "right") +
+  theme_bw() +
+  xlab("") +
+  ylab("Temperature [°C]")
+```
 
 ## TEE
 
 ### LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest
 
-Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line \[[http://daac.ornl.gov\]](http://daac.ornl.gov]) from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA <http://dx.doi.org/10.3334/ORNLDAAC/1169>
+Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest. Data set. Available on-line \[<http://daac.ornl.gov%5D> from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA <http://dx.doi.org/10.3334/ORNLDAAC/1169>
 
 ```{r microclim}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv",
-         skip = 16, na = "-9999") %>% 
-  rename_all(tolower) %>% 
-  mutate(date = paste0(str_sub(date, 1,4), "-",
-                       str_sub(date, 5,6), "-",
-                       str_sub(date, 7,8))) %>% 
-  mutate(datetime = as_datetime(paste(date, time))) %>% 
-  select(-date, -time) %>% 
-  gather(variable, value, -treatment, -sensor_code, -location, -height, -datetime) %>% 
-  ggplot(aes(datetime, value, group = sensor_code, col = paste(treatment, location))) +
+read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv", #nolint
+  skip = 16, na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  mutate(date = paste0(
+    str_sub(date, 1, 4), "-",
+    str_sub(date, 5, 6), "-",
+    str_sub(date, 7, 8)
+  )) %>%
+  mutate(datetime = as_datetime(paste(date, time))) %>%
+  select(-date, -time) %>%
+  gather(variable, value, -treatment,
+         -sensor_code, -location, -height, -datetime) %>%
+  ggplot(aes(datetime, value,
+             group = sensor_code, col = paste(treatment, location))) +
   geom_line() +
   facet_wrap(~ paste(variable, height, "m"), nrow = 3, scales = "free_y") +
   theme_bw() +

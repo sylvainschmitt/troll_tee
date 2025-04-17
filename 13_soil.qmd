@@ -4,3 +4,5 @@ library(tidyverse)
 ```
 
 # Soil {.unnumbered}
+
+There are no soil data available on the LBA (but I may have missed them). We can use the data from @schmitt2024 gathered by Jeremy Lichstein (pers. com.).

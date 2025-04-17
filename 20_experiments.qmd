@@ -1,0 +1,15 @@
+# Experiments {.unnumbered}
+
+I suggest the following experimental scheme:
+
+1.  Undisturbed historical dynamics
+    1.  4.0 evaluation / calibration (starting from @schmitt2024)
+2.  TEE (Throughfall Exclusion Experiment) historical dynamics
+    1.  4.0 evaluation / calibration
+    2.  *dev of TROLL 4.1 for lack of stomatal control*
+    3.  4.1 evaluation / calibration
+3.  Projected future dynamics
+    1.  projected dynamics under several CMIP6 and SSP downscaled projections
+    2.  *effect of diversity?*
+
+Obviously limits reflecting other current developments should be mentioned or integrated if ready (microclimate, water table depth, computing efficiency, ...) and this could open on future works (forest on shallow water table depth, selectively logged forests).

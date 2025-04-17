@@ -1,11 +1,97 @@
 ```{r set}
 #| include: false
 library(tidyverse)
+library(knitr)
 ```
 
 # Climate {.unnumbered}
 
+Climate data are available for both sites (Km67 and Km83) with needed TROLL inputs: rainfall, snet, temperature, wind speed, and vpd (to derive from humidity). The only thing to explore is how to model the effect of Throughfall Exclusion Experiment. There are values and relations given in @nepstad2002 and @nepstad2007, and this should be validated with soil water content (see Data/Fluxes).
+
 ## Undisturbed
+
+### LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data
+
+Cite: de Goncalves, L.G.G., N. Restrepo-Coupe, H.R. da Rocha, S.R. Saleska, and R. Stockli. 2013. LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA http://dx.doi.org/10.3334/ORNLDAAC/1177
+
+```{r clim}
+#| message: false
+#| warning: false
+list.files("data/raw_data/CD32_LBA_MIP_Drivers_1177/data/Santarem_KM67/",
+  pattern = ".txt", full.names = TRUE
+) %>%
+  read_tsv(
+    skip = 16, na = "-9999",
+    col_names = c(
+      "year", "day", "hour", "minute",
+      "tas", "tas_gf", "q", "q_gf", "ws", "ws_gf",
+      "pr", "pr_gf", "p", "p_gf", "swdown", "swdown_gf",
+      "lwdown", "lwdown_gf", "co2", "co2_gf"
+    )
+  ) %>%
+  mutate(date = as_date(paste0(year, "-01-01")) + day - 1) %>%
+  mutate(date = as_datetime(date) + hour * 60 * 60 + minute * 60) %>%
+  mutate(date = date - 4 * 60 * 60) %>%
+  select(-year, -day, -hour, -minute) %>%
+  select(date, tas, q, ws, pr, p, swdown, lwdown, co2) %>%
+  gather(variable, value, -date) %>%
+  mutate(variable = recode(variable,
+    "tas" = "Temperature [K]",
+    "q" = "Specific humidity [kg/kg]",
+    "ws" = "Wind speed [m/s]",
+    "pr" = "Precipitation [kg/m2/s]",
+    "p" = "Pressure [Pa]",
+    "swdown" = "Shortwave radiation [W/m2]",
+    "lwdown" = "Longwave radiation [W/m2]",
+    "co2" = "CO2 [ppmv]"
+  )) %>%
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~variable, scales = "free") +
+  theme_bw() +
+  theme(axis.title = element_blank())
+```
+
+### LBA-ECO CD-10 CO2 & H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest
+
+Cite: Hutyra, L., S. Wofsy and S. Saleska. 2008. LBA-ECO CD-10 CO2 and H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, U.S.A. doi:10.3334/ORNLDAAC/860
+
+```{r eddy}
+#| message: false
+#| warning: false
+read_csv("data/raw_data/CD10_EddyFlux_Tapajos_860/data/km67_eddyflux_2002_2006.txt") %>% #nolint
+  rename_all(tolower) %>%
+  mutate(date = as_datetime("2000/01/01") + hours * 60 * 60 - 4 * 60 * 60) %>%
+  rename(h2o = h2o.mmol.m., p = pamb.pa, lh = lhdry, pr = rain) %>%
+  select(
+    date, ws, wdir, tamb, tdew, fheat, co2, h2o, p, h, lh, netrad, par, pr,
+    nee, r, gee
+  ) %>%
+  gather(variable, value, -date) %>%
+  mutate(variable = recode(variable,
+    "tamb" = "Temperature [°C]",
+    "tdew" = "Dewpoint [°C]",
+    "ws" = "Wind speed [m/s]",
+    "wdir" = "Wind direction [°]",
+    "fheat" = "Heat flux [°C/m/s]",
+    "co2" = "CO2 [mmol/mol]",
+    "h2O" = "H2O [mmol/mol]",
+    "p" = "Pressure [Pa]",
+    "h" = "Sensible heat [W/m2]",
+    "lh" = "Latent heat [W/m2]",
+    "netrad" = "Net Radiation [W/m2]",
+    "par" = "PAR [umol/m2/s]",
+    "pr" = "Precipitation [mm]",
+    "nee" = "NEE [umol/m2/s]",
+    "r" = "Respiration [umol/m2/s]",
+    "gee" = "GEE [umol/m2/s]"
+  )) %>%
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~variable, scales = "free") +
+  theme_bw() +
+  theme(axis.title = element_blank())
+```
 
 ## TEE
 
@@ -16,25 +102,75 @@ Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC 
 ```{r rainfall}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv",
-         skip = 12, na = "-9999") %>% 
-  rename_all(tolower) %>% 
-  mutate(date = paste0(str_sub(date, 1,4), "-",
-                       str_sub(date, 5,6), "-",
-                       str_sub(date, 7,8))) %>% 
-  mutate(date = as_date(date)) %>% 
-  gather(site, precipitation, -date, -exclusion) %>% 
-  mutate(site = recode(site, 
-                       "ppt_casa" = "Casa Onca (~1-km)",
-                       "ppt_ree_tower" = "Control plot tower")) %>% 
+read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv", #nolint
+  skip = 12, na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  mutate(date = paste0(
+    str_sub(date, 1, 4), "-",
+    str_sub(date, 5, 6), "-",
+    str_sub(date, 7, 8)
+  )) %>%
+  mutate(date = as_date(date)) %>%
+  gather(site, precipitation, -date, -exclusion) %>%
+  mutate(site = recode(site,
+    "ppt_casa" = "Casa Onca (~1-km)",
+    "ppt_ree_tower" = "Control plot tower"
+  )) %>%
   ggplot(aes(date, precipitation, fill = exclusion == 1)) +
   geom_col() +
   theme_bw() +
-  facet_wrap(~ site, nrow = 2) +
+  facet_wrap(~site, nrow = 2) +
   xlab("") +
   ylab("Daily rainfall [mm]") +
   scale_fill_discrete("Exclusion") +
   theme(legend.position = "bottom")
 ```
 
-Precipitation data to force the model.
+Precipitation data to force the model. ⚠️ not measured at weekend so Monday is three days precipitation. For the moment I have nothing else that @nepstad2002 relation to compute avoided precipitation with precipitation excluded = 0.484 precipitation input + 0.073 as I couldn't get hold of the original data yet. There is also a 60% exclusion reported in @nepstad2007.
+
+## Logged
+
+### LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data
+
+Cite: de Goncalves, L.G.G., N. Restrepo-Coupe, H.R. da Rocha, S.R. Saleska, and R. Stockli. 2013. LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data. Data set. Available on-line \[http://daac.ornl.gov\] from Oak Ridge National Laboratory Distributed Active Archive Center, Oak Ridge, Tennessee, USA http://dx.doi.org/10.3334/ORNLDAAC/1177
+
+```{r climlogged}
+#| message: false
+#| warning: false
+list.files("data/raw_data/CD32_LBA_MIP_Drivers_1177/data/Santarem_KM83/",
+  pattern = ".txt", full.names = TRUE
+) %>%
+  read_tsv(
+    skip = 16, na = "-9999",
+    col_names = c(
+      "year", "day", "hour", "minute",
+      "tas", "tas_gf", "q", "q_gf", "ws", "ws_gf",
+      "pr", "pr_gf", "p", "p_gf", "swdown", "swdown_gf",
+      "lwdown", "lwdown_gf", "co2", "co2_gf"
+    )
+  ) %>%
+  mutate(date = as_date(paste0(year, "-01-01")) + day - 1) %>%
+  mutate(date = as_datetime(date) + hour * 60 * 60 + minute * 60) %>%
+  mutate(date = date - 4 * 60 * 60) %>%
+  select(-year, -day, -hour, -minute) %>%
+  select(date, tas, q, ws, pr, p, swdown, lwdown, co2) %>%
+  gather(variable, value, -date) %>%
+  mutate(variable = recode(variable,
+    "tas" = "Temperature [K]",
+    "q" = "Specific humidity [kg/kg]",
+    "ws" = "Wind speed [m/s]",
+    "pr" = "Precipitation [kg/m2/s]",
+    "p" = "Pressure [Pa]",
+    "swdown" = "Shortwave radiation [W/m2]",
+    "lwdown" = "Longwave radiation [W/m2]",
+    "co2" = "CO2 [ppmv]"
+  )) %>%
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~variable, scales = "free") +
+  theme_bw() +
+  theme(axis.title = element_blank())
+```
+
+## 

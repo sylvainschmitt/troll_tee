@@ -9,9 +9,7 @@ format:
     toc-depth: 2
 ---
 
-All raw data for the analyses. In particular:
-
--   `...`:
+All raw data for the analyses. They are all retrieved from the Lartge Scale Biosphere-Atmosphere Experiment (LBA-ECO, <https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11>) available at the Oak Ridge National Laboratory Distributed Active Archive Center (ORNL DAAC). See the "Data" section.
 
 ```{r, comment=""}
 fs::dir_tree()

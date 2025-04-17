@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>TROLL TEE - Soil</title>
+<title>TROLL TEE - Experiments</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -49,8 +49,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./14_forest.html" rel="next">
-<link href="./12_climate.html" rel="prev">
+<link href="./21_dummy.html" rel="next">
+<link href="./16_microclimate.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -93,7 +93,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li><li class="breadcrumb-item"><a href="./13_soil.html">Soil</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20_experiments.html">Experiments</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -147,7 +147,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13_soil.html" class="sidebar-item-text sidebar-link active">
+  <a href="./13_soil.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Soil</span></a>
   </div>
 </li>
@@ -173,7 +173,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20_experiments.html" class="sidebar-item-text sidebar-link">
+            <a href="./20_experiments.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Experiments</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -218,7 +218,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Soil</h1>
+<h1 class="title">Experiments</h1>
 </div>
 
 
@@ -233,7 +233,25 @@ div.csl-indent {
 
 </header>
 
-<p>There are no soil data available on the LBA (but I may have missed them). We can use the data from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span> gathered by Jeremy Lichstein (pers. com.).</p>
+<p>I suggest the following experimental scheme:</p>
+<ol type="1">
+<li>Undisturbed historical dynamics
+<ol type="1">
+<li>4.0 evaluation / calibration (starting from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>)</li>
+</ol></li>
+<li>TEE (Throughfall Exclusion Experiment) historical dynamics
+<ol type="1">
+<li>4.0 evaluation / calibration</li>
+<li><em>dev of TROLL 4.1 for lack of stomatal control</em></li>
+<li>4.1 evaluation / calibration</li>
+</ol></li>
+<li>Projected future dynamics
+<ol type="1">
+<li>projected dynamics under several CMIP6 and SSP downscaled projections</li>
+<li><em>effect of diversity?</em></li>
+</ol></li>
+</ol>
+<p>Obviously limits reflecting other current developments should be mentioned or integrated if ready (microclimate, water table depth, computing efficiency, …) and this could open on future works (forest on shallow water table depth, selectively logged forests).</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -478,13 +496,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./12_climate.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Climate</span>
+      <a href="./16_microclimate.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Microclimate</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./14_forest.html" class="pagination-link">
-        <span class="nav-page-text">Forest</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./21_dummy.html" class="pagination-link">
+        <span class="nav-page-text">Dummy</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
