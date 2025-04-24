@@ -2,12 +2,16 @@
 
 I suggest the following experimental scheme:
 
+```{r}
+knitr::include_graphics("figures/tee_fig.png")
+```
+
 1.  Undisturbed historical dynamics
-    1.  4.0 evaluation / calibration (starting from @schmitt2024)
+    1.  TROLL 4.0 evaluation / calibration (starting from @schmitt2024)
 2.  TEE (Throughfall Exclusion Experiment) historical dynamics
-    1.  4.0 evaluation / calibration
+    1.  TROLL 4.0 evaluation / calibration
     2.  *dev of TROLL 4.1 for lack of stomatal control*
-    3.  4.1 evaluation / calibration
+    3.  TROLL 4.1 evaluation / calibration
 3.  Projected future dynamics
     1.  projected dynamics under several CMIP6 and SSP downscaled projections
     2.  *effect of diversity?*
