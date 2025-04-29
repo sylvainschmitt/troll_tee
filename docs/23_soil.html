@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>TROLL TEE - Data</title>
+<title>TROLL TEE - Soil</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -49,8 +83,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./11_species.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./24_historical_climate.html" rel="next">
+<link href="./22_species.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -93,7 +127,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_data.html">Data</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20_input_data.html">Input data</a></li><li class="breadcrumb-item"><a href="./23_soil.html">Soil</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -126,8 +160,8 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10_data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Data</span></a>
+            <a href="./10_raw_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Raw data</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -173,8 +207,8 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20_experiments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Experiments</span></a>
+            <a href="./20_input_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Input data</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -182,7 +216,71 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21_dummy.html" class="sidebar-item-text sidebar-link">
+  <a href="./21_global.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./22_species.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Species</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./23_soil.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Soil</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./24_historical_climate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Historical climate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./25_future_climate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Future climate</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./30_evaluation_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Evaluation data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./31_forest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./32_fluxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fluxes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./40_experiments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Virtual experiments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./41_dummy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dummy</span></a>
   </div>
 </li>
@@ -190,13 +288,13 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -211,22 +309,14 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#undisturbed" id="toc-undisturbed" class="nav-link active" data-scroll-target="#undisturbed">Undisturbed</a></li>
-  <li><a href="#tee" id="toc-tee" class="nav-link" data-scroll-target="#tee">TEE</a></li>
-  <li><a href="#logged" id="toc-logged" class="nav-link" data-scroll-target="#logged">Logged</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data</h1>
+<h1 class="title">Soil</h1>
 </div>
 
 
@@ -241,95 +331,63 @@ div.csl-indent {
 
 </header>
 
-<blockquote class="blockquote">
-<p><strong>Summary</strong>. We propose to take advantage of the extensive data collection from the Large Scale Biosphere-Atmosphere Experiment near Santarém, Para, Brazil available at the Oak Ridge National Laboratory Distributed Active Archive Center, differentiating data from undisturbed plots and Throughfall Exclusion Experiment (TEE) used for model inputs and simulations validation. For species input, only LA, SLA, C, and N values are available and alometric parameters can be derived from inventories (see Data/Forest). Additional data will be needed from TRY <span class="citation" data-cites="kattge2019">(<a href="references.html#ref-kattge2019" role="doc-biblioref">Kattge et al. 2019</a>)</span>, TALLO <span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, and <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. For climate input, data are available for both Km67 and Km83 with needed TROLL inputs: rainfall, snet, temperature, wind speed, and VPD (to derive from humidity). But we need to explore how to model the effect of TEE using <span class="citation" data-cites="nepstad2002">D. C. Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span> and <span class="citation" data-cites="nepstad2007">Daniel C. Nepstad et al. (<a href="references.html#ref-nepstad2007" role="doc-biblioref">2007</a>)</span> validating with the measured dynamics of soil water. For soil input, there are no data available but we can use the data from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span> gathered by Jeremy Lichstein (pers. com.). For forest structure, composition and dynamics evaluation, we have spatialized repeated inventories with taxonomy for forest dynamics (recruitment, growth, mortality), structure, and composition including control and TEE plots. We can also leverage back LIDAR scanning from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. For forest fluxes evaluation, we have eddy flux data (evapotranspiration, gross primary productivity, PAR), soil water, litterfall, and leaf area index including control and TEE plots. Midday and predawn potential are available for a few species to assess individual tree hydric stress and stomatal control in the model. We do not schedule microclimate evaluation, however, we have access to vertiacal profiles of H2O, temperature, Dewpoint and relative humidity including control and TEE plots. The next step is thus to consolidate inputs and evaluation data.</p>
-</blockquote>
-<p>We propose to take advantage of the extensive data collection from the Lartge Scale Biosphere-Atmosphere Experiment (LBA-ECO, <a href="https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11" class="uri">https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11</a>) available at the Oak Ridge National Laboratory Distributed Active Archive Center (ORNL DAAC).</p>
-<p>We differentiated data for three purposes according to three available sites near Santarém, Para, Brazil:</p>
-<ul>
-<li><strong>Undisturbed</strong> data from the undisturbed plots, mainly at the km-67 site, used for model inputs and undisturbed model simulations validation</li>
-<li><strong>TEE</strong> (Throughfall Exclusion Experiment) data from the TEE at the km 67 Seca Floresta site, used for model inputs and TEE model simulations validation. Note that control plots can be used as undisturbed data.</li>
-<li><strong>Logged</strong> data from the TEE at the km-83 site, that might be later used for model inputs and logging model simulations validation. Note that control plots can be used as undisturbed data. Note that this is just to be listed but not to be used in this project.</li>
-</ul>
-<p>We further differentiated data depending on their usage following <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span> analyses:</p>
-<ul>
-<li><strong>Species</strong> <u>input</u> data for species parametrization mainly based on functional traits measurements.</li>
-<li><strong>Climate</strong> <u>input</u> data for simulation forcing mainly based on weather station and eddy flux towers.</li>
-<li><strong>Soil</strong> <u>input</u> data for simulation forcing.</li>
-<li><strong>Forest</strong> <u>evaluation</u> data for forest structure, composition, and dynamics evaluation mainly based on forest inventories (but can also include others such as lidar data).</li>
-<li><strong>Fluxes</strong> <u>evaluation</u> data for forest carbon, water, and leaf fluxes based on eddy flux data, phenological data, litter data, and soil measurements.</li>
-<li><strong>Microclimate</strong> <u>evaluation</u> data for finer microclimatic information not included in fluxes, mainly carbon, water and temperature vertical profiles. <em>Not sure if it will be included in the end or not.</em></li>
-</ul>
-<p>Note that some datasets include data covering several usage. Below are listed all data by purpose and usage and they are illustrated in following pages.</p>
-<section id="undisturbed" class="level2">
-<h2 class="anchored" data-anchor-id="undisturbed">Undisturbed</h2>
-<p>Done</p>
-<ul>
-<li><strong>Climate</strong> - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: <em>km-67 2002:2004 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration</em></li>
-<li><strong>Climate &amp; Fluxes</strong> - LBA-ECO CD-10 CO2 &amp; H2O Eddy Flux Data at km 67 Tower Site, Tapajos National Forest: <em>among others temperature, dewpoint, wind speed, wind direction, heat flux, CO2, H2O, pressure, sensible heat, latent heat, net Radiation, PAR, precipitation, NEE, respiration, GEE</em></li>
-<li><strong>Species</strong> - LBA-ECO CD-04 Leaf Photosynthesis and Respiration, Tapajos National Forest: 2000-2006: <em>fine photosynthetic quantification (A, Ci, …) not developed in the following pages</em></li>
-<li><strong>Species</strong> - LBA-ECO CD-02 Forest Canopy Structure, Tapajos National Forest, Brazil: 1999-2003: <em>LA, SLA</em></li>
-<li><strong>Species</strong> - LBA-ECO CD-02 Leaf Level Gas Exchange, Chemistry, and Isotopes, Amazonia, Brazil: <em>LA, C, N, and fine photosynthetic quantification (A, Ci, …)</em></li>
-<li><strong>Forest &amp;</strong> <strong>Fluxes</strong> - LBA-ECO CD-15 LAI and Productivity Data, km 67, Tapajos National Forest: 2003-2004: <em>LAI, DBH, litterfall</em></li>
-<li><strong>Forest</strong> - LBA-ECO CD-10 TREE DBH MEASUREMENTS AT THE KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>DBH, H, WD, mortality, recruitment, coordinates, taxonomy</em></li>
-<li><strong>Forest</strong> - LBA-ECO CD-10 GROUND-BASED BIOMETRY DATA AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>DBH, H, coordinates, taxonomy</em></li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-02 Leaf Water Potential, Forest and Pasture Sites, Para, Brazil: 2000-2001: <em>pre-dawn and midday leaf water potential on 8 species and 4 dates</em></li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-10 FOREST LITTER DATA FOR KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>fruit, leaf, wood, misc and total litterfall from 2000 to 2005</em></li>
-<li><strong>Microclimate</strong> - LBA-ECO CD-10 H2O PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>2002 to 2006 vertical profile of H2O concentration at 8 heights</em></li>
-<li><strong>Microclimate</strong> - LBA-ECO CD-10 TEMPERATURE PROFILES AT KM 67 TOWER SITE, TAPAJOS NATIONAL FOREST: <em>2002 to 2006 vertical profile of H2O concentration at 9 heights</em></li>
-</ul>
-</section>
-<section id="tee" class="level2">
-<h2 class="anchored" data-anchor-id="tee">TEE</h2>
-<p>Done</p>
-<ul>
-<li><strong>Climate, Fluxes, &amp; microclimate</strong> - LBA-ECO CD-05 Soil VWC and Meteorology, Rainfall Exclusion, Tapajos National Forest: <em>precipitations, relative humidity, air temperature and dew point vertical profiles, volumetric water content</em></li>
-<li><strong>Fluxes</strong> - LBA-ECO ND-02 Soil Volumetric Water Content, Tapajos National Forest, Brazil: <em>volumetric water content</em></li>
-<li><strong>Forest &amp; Fluxes</strong> - LBA-ECO LC-14 Biophysical Measurements, Rainfall Exclusion, Tapajos National Forest: <em>LAI, DBH, mortality, litterfall</em></li>
-</ul>
-</section>
-<section id="logged" class="level2">
-<h2 class="anchored" data-anchor-id="logged">Logged</h2>
-<p>Logged data are listed but not illustrated in the data, there are only here for information for eventual future projects.</p>
-<p>Done</p>
-<ul>
-<li><strong>Climate</strong> - LBA-ECO CD-32 LBA Model Intercomparison Project (LBA-MIP) Meteorological Forcing Data: <em>km-83 2001:2003 gap filled climatologies with near surface air temperature, near surface specific humidity, near surface module of the wind, rainfall rate, surface pressure, surface incident shortwave radiation surface incident longwave radiation, near surface CO2 concentration</em></li>
-</ul>
-<p>To do</p>
-<ul>
-<li><strong>Climate</strong> - LBA-ECO CD-04 Meteorological and Flux Data, km 83 Tower Site, Tapajos National Forest (Climate, fluxes)</li>
-<li><strong>Forest</strong> - LBA-ECO TG-07 Ground-based Biometry Data at km 83 Site, Tapajos National Forest: 1997 (forest)</li>
-<li><strong>Forest</strong> - LBA-ECO CD-04 Logging Damage, km 83 Tower Site, Tapajos National Forest, Brazil</li>
-<li><strong>Forest</strong> - LBA-ECO CD-11 Biophysical Measurements of Logged and Fire-Treated Forests, Brazil</li>
-<li><strong>Forest</strong> - LBA-ECO CD-04 Biomass Survey, km 83 Tower Site, Tapajos National Forest, Brazil</li>
-<li><strong>Forest</strong> - LBA-ECO CD-04 Dendrometry, km 83 Tower Site, Tapajos National Forest, Brazil</li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-04 LAI Estimated from Photos, km 83 Tower Site, Tapajos National Forest</li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-04 Soil Respiration, km 83 Tower Site, Tapajos National Forest, Brazil</li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-04 Leaf Area Index, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)</li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-04 Leaf Litter Data, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)</li>
-<li><strong>Fluxes</strong> - LBA-ECO CD-04 Soil Moisture Data, km 83 Tower Site, Tapajos National Forest, Brazil (fluxes)</li>
-<li><strong>Climate &amp; Fluxes</strong> - LBA-ECO CD-04 CO2 and Heat Flux, km 83 Gap Tower Site, Tapajos National Forest</li>
-</ul>
+<p>Soil data are taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span> and have been gathered by Jérémy Lischtein (pers. com.):</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/raw_data/Tapajos_soil_troll.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">depth =</span> <span class="fu">max</span>(layer_thickness)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>layer_thickness) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Soil parameters."</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Soil parameters.</caption>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">proportion_Silt</th>
+<th style="text-align: right;">proportion_Clay</th>
+<th style="text-align: right;">proportion_Sand</th>
+<th style="text-align: right;">SOC</th>
+<th style="text-align: right;">DBD</th>
+<th style="text-align: right;">pH</th>
+<th style="text-align: right;">CEC</th>
+<th style="text-align: right;">depth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2.64</td>
+<td style="text-align: right;">60.09</td>
+<td style="text-align: right;">37.27</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">3.84</td>
+<td style="text-align: right;">2.97</td>
+<td style="text-align: right;">12.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-jucker2022" class="csl-entry" role="listitem">
-Jucker, Tommaso, Fabian Jörg Fischer, Jérôme Chave, David A. Coomes, John Caspersen, Arshad Ali, Grace Jopaul Loubota Panzou, et al. 2022. <span>“Tallo: A Global Tree Allometry and Crown Architecture Database.”</span> <em>Global Change Biology</em> 28 (17): 5254–68. <a href="https://doi.org/10.1111/gcb.16302">https://doi.org/10.1111/gcb.16302</a>.
-</div>
-<div id="ref-kattge2019" class="csl-entry" role="listitem">
-Kattge, Jens, Gerhard Bönisch, Sandra Díaz, Sandra Lavorel, Iain Colin Prentice, Paul Leadley, Susanne Tautenhahn, et al. 2019. <span>“TRY Plant Trait Database <span></span> Enhanced Coverage and Open Access.”</span> <em>Global Change Biology</em> 26 (1): 119–88. <a href="https://doi.org/10.1111/gcb.14904">https://doi.org/10.1111/gcb.14904</a>.
-</div>
-<div id="ref-nepstad2002" class="csl-entry" role="listitem">
-Nepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot, D. Markewitz, R. Figueiredo, et al. 2002. <span>“The Effects of Partial Throughfall Exclusion on Canopy Processes, Aboveground Production, and Biogeochemistry of an Amazon Forest.”</span> <em>Journal of Geophysical Research: Atmospheres</em> 107 (D20). <a href="https://doi.org/10.1029/2001jd000360">https://doi.org/10.1029/2001jd000360</a>.
-</div>
-<div id="ref-nepstad2007" class="csl-entry" role="listitem">
-Nepstad, Daniel C., Ingrid Marisa Tohver, David Ray, Paulo Moutinho, and Georgina Cardinot. 2007. <span>“MORTALITY OF LARGE TREES AND LIANAS FOLLOWING EXPERIMENTAL DROUGHT IN AN AMAZON FOREST.”</span> <em>Ecology</em> 88 (9): 2259–69. <a href="https://doi.org/10.1890/06-1046.1">https://doi.org/10.1890/06-1046.1</a>.
-</div>
 <div id="ref-schmitt2024" class="csl-entry" role="listitem">
 Schmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. <span>“TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model <span></span> Part 2: Model Evaluation for Two Amazonian Sites.”</span> <a href="http://dx.doi.org/10.5194/egusphere-2024-3106">http://dx.doi.org/10.5194/egusphere-2024-3106</a>.
 </div>
 </div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -567,13 +625,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      <a href="./22_species.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Species</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./11_species.html" class="pagination-link">
-        <span class="nav-page-text">Species</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./24_historical_climate.html" class="pagination-link">
+        <span class="nav-page-text">Historical climate</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,0 +1,18 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Soil {.unnumbered}
+
+Soil data are taken from @schmitt2024 and have been gathered by Jérémy Lischtein (pers. com.):
+
+```{r soil}
+#| message: false
+#| warning: false
+read_tsv("data/raw_data/Tapajos_soil_troll.tsv") %>% 
+  mutate(depth = max(layer_thickness)) %>% 
+  select(-layer_thickness) %>% 
+  summarise_all(mean) %>% 
+  knitr::kable(caption = "Soil parameters.", digits = 2)
+```

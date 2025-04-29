@@ -22,8 +22,10 @@ read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv",
   rename_all(tolower) %>%
   select(trans, tag, sci_name, fam, x, y, dbh_99, dbh_01, dbh_05, wood_dens) %>%
   gather(year, dbh, -trans, -tag, -sci_name, -fam, -x, -y, -wood_dens) %>%
-  mutate(year = as.numeric(recode(year, "dbh_99" = "1999",
-                                  "dbh_01" = "2001", "dbh_05" = "2005"))) %>%
+  mutate(year = as.numeric(recode(year,
+    "dbh_99" = "1999",
+    "dbh_01" = "2001", "dbh_05" = "2005"
+  ))) %>%
   mutate(dbh = as.numeric(dbh)) %>%
   ggplot(aes(x, y, size = dbh, col = wood_dens)) +
   facet_grid(trans ~ year) +
@@ -41,7 +43,7 @@ Cite: Rice, A. H., E. P. Hammond, S. R. Saleska, L. Hutyra, M. Palace, M. Keller
 ```{r inveotry2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD10_Biometry_Tapajos_854/data/lba_km67_dend_dbhs_filled_archive.txt", na = "-9999") %>% #nolint
+read_csv("data/raw_data/CD10_Biometry_Tapajos_854/data/lba_km67_dend_dbhs_filled_archive.txt", na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   select(t, tag, family, genus, spp, x, y, starts_with("doysince")) %>%
   gather(date, dbh, -t, -tag, -family, -genus, -spp, -x, -y) %>%
@@ -67,7 +69,7 @@ Cite: Costa, M.H. and W. Cohen. 2013. LBA-ECO CD-15 LAI and Productivity Data, k
 ```{r dendrometer}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Dendrometer_measurements_2003_2004.csv", #nolint
+read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Dendrometer_measurements_2003_2004.csv", # nolint
   skip = 24, na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -102,7 +104,7 @@ Cite: Nepstad, D.C. and P.R. Moutinho. 2013. LBA-ECO LC-14 Biophysical Measureme
 ```{r dendrometer2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", #nolint
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", # nolint
   skip = 19, na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -143,7 +145,7 @@ Can be used to assess TEE on dynamics simulation in TROLL.
 ```{r inventory}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", skip = 15, na = "-9999") %>% #nolint
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", skip = 15, na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   filter(life_form == "TREE") %>%
   ggplot(aes(dbh_2000, fill = obs_final)) +

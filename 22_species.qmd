@@ -1,0 +1,561 @@
+```{r set}
+#| include: false
+library(tidyverse)
+library(phylobase)
+library(ggtree)
+library(ggfortify)
+```
+
+# Species {.unnumbered}
+
+## Taxonomy
+
+We gathered the species list of all inventories we got from LBA control and experimental inventories. We used World Flora Online R package to clean the taxonomy with most recent accepted names. We used the cleaned taxonomy to build a phylogeny using `V.PhyloMaker`.
+
+```{r species_list}
+#| eval: false
+library(WorldFlora)
+library(fuzzyjoin)
+library(V.PhyloMaker)
+library(ape)
+inventory_1 <- read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv", na = "-9999") %>% # nolint
+  select(fam, sci_name, dbh_99, dbh_01, dbh_05) %>%
+  rename(family = fam) %>%
+  separate(sci_name, c("genus", "species")) %>%
+  gather(year, dbh, -family, -genus, -species) %>%
+  select(-year) %>%
+  mutate(dbh = as.numeric(dbh) / 100)
+inventory_2 <- read_csv("data/raw_data/CD10_Biometry_Tapajos_854/data/lba_km67_dend_dbhs_filled_archive.txt", na = "-9999") %>% # nolint
+  select(family, genus, spp, starts_with("doysince")) %>%
+  rename(species = spp) %>%
+  gather(year, dbh, -family, -genus, -species) %>%
+  select(-year) %>%
+  mutate(dbh = as.numeric(dbh) / 100)
+inventory_3 <- read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Dendrometer_DBH_REE_Plots_1999_2006.csv", # nolint
+  skip = 19, na = "-9999"
+) %>%
+  select(Family, Genus_species, starts_with("dbh_")) %>%
+  rename_all(tolower) %>%
+  separate(genus_species, c("genus", "species")) %>%
+  gather(year, dbh, -family, -genus, -species) %>%
+  select(-year) %>%
+  mutate(dbh = as.numeric(dbh) / 100)
+inventory_4 <- read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Stem_inventory_REE_plots_2000_2004.csv", # nolint
+  skip = 15, na = "-9999"
+) %>%
+  select(Family, Scientific_name, DBH_2000, DBH_2004) %>%
+  rename_all(tolower) %>%
+  separate(scientific_name, c("genus", "species")) %>%
+  gather(year, dbh, -family, -genus, -species) %>%
+  select(-year) %>%
+  mutate(dbh = as.numeric(dbh) / 100)
+inventories <- bind_rows(
+  inventory_1,
+  inventory_2,
+  inventory_3,
+  inventory_4
+)
+write_tsv(inventories, file = "data/derived_data/inventories.tsv")
+taxo <- inventories %>%
+  select(genus, species) %>%
+  unique() %>%
+  filter(genus != "Geissospermum vellozii  Alem\xdco") %>%
+  separate(genus, "genus") %>%
+  separate(species, "species") %>%
+  filter(!(genus %in% c("NA", "unk"))) %>%
+  unique() %>%
+  mutate(species = ifelse(is.na(species), "", species)) %>%
+  mutate(scientific = paste(genus, species))
+wfo <- WFO.match.fuzzyjoin(
+  spec.data = taxo$scientific,
+  WFO.file = "data/raw_data/WFO_Backbone.zip"
+)
+cleaned <- bind_rows(
+  wfo %>%
+    filter(Matched) %>%
+    filter(Unique),
+  wfo %>%
+    filter(Matched) %>%
+    filter(!Unique) %>%
+    group_by(spec.name) %>%
+    filter(New.accepted) %>%
+    sample_n(1)
+) %>%
+  select(
+    spec.name,
+    family, genus, specificEpithet,
+    scientificName
+  ) %>%
+  rename(
+    scientific_raw = spec.name,
+    family = family,
+    genus = genus,
+    species = specificEpithet,
+    scientific = scientificName
+  ) %>%
+  unique() %>%
+  filter(str_length(species) > 0)
+write_tsv(cleaned, file = "data/derived_data/taxonomy.tsv")
+tree <- phylo.maker( # nolint
+  sp.list = cleaned %>%
+    select(species, genus, family) %>%
+    mutate(species = paste(genus, species)),
+  tree = GBOTB.extended,
+  nodes = nodes.info.1,
+  scenarios = "S3"
+)
+write.tree(tree$scenario.3, "data/derived_data/phylogeny.tree")
+```
+
+```{r stat}
+#| warning: false
+#| message: false
+read_tsv("data/derived_data/taxonomy.tsv") %>%
+  summarise(
+    family = length(unique(na.omit(family))),
+    genus = length(unique(na.omit(genus))),
+    species = length(unique(scientific))
+  ) %>%
+  knitr::kable(
+    format.args = list(big.mark = ","),
+    caption = "Total numbers per taxonomic levels."
+  )
+```
+
+```{r phylo}
+#| message: false
+#| warning: false
+#| fig-cap: "Cleaned taxonomy phylogeny."
+phylo <- ape::read.tree("data/derived_data/phylogeny.tree")
+phylo_df <- phylo4d(
+  phylo,
+  tibble(scientific = gsub("_", " ", phylo$tip.label)) %>%
+    left_join(read_tsv("data/derived_data/taxonomy.tsv") %>%
+      select(-scientific_raw) %>%
+      unique())
+)
+ggtree(phylo_df, aes(col = family), layout = "circular") +
+  theme_tree(legend.text = element_text(face = "italic", size = 6)) +
+  scale_color_discrete("")
+```
+
+## Functional traits
+
+TROLL 4.0 relies on LMA, Nmass, Pmass, wsg, TLP and LA. We compared available trait data between @kattge2019, @schmitt2024, @vleminckx2021, and @réjou-méchain2017.
+
+```{r n_try}
+#| message: false
+#| warning: false
+#| fig-cap: "Available data from TRY."
+read_tsv("data/derived_data/taxonomy.tsv") %>%
+  select(scientific) %>%
+  na.omit() %>%
+  unique() %>%
+  left_join(read_tsv("data/raw_data/TryAccSpecies.txt"),
+    by = c("scientific" = "AccSpeciesName")
+  ) %>%
+  filter(!is.na(AccSpeciesID)) %>%
+  select(AccSpeciesID) %>%
+  na.omit() %>%
+  unique() %>%
+  arrange() %>%
+  mutate(request = rep(1:100, each = 200)[seq_len(n())]) %>%
+  group_by(request) %>%
+  summarise(species_list = paste0(AccSpeciesID, collapse = ", ")) %>%
+  write_tsv("data/raw_data/try_reqs/requests.txt")
+lma_codes <- c(3056, 4083, 3086, 3115, 3116, 3117)
+la_codes <- c(3058, 3114, 3108, 3110, 3112, 3109, 3111, 3113)
+n_codes <- c(660, 14)
+p_codes <- c(58, 15)
+wsg_codes <- c(4, 3764)
+tlp_codes <- 3468
+all_codes <- c(
+  lma_codes,
+  la_codes,
+  n_codes,
+  p_codes,
+  wsg_codes,
+  tlp_codes
+)
+try <- list.files("data/raw_data/try_reqs/",
+  pattern = "req_",
+  full.names = TRUE
+) %>%
+  lapply(read_tsv, skip = 3) %>%
+  lapply(gather, species, N, -Trait, -TraitID) %>%
+  bind_rows() %>%
+  rename_all(tolower) %>%
+  filter(n > 0) %>%
+  rename(id = traitid) %>%
+  filter(id %in% all_codes) %>%
+  mutate(simple_trait = NA) %>%
+  mutate(simple_trait = ifelse(id %in% lma_codes, "LMA", simple_trait)) %>%
+  mutate(simple_trait = ifelse(id %in% la_codes, "leafarea", simple_trait)) %>%
+  mutate(simple_trait = ifelse(id %in% n_codes, "Nmass", simple_trait)) %>%
+  mutate(simple_trait = ifelse(id %in% p_codes, "Pmass", simple_trait)) %>%
+  mutate(simple_trait = ifelse(id %in% wsg_codes, "wsg", simple_trait)) %>%
+  mutate(simple_trait = ifelse(id %in% tlp_codes, "tlp", simple_trait)) %>%
+  select(simple_trait, species) %>%
+  unique() %>%
+  rename(trait = simple_trait) %>%
+  mutate(species = gsub(".", "", species, fixed = TRUE))
+try %>%
+  group_by(trait) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(fct_rev(fct_infreq(trait, n)), n)) +
+  geom_col() +
+  geom_text(aes(label = n), nudge_y = 10) +
+  theme_bw() +
+  coord_flip() +
+  theme(axis.title = element_blank()) +
+  ggtitle("TRY")
+```
+
+```{r n_prev}
+#| message: false
+#| warning: false
+prev <- rcontroll::TROLLv4_species %>%
+  rename_all(~ gsub("s_", "", .)) %>%
+  rename(species = name) %>%
+  mutate(species = gsub("_", " ", species)) %>%
+  filter(species %in%
+    read_tsv("data/derived_data/taxonomy.tsv")$scientific) %>%
+  select(species, LMA, Nmass, Pmass, wsg, tlp, leafarea)
+print(paste("Number of common species available in Schmitt et al. 2025:", nrow(prev))) #nolint
+```
+
+```{r n_vleminckx}
+#| message: false
+#| warning: false
+#| fig-cap: "Available data from Vleminckx."
+vleminckx <- readxl::read_xlsx("data/raw_data/Appendix_S2-6___S8-13.xlsx",
+  "App.S6-ok",
+  skip = 3
+) %>%
+  mutate(species = sub("_", " ", Species)) %>%
+  mutate(species = gsub("[[:punct:]]", "", species)) %>%
+  mutate(LMA = 1 / SLA * 1000) %>%
+  mutate(N = N / 100, P = P / 10^6) %>%
+  rename(leafarea = Leaf_Area, Nmass = N, Pmass = P, wsg = WSG) %>%
+  mutate(LMA = ifelse(LMA > 200, NA, LMA)) %>%
+  select(species, LMA, leafarea, Nmass, Pmass, wsg) %>%
+  filter(species %in% read_tsv("data/derived_data/taxonomy.tsv")$scientific)
+print(paste("Number of common species available in Vleminckx et al. 2021:", nrow(vleminckx))) #nolint
+```
+
+```{r n_biomass}
+#| message: false
+#| warning: false
+#| fig-cap: "Available data from BIOMASS."
+biomass <- BIOMASS::getWoodDensity(
+  read_tsv("data/derived_data/taxonomy.tsv")$genus,
+  read_tsv("data/derived_data/taxonomy.tsv")$species
+) %>%
+  mutate(species = paste(genus, species)) %>%
+  select(-genus) %>%
+  group_by(species) %>%
+  summarise(wd = mean(meanWD)) %>%
+  na.omit()
+print(paste("Number of common species available in BIOMASS (WSG):", nrow(biomass))) #nolint
+```
+
+```{r n_all}
+#| message: false
+#| warning: false
+#| fig-cap: "Available data from all."
+bind_rows(
+  try,
+  prev %>%
+    gather(trait, value, -species) %>%
+    select(-value),
+  vleminckx %>%
+    gather(trait, value, -species) %>%
+    select(-value),
+  biomass %>%
+    mutate(trait = "wsg") %>%
+    select(-wd)
+) %>%
+  unique() %>%
+  group_by(trait) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(fct_rev(fct_infreq(trait, n)), n)) +
+  geom_col() +
+  geom_text(aes(label = n), nudge_y = 20) +
+  theme_bw() +
+  coord_flip() +
+  theme(axis.title = element_blank()) +
+  ggtitle("All")
+```
+
+As almost all information comes from TRY [@kattge2019], with additional WSG in BIOMASS [@réjou-méchain2017] and TLP in @schmitt2024, we will thus focusing on building a dataset solely on these three.
+
+```{r functional_assembly}
+#| message: false
+#| warning: false
+#| fig-cap: "Assembled traits across datasets."
+try <- read_tsv("data/raw_data/40982_29042025105444/40982.txt") %>%
+  filter(TraitID %in% all_codes) %>%
+  filter(AccSpeciesName %in%
+           read_tsv("data/derived_data/taxonomy.tsv")$scientific) %>%
+  select(AccSpeciesName, TraitID, TraitName, StdValue, OrigValueStr) %>%
+  mutate(value = ifelse(TraitID %in% tlp_codes, as.numeric(OrigValueStr),
+    StdValue
+  )) %>%
+  select(-OrigValueStr, -StdValue) %>%
+  rename(
+    species = AccSpeciesName,
+    id = TraitID,
+    trait = TraitName,
+  ) %>%
+  mutate(trait = ifelse(id %in% lma_codes, "LMA", trait)) %>%
+  mutate(trait = ifelse(id %in% la_codes, "leafarea", trait)) %>%
+  mutate(trait = ifelse(id %in% n_codes, "Nmass", trait)) %>%
+  mutate(trait = ifelse(id %in% p_codes, "Pmass", trait)) %>%
+  mutate(trait = ifelse(id %in% wsg_codes, "wsg", trait)) %>%
+  mutate(trait = ifelse(id %in% tlp_codes, "tlp", trait)) %>%
+  select(-id) %>%
+  mutate(value = ifelse(trait %in% c("Nmass", "Pmass"),
+                        value / 1000, value)) %>%
+  mutate(value = ifelse(trait %in% "LMA", 1 / value * 1000, value)) %>%
+  mutate(value = ifelse(trait %in% "leafarea", value / 100, value))
+traits <- bind_rows(
+  try %>%
+    mutate(origin = "TRY"),
+  biomass %>%
+    mutate(trait = "wsg") %>%
+    rename(value = wd) %>%
+    mutate(origin = "BIOMASS"),
+  prev %>%
+    gather(trait, value, -species) %>%
+    mutate(origin = "Schmitt (2024)")
+)
+traits %>%
+  na.omit() %>%
+  filter(!(origin == "TRY" & trait == "TLP")) %>%
+  group_by(species, trait) %>%
+  summarise(value = mean(value)) %>%
+  pivot_wider(names_from = trait, values_from = value) %>%
+  write_tsv("data/derived_data/functional.tsv")
+traits %>%
+  mutate(value = ifelse(trait %in% c("leafarea", "LMA"), log(value), value)) %>%
+  ggplot(aes(origin, value)) +
+  geom_boxplot() +
+  facet_wrap(~trait, scales = "free") +
+  theme_bw() +
+  coord_flip() +
+  xlab("") +
+  ylab("")
+```
+
+As the 8 TLP values from TRY from @10.1002/ecy.2591 differed too much besides using the same method, we excluded them.
+
+```{r functional_stat}
+#| message: false
+#| warning: false
+read_tsv("data/derived_data/functional.tsv") %>%
+  gather(trait, value, -species) %>%
+  na.omit() %>%
+  group_by(trait) %>%
+  summarise(n = n(), p = n() / 505 * 100) %>%
+  knitr::kable(caption = "Gathered species mean values per trait and corresponding coverage of the taxonomy.", digits = 2)  #nolint
+```
+
+We thus obtained 37 (7%) to 505 (100%) of parametrised species depending on the trait with most having more than 50% data available. However, we will need still imputation as TROLL only uses non missing inputs.
+
+## Allometric parameters
+
+TROLL 4.0 relies on $dbh_{thres}$, $h_{lim}$, $a_h$.
+
+We derived $dbh_{thres}$ from available inventories from which we already retrieved the taxonomy, using the cleaned taxonomy, species with at least 10 diameter observations across years and sites, and with at least one measurement above 20 cm. We used the 95th quantile to define $dbh_{thres}$ which resulted in 217 (43%) species parametrised.
+
+```{r dbhthres}
+#| message: false
+#| warning: false
+#| fig-cap: "Parametrised dbh_thres."
+dbhthres <- read_tsv("data/derived_data/inventories.tsv") %>%
+  mutate(species = ifelse(is.na(species), "", species)) %>%
+  mutate(scientific_raw = paste(genus, species)) %>%
+  select(scientific_raw, dbh) %>%
+  left_join(read_tsv("data/derived_data/taxonomy.tsv")) %>%
+  select(scientific, dbh) %>%
+  na.omit() %>%
+  group_by(scientific) %>%
+  filter(n() > 10) %>%
+  filter(max(dbh) > 0.2) %>%
+  summarise(dbhthres = quantile(dbh, 0.95))
+dbhthres %>%
+  ggplot(aes(dbhthres)) +
+  geom_histogram() +
+  theme_bw() +
+  ggtitle(
+    paste(nrow(dbhthres), "species"),
+    paste(round(nrow(dbhthres) / 505 * 100, 2), "%")
+  ) +
+  xlab(expression(dbh[thres] ~ "[ m ]")) +
+  ylab("")
+```
+
+We used TALLO [@jucker2022] to retrieve diameter - height measurements available for 133 (26%) species and used `brms` to run a hierarchical Michaelis Menten model to infer $h_{lim}$ and $a_h$.
+
+```{r tallo_data}
+#| message: false
+#| warning: false
+#| fig-cap: "Height-diameter relation for species of our datasets in TALLO."
+tallo <- read_tsv("data/derived_data/taxonomy.tsv") %>%
+  select(scientific) %>%
+  na.omit() %>%
+  unique() %>%
+  left_join(read_csv("data/raw_data/Tallo.csv?download=1"),
+    by = c("scientific" = "species")
+  ) %>%
+  filter(!is.na(tree_id))
+tallo %>%
+  ggplot(aes(stem_diameter_cm, height_m)) +
+  geom_point(aes(col = scientific), alpha = 0.25) +
+  theme_bw() +
+  geom_smooth(formula = y ~ log(x)) +
+  scale_color_discrete(guide = "none") +
+  xlab("Diameter [ m ]") +
+  ylab("Height [ m ]") +
+  ggtitle(
+    paste(length(unique(tallo$scientific)), "species"),
+    paste(round(length(unique(tallo$scientific)) / 505 * 100, 2), "%")
+  )
+```
+
+```{r tallo_fit}
+#| eval: false
+library(brms)
+library(tidybayes)
+mdata <- tallo %>%
+  select(scientific, height_m, stem_diameter_cm) %>%
+  rename(h = height_m, d = stem_diameter_cm) %>%
+  mutate(d = d / 100) %>%
+  na.omit()
+fit <- brm(
+  bf(log(h) ~ log(hlim * (d / (ah + d))),
+    hlim ~ 1 + 1 | scientific,
+    ah ~ 1 + 1 | scientific,
+    nl = TRUE
+  ),
+  prior = c(
+    prior(normal(40, 10), lb = 10, nlpar = "hlim"),
+    prior(normal(0.5, 0.5), lb = 0, nlpar = "ah")
+  ),
+  data = mdata, chains = 2, cores = 2, threads = 10
+)
+fit %>%
+  spread_draws(
+    b_hlim_Intercept, r_scientific__hlim[scientific, ],
+    b_ah_Intercept, r_scientific__ah[scientific, ]
+  ) %>%
+  mutate(ah = b_ah_Intercept + r_scientific__ah) %>%
+  mutate(hlim = b_hlim_Intercept + r_scientific__hlim) %>%
+  group_by(scientific) %>%
+  summarise(ah = median(ah), hlim = median(hlim)) %>%
+  mutate(scientific = gsub(".", " ",
+    scientific,
+    fixed = TRUE
+  )) %>%
+  write_tsv("data/derived_data/tallo_pars.tsv")
+```
+
+```{r tallo_res}
+#| message: false
+#| warning: false
+#| fig-cap: "Inferred a_h and h_lim pairs for inferred species and resulting height-diameter trajectories."  #nolint
+g1 <- read_tsv("data/derived_data/tallo_pars.tsv") %>%
+  ggplot(aes(ah, hlim)) +
+  geom_point() +
+  theme_bw() +
+  xlab(expression(a[h])) +
+  ylab(expression(h[lim]))
+g2 <- read_tsv("data/derived_data/tallo_pars.tsv") %>%
+  mutate(d = list(seq(0, 1, 0.1))) %>%
+  unnest(d) %>%
+  mutate(h = hlim * (d / (ah + d))) %>%
+  ggplot(aes(d, h, group = scientific)) +
+  geom_line(col = "lightgrey") +
+  theme_bw() +
+  xlab("Diameter [ m ]") +
+  ylab("Height [ m ]")
+g1 + g2
+```
+
+## Imputation
+
+Using `missForest` (<https://cran.r-project.org/web/packages/missForest/index.html>) with phylogeny Eigen vectors (<https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005>).
+
+```{r sp_par_raw}
+#| message: false
+#| warning: false
+#| fig-cap: "Functional traits and allometric parameters pairwise correlations used for species parameters imputation." #nolint
+raw <- read_tsv("data/derived_data/functional.tsv") %>%
+  mutate(LMA = ifelse(is.infinite(LMA), NA, LMA)) %>%
+  rename(scientific = species) %>%
+  left_join(dbhthres) %>%
+  left_join(read_tsv("data/derived_data/tallo_pars.tsv"))
+raw %>%
+  select(-scientific) %>%
+  cor(use = "pairwise.complete.obs") %>%
+  corrplot::corrplot(method = "number", type = "upper", diag = FALSE)
+```
+
+⚠️ The imputation with `missForest` is pretty long. NRMSE value is 0.8262651, indicating a pretty good mean trait prediction across traits.
+
+```{r imputation}
+#| eval: false
+phylo_vect <- PVR::PVRdecomp(phylo)@Eigen$vectors %>%
+  as_tibble() %>%
+  mutate(scientific = phylo_df@data$scientific)
+raw_phylo <- raw %>%
+  left_join(phylo_vect)
+imputation <- missForest::missForest(
+  raw_phylo %>%
+    select(-scientific) %>%
+    as.data.frame(),
+  verbose = TRUE
+)
+imputation$OOBerror
+imputed <- imputation$ximp[, seq_len(9), drop = FALSE] %>%
+  as_tibble() %>%
+  mutate(scientific = raw$scientific)
+write_tsv(imputed, file = "data/derived_data/species.tsv")
+```
+
+```{r hist}
+#| message: false
+#| warning: false
+#| fig-cap: "Imputed traits histograms."
+read_tsv("data/derived_data/species.tsv") %>%
+  gather(trait, value, -scientific) %>%
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~trait, scales = "free") +
+  theme_bw() +
+  xlab("") +
+  ylab("")
+```
+
+```{r pca}
+#| message: false
+#| warning: false
+#| fig-cap: "Imputed traits principal component analysis."
+autoplot(
+  princomp(read_tsv("data/derived_data/species.tsv") %>%
+    select(-scientific) %>%
+    mutate(
+      LMA = log(LMA),
+      leafarea = log(leafarea)
+    ), cor = TRUE),
+  loadings.label.size = 6,
+  loadings.label.colour = "red", loadings.label.vjust = 1.1,
+  loadings.label.repel = TRUE,
+  loadings = TRUE, loadings.label = TRUE, loadings.colour = "red",
+  alpha = 0.25
+) +
+  coord_equal() +
+  geom_hline(aes(yintercept = 0), col = "black", linetype = "dotted") +
+  geom_vline(aes(xintercept = 0), col = "black", linetype = "dotted") +
+  theme_bw()
+```

@@ -8,7 +8,7 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - part: 10_data.qmd
+    - part: 10_raw_data.qmd
       chapters: 
         - 11_species.qmd
         - 12_climate.qmd
@@ -16,9 +16,20 @@ book:
         - 14_forest.qmd
         - 15_fluxes.qmd
         - 16_microclimate.qmd
-    - part: 20_experiments.qmd
+    - part: 20_input_data.qmd
       chapters: 
-        - 21_dummy.qmd
+        - 21_global.qmd
+        - 22_species.qmd
+        - 23_soil.qmd
+        - 24_historical_climate.qmd
+        - 25_future_climate.qmd
+    - part: 30_evaluation_data.qmd
+      chapters: 
+        - 31_forest.qmd
+        - 32_fluxes.qmd
+    - part: 40_experiments.qmd
+      chapters: 
+        - 41_dummy.qmd
   appendices:
     - references.qmd
 

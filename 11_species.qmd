@@ -14,7 +14,7 @@ Cite: Ehleringer, J., L.A. Martinelli and J.P. Ometto. 2011. LBA-ECO CD-02 Fores
 ```{r sp1}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD02_Forest_Canopy_Structure_1009/data/CD02_SLA_measurements_TNF.csv", skip = 22, na = "-9999") %>% #nolint
+read_csv("data/raw_data/CD02_Forest_Canopy_Structure_1009/data/CD02_SLA_measurements_TNF.csv", skip = 22, na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   filter(functional_group == "Tree", species != "Not provided") %>%
   select(species, leaf_area, sla) %>%
@@ -41,7 +41,7 @@ Cite: Ehleringer, J., L.A. Martinelli, C. Cook, T.F. Domingues, L. Flanagan, J. 
 ```{r sp2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD02_Leaf_Level_Gas_Exchange_1010/data/CD02_Leaf_Level_Gas_Exchange.csv", skip = 48, na = "-9999") %>% #nolint
+read_csv("data/raw_data/CD02_Leaf_Level_Gas_Exchange_1010/data/CD02_Leaf_Level_Gas_Exchange.csv", skip = 48, na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   filter(functional_group == "Tree", species != "Not provided") %>%
   select(species, leaf_area, c_conc, n_conc) %>%

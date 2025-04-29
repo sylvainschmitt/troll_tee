@@ -1,3 +1,4 @@
+-   troll_tee 0.1.0.9004: global, species & soil inputs
 -   troll_tee 0.1.0.9003: exp fig
 -   troll_tee 0.1.0.9002: LBA data
 -   troll_tee 0.1.0.9001: init

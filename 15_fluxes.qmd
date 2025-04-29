@@ -41,7 +41,7 @@ LAI data available for seasonal variation of canopy leaf dynamics assessment.
 ```{r litter}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Litterfall_km67_2004.csv", #nolint
+read_csv("data/raw_data/CD15_Productivity_1167/data/CD15_Litterfall_km67_2004.csv", # nolint
   skip = 10, na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -71,7 +71,7 @@ Cite: Almeida, D.,T.F. Domingues, J. Ehleringer, L.A. Martinelli, C. Cook, L. Fl
 ```{r leaf_pot}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD02_Leaf_Water_Potential_1100/data/CD02_Leaf_Water_Potential.csv", skip = 22, na = "-9999") %>% #nolint
+read_csv("data/raw_data/CD02_Leaf_Water_Potential_1100/data/CD02_Leaf_Water_Potential.csv", skip = 22, na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   filter(site == "STM km 67 tower") %>%
   mutate(date = paste0(
@@ -101,7 +101,7 @@ Cite: Rice, A.H., E. P. Hammond, S. R. Saleska, L. Hutyra, M. Palace, M. Keller,
 ```{r litter2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD10_Litter_Tapajos_862/data/lba_km67_litter_archive.txt", #nolint
+read_csv("data/raw_data/CD10_Litter_Tapajos_862/data/lba_km67_litter_archive.txt", # nolint
   na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -200,10 +200,10 @@ Cite: Belk, E.L., D. Markewitz, T. Rasmussen, E.J.M. Carvalho, D.C. Nepstad, and
 #| message: false
 #| warning: false
 bind_rows(
-  read_csv("data/raw_data/ND02_REE_Soil_VWC_1061/data/Seca_Floresta_actual_vs_simulated_VWC_control_plot.csv", #nolint
+  read_csv("data/raw_data/ND02_REE_Soil_VWC_1061/data/Seca_Floresta_actual_vs_simulated_VWC_control_plot.csv", # nolint
     skip = 36, na = "-9999"
   ),
-  read_csv("data/raw_data/ND02_REE_Soil_VWC_1061/data/Seca_Floresta_actual_vs_simulated_VWC_treatment_plot.csv", #nolint
+  read_csv("data/raw_data/ND02_REE_Soil_VWC_1061/data/Seca_Floresta_actual_vs_simulated_VWC_treatment_plot.csv", # nolint
     skip = 36, na = "-9999"
   )
 ) %>%
@@ -234,7 +234,7 @@ Cite: Nepstad, D.C. and P.R. Moutinho. 2013. LBA-ECO LC-14 Biophysical Measureme
 ```{r lai2}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/LAI_REE_plots_1999_2006.csv", #nolint
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/LAI_REE_plots_1999_2006.csv", # nolint
   skip = 14, na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -261,7 +261,7 @@ LAI data available for seasonal variation of canopy leaf dynamics assessment.
 ```{r fine_litter}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Fine_Litter_REE_plots_1998_2006.csv", skip = 16, na = "-9999") %>% #nolint
+read_csv("data/raw_data/LC14_Aboveground_Prod_1196/data/Fine_Litter_REE_plots_1998_2006.csv", skip = 16, na = "-9999") %>% # nolint
   rename_all(tolower) %>%
   mutate(date = paste0(
     str_sub(date, 1, 4), "-",

@@ -1,4 +1,4 @@
-# Experiments {.unnumbered}
+# Virtual experiments {.unnumbered}
 
 I suggest the following experimental scheme:
 

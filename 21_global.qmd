@@ -1,0 +1,30 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Global {.unnumbered}
+
+We first used back parameters calibrated for Tapajos from @schmitt2024 for a first test:
+
+```{r parameters}
+rcontroll::generate_parameters(
+  CR_a = 2.45,
+  CR_b = 0.7565,
+  m = 0.040,
+  m1 = 0.040,
+  pheno_a0 = 0.2,
+  pheno_b0 = 0.015,
+  pheno_delta = 0.2
+) %>%
+  filter(!(param %in% c(
+    "nbiter", "HEIGHT", "length_dcell", "NV", "NH", "nbout", "nbspp",
+    "DBH0", "H0", "CR_min", "CD0", "_SOIL_LAYER_WEIGHT",
+    "_WATER_RETENTION_CURVE", "_LL_parameterization", "_LA_regulation",
+    "_sapwood", "_seedsadditional", "_NONRANDOM", "Rseed",
+    "_GPPcrown", "_BASICTREEFALL", "_SEEDTRADEOFF",
+    "_CROWN_MM", "_OUTPUT_extended", "_OUTPUT_inventory",
+    "extent_visual"
+  ))) %>%
+  knitr::kable()
+```

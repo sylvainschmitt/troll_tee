@@ -59,7 +59,7 @@ Cite: Hutyra, L., S. Wofsy and S. Saleska. 2008. LBA-ECO CD-10 CO2 and H2O Eddy 
 ```{r eddy}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD10_EddyFlux_Tapajos_860/data/km67_eddyflux_2002_2006.txt") %>% #nolint
+read_csv("data/raw_data/CD10_EddyFlux_Tapajos_860/data/km67_eddyflux_2002_2006.txt") %>% # nolint
   rename_all(tolower) %>%
   mutate(date = as_datetime("2000/01/01") + hours * 60 * 60 - 4 * 60 * 60) %>%
   rename(h2o = h2o.mmol.m., p = pamb.pa, lh = lhdry, pr = rain) %>%
@@ -102,7 +102,7 @@ Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC 
 ```{r rainfall}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv", #nolint
+read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv", # nolint
   skip = 12, na = "-9999"
 ) %>%
   rename_all(tolower) %>%

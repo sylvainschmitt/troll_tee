@@ -16,14 +16,14 @@ Cite: Hutyra, L.R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo and
 ```{r h2o}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD10_H2O_Profiles_Tapajos_861/data/km67_h2o_profile_2002_2006.txt") %>% #nolint
+read_csv("data/raw_data/CD10_H2O_Profiles_Tapajos_861/data/km67_h2o_profile_2002_2006.txt") %>% # nolint
   rename(decimal_day = `JDstart(GMT)`) %>%
   mutate(date = as_date("2000/1/1") + floor(decimal_day)) %>%
-  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% #nolint
+  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% # nolint
   select(-decimal_day, -"9") %>%
   gather(height, h2o, -date) %>%
   mutate(height = as.integer(height)) %>%
-  mutate(height = c(62.24, 50.05, 39.41, 28.71, 19.57, 10.42, 3.05, 0.91)[height]) %>% #nolint
+  mutate(height = c(62.24, 50.05, 39.41, 28.71, 19.57, 10.42, 3.05, 0.91)[height]) %>% # nolint
   ggplot(aes(date, h2o)) +
   geom_line() +
   facet_wrap(~height, nrow = 8, strip.position = "right") +
@@ -39,10 +39,10 @@ Cite: Hutyra, L. R., J. W. Munger, E. W. Gottlieb, B. C. Daube, P. B. Camargo an
 ```{r temp}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD10_Temperature_Profiles_Tapajos_863/data/km67_temp_profile_2002_2006.txt") %>% #nolint
+read_csv("data/raw_data/CD10_Temperature_Profiles_Tapajos_863/data/km67_temp_profile_2002_2006.txt") %>% # nolint
   rename(decimal_day = `JDstart(GMT)`) %>%
   mutate(date = as_date("2000/1/1") + floor(decimal_day)) %>%
-  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% #nolint
+  mutate(date = as_datetime(date) + (decimal_day - floor(decimal_day)) * 24 * 60 * 60 - 4 * 60 * 60) %>% # nolint
   select(-decimal_day, -T.C.57.8m.est) %>%
   rename(T.C.57.8m = T.C.filled.57.8m) %>%
   gather(height, temperature, -date) %>%
@@ -66,7 +66,7 @@ Cite: Nepstad, D.C., P.R. Moutinho, and P. Brando. 2013. LBA-ECO CD-05 Soil VWC 
 ```{r microclim}
 #| message: false
 #| warning: false
-read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv", #nolint
+read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv", # nolint
   skip = 16, na = "-9999"
 ) %>%
   rename_all(tolower) %>%
@@ -77,10 +77,13 @@ read_csv("data/raw_data/CD05_Micromet_1169/data/Temp_RH_REE_plots_2000_2003.csv"
   )) %>%
   mutate(datetime = as_datetime(paste(date, time))) %>%
   select(-date, -time) %>%
-  gather(variable, value, -treatment,
-         -sensor_code, -location, -height, -datetime) %>%
+  gather(
+    variable, value, -treatment,
+    -sensor_code, -location, -height, -datetime
+  ) %>%
   ggplot(aes(datetime, value,
-             group = sensor_code, col = paste(treatment, location))) +
+    group = sensor_code, col = paste(treatment, location)
+  )) +
   geom_line() +
   facet_wrap(~ paste(variable, height, "m"), nrow = 3, scales = "free_y") +
   theme_bw() +
