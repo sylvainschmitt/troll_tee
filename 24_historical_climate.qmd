@@ -4,3 +4,104 @@ library(tidyverse)
 ```
 
 # Historical climate {.unnumbered}
+
+For historical climate we gathered, compared, and consildated data from ERA5-Land (ref), LBA flux towers, and LBA weather stations. ERA5-Land data must be first downloaded using conda environment and python code available in `data/raw_data/era`.
+
+## ERA5-Land
+
+```{r era}
+#| message: false
+#| warning: false
+#| fig-cap: "ERA5-Land monthly means from 1980 to 2025."
+era <- read_csv("data/raw_data/era/era5_tapajos.csv") %>% 
+  select(-`...1`) %>% 
+  mutate(date = as_datetime(date)) %>% 
+  gather(variable, value, -date)
+era %>% 
+  group_by(variable, date = floor_date(date, "month")) %>% 
+  mutate(value = ifelse(variable %in% c("precipitation"),
+                           sum(value, na.rm = T), value)) %>% 
+  summarise_all(mean) %>% 
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~ variable, scales = "free_y", nrow = 5) +
+  theme_bw() +
+  xlab("") +
+  ylab("")
+```
+
+## Weather stations
+
+```{r stations}
+#| message: false
+#| warning: false
+#| fig-cap: "Weather stations comparisons."
+weather_station <- read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_plots_1999_2006.csv", # nolint
+  skip = 12, na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  mutate(date = paste0(
+    str_sub(date, 1, 4), "-",
+    str_sub(date, 5, 6), "-",
+    str_sub(date, 7, 8)
+  )) %>%
+  mutate(date = as_date(date)) %>%
+  gather(site, precipitation, -date, -exclusion) %>%
+  mutate(site = recode(site,
+    "ppt_casa" = "Casa Onca (~1-km)",
+    "ppt_ree_tower" = "Control plot tower"
+  ))
+weather_station %>% 
+  pivot_wider(names_from = site, values_from = precipitation) %>% 
+  na.omit() %>% 
+  ggplot(aes(`Casa Onca (~1-km)`, `Control plot tower`)) +
+  geom_abline() +
+  geom_smooth(method = "lm", formula = ~0+x, se = FALSE) +
+  geom_point(alpha = 0.2) +
+  ggpubr::stat_cor() +
+  theme_bw() +
+  ggtitle("Precipitaiton [ mm ]")
+```
+
+```{r station_era}
+#| message: false
+#| warning: false
+#| fig-cap: "Weather stations comparisons with ERA."
+day_comp <- era %>% 
+  filter(variable == "precipitation") %>% 
+  group_by(date = as_date(date)) %>% 
+  summarise(era = sum(value)) %>% 
+  left_join(weather_station) %>% 
+  na.omit()
+make_fig <- function(data)
+  data %>% 
+  ggplot(aes(era, precipitation)) +
+  geom_abline() +
+  geom_smooth(method = "lm", formula = ~0+x, se = FALSE) +
+  geom_point(alpha = 0.2) +
+  ggpubr::stat_cor() +
+  theme_bw() +
+  ylab("Station [ mm ]") +
+  xlab("ERA [ mm ]")
+g_day <- day_comp %>% 
+  make_fig() +
+  ggtitle("daily")
+g_week <- day_comp %>% 
+  group_by(site, date = floor_date(date, "week")) %>% 
+  summarise_all(sum) %>% 
+  make_fig() +
+  ggtitle("weekly")
+g_month <- day_comp %>% 
+  group_by(site, date = floor_date(date, "month")) %>% 
+  summarise_all(sum) %>% 
+  make_fig() +
+  ggtitle("monthly")
+g_year <- day_comp %>% 
+  group_by(site, date = floor_date(date, "year")) %>% 
+  summarise_all(sum) %>% 
+  make_fig() +
+  ggtitle("yearly")
+cowplot::plot_grid(g_day, g_week, g_month, g_year)
+```
+
+## Towers
