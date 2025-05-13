@@ -5,4 +5,6 @@ library(tidyverse)
 
 # Soil {.unnumbered}
 
+> **Summary.** Soil parameters taken from @schmitt2024.
+
 There are no soil data available on the LBA (but I may have missed them). We can use the data from @schmitt2024 gathered by Jeremy Lichstein (pers. com.).

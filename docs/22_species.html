@@ -342,6 +342,9 @@ div.csl-indent {
 
 </header>
 
+<blockquote class="blockquote">
+<p><strong>Summary.</strong> Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO<span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, leaf, wood and hydraulic traits from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>, TRY [<span class="citation" data-cites="kattge2019">Kattge et al. (<a href="references.html#ref-kattge2019" role="doc-biblioref">2019</a>)</span>] and BIOMASS <span class="citation" data-cites="réjou-méchain2017">(<a href="references.html#ref-réjou-méchain2017" role="doc-biblioref">Réjou-Méchain et al. 2017</a>)</span>, and missing traits imputed using <code>missForest</code> with phylogeny <span class="citation" data-cites="10.1111/2041-210X.14339">(<a href="references.html#ref-10.1111/2041-210X.14339" role="doc-biblioref"><strong>10.1111/2041-210X.14339?</strong></a>)</span>.</p>
+</blockquote>
 <section id="taxonomy" class="level2">
 <h2 class="anchored" data-anchor-id="taxonomy">Taxonomy</h2>
 <p>We gathered the species list of all inventories we got from LBA control and experimental inventories. We used World Flora Online R package to clean the taxonomy with most recent accepted names. We used the cleaned taxonomy to build a phylogeny using <code>V.PhyloMaker</code>.</p>
@@ -934,7 +937,7 @@ div.csl-indent {
 </section>
 <section id="imputation" class="level2">
 <h2 class="anchored" data-anchor-id="imputation">Imputation</h2>
-<p>Using <code>missForest</code> (<a href="https://cran.r-project.org/web/packages/missForest/index.html" class="uri">https://cran.r-project.org/web/packages/missForest/index.html</a>) with phylogeny Eigen vectors (<a href="https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005" class="uri">https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005</a>).</p>
+<p>Using <code>missForest</code> (<a href="https://cran.r-project.org/web/packages/missForest/index.html" class="uri">https://cran.r-project.org/web/packages/missForest/index.html</a>) with phylogeny Eigen vectors (<a href="https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005" class="uri">https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005</a>), see benchmarking in <span class="citation" data-cites="10.1111/2041-210X.14339">(<a href="references.html#ref-10.1111/2041-210X.14339" role="doc-biblioref"><strong>10.1111/2041-210X.14339?</strong></a>)</span>.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>

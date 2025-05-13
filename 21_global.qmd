@@ -5,6 +5,8 @@ library(tidyverse)
 
 # Global {.unnumbered}
 
+> **Summary.** Global parameters taken from @schmitt2024.
+
 We first used back parameters calibrated for Tapajos from @schmitt2024 for a first test:
 
 ```{r parameters}

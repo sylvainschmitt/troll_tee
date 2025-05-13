@@ -1,6 +1,6 @@
-# mamba env create -f get_era.yml 
-# conda activate get-era
-# python get_era.py
+# mamba env create -f get_era_om.yml 
+# mamba activate get-era-om
+# python get_era_om.py > log.txt
 
 import openmeteo_requests
 
@@ -21,7 +21,7 @@ params = {
 	"longitude": -54.952,
 	"start_date": "1980-01-01",
 	"end_date": "2025-01-01",
-	"hourly": ["temperature_2m", "precipitation", "wind_speed_10m", "vapour_pressure_deficit", "terrestrial_radiation_instant"],
+	"hourly": ["temperature_2m", "wind_speed_10m", "precipitation", "vapour_pressure_deficit", "shortwave_radiation"],
 	"timezone": "auto"
 }
 responses = openmeteo.weather_api(url, params=params)
@@ -36,10 +36,10 @@ print(f"Timezone difference to GMT+0 {response.UtcOffsetSeconds()} s")
 # Process hourly data. The order of variables needs to be the same as requested.
 hourly = response.Hourly()
 hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
-hourly_precipitation = hourly.Variables(1).ValuesAsNumpy()
-hourly_wind_speed_10m = hourly.Variables(2).ValuesAsNumpy()
+hourly_wind_speed_10m = hourly.Variables(1).ValuesAsNumpy()
+hourly_precipitation = hourly.Variables(2).ValuesAsNumpy()
 hourly_vapour_pressure_deficit = hourly.Variables(3).ValuesAsNumpy()
-hourly_terrestrial_radiation_instant = hourly.Variables(4).ValuesAsNumpy()
+hourly_shortwave_radiation = hourly.Variables(4).ValuesAsNumpy()
 
 hourly_data = {"date": pd.date_range(
 	start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
@@ -49,10 +49,10 @@ hourly_data = {"date": pd.date_range(
 )}
 
 hourly_data["temperature_2m"] = hourly_temperature_2m
-hourly_data["precipitation"] = hourly_precipitation
 hourly_data["wind_speed_10m"] = hourly_wind_speed_10m
+hourly_data["precipitation"] = hourly_precipitation
 hourly_data["vapour_pressure_deficit"] = hourly_vapour_pressure_deficit
-hourly_data["terrestrial_radiation_instant"] = hourly_terrestrial_radiation_instant
+hourly_data["shortwave_radiation"] = hourly_shortwave_radiation
 
 hourly_dataframe = pd.DataFrame(data = hourly_data)
 

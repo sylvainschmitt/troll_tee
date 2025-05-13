@@ -1,5 +1,6 @@
 *
 !.gitignore
-!get_era.py
-!get_era.yml
-
+!get_era_om.py
+!get_era_om.yml
+!get_era_ee.py
+!get_era_ee.yml

@@ -5,21 +5,42 @@ library(tidyverse)
 
 # Historical climate {.unnumbered}
 
-For historical climate we gathered, compared, and consildated data from ERA5-Land (ref), LBA flux towers, and LBA weather stations. ERA5-Land data must be first downloaded using conda environment and python code available in `data/raw_data/era`.
+> **Summary.** Historical climate forcing from ERA5-Land between 1980 and 2025 [@muñoz-sabater2021] was used as showing good correlation with local measurements.
+
+For historical climate we gathered, compared, and consolidated data from ERA5-Land [@muñoz-sabater2021], LBA flux towers, and LBA weather stations. ERA5-Land data must be first downloaded using conda environment and python code available in `data/raw_data/era`.
 
 ## ERA5-Land
+
+ERA5-Land reanalysis [@muñoz-sabater2021] could be used to derive the five needed climate forcing inputs (precipitation, temperature, solar radiation, vapour pressure deficit and wind speed, see code) for 45 years from 1980 to 2024 at an hourly time step.
 
 ```{r era}
 #| message: false
 #| warning: false
 #| fig-cap: "ERA5-Land monthly means from 1980 to 2025."
-era <- read_csv("data/raw_data/era/era5_tapajos.csv") %>% 
-  select(-`...1`) %>% 
-  mutate(date = as_datetime(date)) %>% 
-  gather(variable, value, -date)
+esat <- function(t, p) {
+  a <- 611.21
+  b <- 18.678 - (t / 234.5)
+  c <- 257.14
+  f <- 1.00072 + 10^-7 * p * (0.032 + 5.9 * 10^-6 * t^2)
+  return(f * a * (exp(b * t / (c + t))))
+}
+era <- read_tsv("data/raw_data/era/era5_tapajos.tsv") %>% 
+  mutate(date = as_datetime(time) - 3*60*60, .before = 1) %>% 
+  select(-lat, -lon, -time) %>% 
+  mutate(ws = sqrt(u_component_of_wind_10m^2+v_component_of_wind_10m^2)) %>% 
+  mutate(snet = surface_net_solar_radiation/3600) %>% 
+  mutate(snet = snet - lag(snet)) %>% 
+  mutate(snet = ifelse(snet < 0, 0, snet)) %>% 
+  mutate(tas = temperature_2m-273.15) %>% 
+  mutate(pr = total_precipitation_hourly*1000) %>% 
+  mutate(vpd = (esat(temperature_2m-273.15, 101325) - 
+                  esat(dewpoint_temperature_2m-273.15, surface_pressure/1000))/1000) %>% 
+  select(date, pr, tas, snet, ws, vpd) %>% 
+  gather(variable, value, -date) %>% 
+  filter(year(date) %in% 1980:2024) 
 era %>% 
   group_by(variable, date = floor_date(date, "month")) %>% 
-  mutate(value = ifelse(variable %in% c("precipitation"),
+  mutate(value = ifelse(variable %in% c("pr"),
                            sum(value, na.rm = T), value)) %>% 
   summarise_all(mean) %>% 
   ggplot(aes(date, value)) +
@@ -31,6 +52,8 @@ era %>%
 ```
 
 ## Weather stations
+
+Weather stations from data from the LBA tower and the nearby Casa Onca station showed high correlation at daily time step pointing to the possibility of using Casa Onca to gap fill the tower precipitation. Moreover, they showed acceptable correlation with ERA5-Land precipitation ranging from R=0.24 at daily time step to R=0.79 at monthly time step , which encourage us to use the ERA5-Land raw product without bias correction to force the TROLL simulations.
 
 ```{r stations}
 #| message: false
@@ -68,7 +91,7 @@ weather_station %>%
 #| warning: false
 #| fig-cap: "Weather stations comparisons with ERA."
 day_comp <- era %>% 
-  filter(variable == "precipitation") %>% 
+  filter(variable == "pr") %>% 
   group_by(date = as_date(date)) %>% 
   summarise(era = sum(value)) %>% 
   left_join(weather_station) %>% 
@@ -105,3 +128,45 @@ cowplot::plot_grid(g_day, g_week, g_month, g_year)
 ```
 
 ## Towers
+
+Similarly hourly values of radiation & temperature from ERA5-Land showed high correlation with ERA5-Land (resp. 0.91 and 0.77), but wind speed showed lower values than observed at the flux tower, which is expected. And time adjustment is correct as showed by the last figure showing mean hourly variation of radiations. Consequently this also encouraged us to use raw ERA5-Land even if bias-correction of wind speed could be considered.
+
+```{r tower_comp}
+#| message: false
+#| warning: false
+#| fig-cap: "Flux tower comparisons with ERA for snet, tas, and ws at hourly timestep."
+era_sub <- era %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gather(variable, era, -date)
+tower <- read_csv("data/raw_data/CD10_EddyFlux_Tapajos_860/data/km67_eddyflux_2002_2006.txt") %>% # nolint
+  rename_all(tolower) %>%
+  mutate(date = as_datetime("2000/01/01") + hours * 60 * 60 - 2 * 60 * 60) %>%
+  rename(tas = tamb, snet = netrad) %>%
+  select(date, tas, ws, snet) %>% 
+  gather(variable, tower, -date) %>% 
+  left_join(era_sub)
+tower %>% 
+  ggplot(aes(era, tower)) +
+  geom_point(col = "lightgrey") +
+  facet_wrap(~ variable, scales = "free", nrow = 2) +
+  theme_bw() +
+  geom_abline() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggpubr::stat_cor(col = "blue")
+```
+
+```{r tower_hourly_snet_comp}
+#| message: false
+#| warning: false
+#| fig-cap: "Flux tower daily variation of radiations comparison with ERA."
+tower %>% 
+  filter(variable == "snet") %>% 
+  na.omit() %>% 
+  mutate(hour = hour(date)) %>% 
+  group_by(hour) %>% 
+  summarise_all(mean) %>% 
+  gather(source, value, -hour, -date, -variable) %>% 
+  ggplot(aes(hour, value, col = source)) +
+  geom_line() +
+  theme_bw()
+```

@@ -1,4 +1,4 @@
-name: get-era
+name: get-era-om
 channels:
   - conda-forge
 dependencies:
