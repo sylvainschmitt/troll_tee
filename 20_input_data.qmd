@@ -1,13 +1,3 @@
 # Input data {.unnumbered}
 
-Summarise:
-
-> **Summary.** Global parameters taken from @schmitt2024.
-
-> **Summary.** Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO[@jucker2022], leaf, wood and hydraulic traits from @schmitt2024, TRY [@kattge2019] and BIOMASS [@réjou-méchain2017], and missing traits imputed using `missForest` with phylogeny [@10.1111/2041-210X.14339].
-
-> **Summary.** Soil parameters taken from @schmitt2024.
-
-> > **Summary.** Historical climate forcing from ERA5-Land between 1980 and 2025 [@muñoz-sabater2021] was used as showing good correlation with local measurements.
-
-> **Summary. F**uture climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 (ref) statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt (ref).
+> **Summary**. Global parameters were taken from @schmitt2024. Taxonomy and maximum diameter were taken from LBA inventories. Allometric height parameters were inferred from TALLO [@jucker2022], and leaf, wood, and hydraulic traits were taken from @schmitt2024, TRY [@kattge2019], and BIOMASS [@réjou-méchain2017]. Missing traits were imputed using `missForest` with phylogeny [@gendre2024]. Soil parameters were also taken from @schmitt2024. Historical climate forcing from ERA5-Land between 1980 and 2025 was used as it showed a good correlation with local measurements. Future climate forcing was obtained from CMIP6 GCMs between 1980 and 2100 under low-emission scenarios SSP1-2.6 and high-emission scenarios SSP5-8.5 [@neill2016], and was statistically downscaled on ERA5-Land historical data on a monthly basis using a cumulative distribution function transformation (CDFt) [@vrac2015].

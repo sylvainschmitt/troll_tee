@@ -1,0 +1,14 @@
+name: get-cmip6
+channels:
+  - conda-forge
+dependencies:
+  - pandas
+  - cf-xarray
+  - matplotlib
+  - intake-esm
+  - requests
+  - aiohttp
+  - gcsfs
+  - nc-time-axis
+  - xmip
+  

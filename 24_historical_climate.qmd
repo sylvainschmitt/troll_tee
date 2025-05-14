@@ -170,3 +170,37 @@ tower %>%
   geom_line() +
   theme_bw()
 ```
+
+## Half-hourly downscaling
+
+We used spline interpolation for downscaling half hourly values of tas, vpd and ws and linear interpolation for snet.
+
+```{r downscaling}
+#| message: false
+#| warning: false
+era_ds <- tibble(date =  seq(min(era$date),
+                   max(era$date),
+                   by = 60 * 60 * 0.5)) %>% 
+  left_join(pivot_wider(era, names_from = variable, values_from = value) %>% 
+              mutate(raw = 1)) %>% 
+  group_by(day = as_date(date)) %>%
+  mutate(across(c(tas, vpd, ws),
+                ~ zoo::na.spline(., date, na.rm = FALSE))) %>% 
+  mutate(across(c(snet),
+                ~ zoo::na.approx(., date, na.rm = FALSE))) %>% 
+  ungroup() %>% 
+  select(-day) %>% 
+  mutate(across(c(snet), ~ ifelse(is.na(.), 0, .))) %>% 
+  mutate(across(c(snet), ~ ifelse(. < 0, 0, .)))
+era_ds %>% 
+  select(-raw) %>% 
+  write_tsv("data/derived_data/climate.tsv")
+filter(era_ds, as_date(date) == "1980-01-01") %>% 
+  gather(variable, value, -date, -raw) %>% 
+  ggplot(aes(date, value)) +
+  geom_line() +
+  geom_point(aes(col = as.factor(raw))) +
+  facet_wrap(~ variable, scales = "free_y", nrow = 5) +
+  theme_bw() +
+  ggtitle("1980-01-01")
+```

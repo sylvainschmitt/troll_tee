@@ -1,0 +1,5 @@
+*
+!.gitignore
+!get_cmip6.py
+!get_cmip6.yml
+

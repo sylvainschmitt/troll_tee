@@ -5,4 +5,217 @@ library(tidyverse)
 
 # Future climate {.unnumbered}
 
-> **Summary. F**uture climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 (ref) statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt (ref).
+> **Summary.** Future climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 [@neill2016] statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt [@vrac2015].
+
+```{r assemble}
+#| eval: false
+library(ncdf4)
+get_var <- function(file, var) {
+  nc <- nc_open(file)
+  data <- tibble(
+    gcm = ncatt_get(nc, 0, "parent_source_id")$value,
+    experiment = ncatt_get(nc, 0, "experiment_id")$value,
+    date = as.character(as_date(ncatt_get(nc, "time", "units")$value) + 
+                       ncvar_get(nc, "time")),
+    "{var}" := as.numeric(ncvar_get(nc, var))
+    ) 
+  nc_close(nc)
+  return(data)
+}
+pr <- list.files("data/raw_data/cmip6/pr/", full.names = TRUE) %>% 
+  lapply(get_var, "pr") %>% 
+  bind_rows() %>% 
+  mutate(pr = pr *60 * 60 * 24)
+write_tsv(pr, "data/derived_data/projections_raw.tsv")
+```
+
+```{r bias-correct}
+#| eval: false
+library(CDFt)
+bc_pr <- function(gcm, month){
+  era <- read_tsv("data/derived_data/climate.tsv") %>% 
+    group_by(date = as_date(date)) %>%
+    filter(month(date) ==  month) %>%
+    summarise(era = sum(pr, na.rm = TRUE))
+  proj <- read_tsv("data/derived_data/projections_raw.tsv") %>%
+    filter(month(date) ==  month) %>%
+    filter(gcm == gcm) %>%
+    left_join(era)
+  train <- filter(proj, !is.na(era))
+  adjusted <- CDFt(
+    ObsRp = train$era,
+    DataGp = train$pr,
+    DataGf = proj$pr
+  )
+  proj %>%
+    mutate(pr = adjusted$DS) %>%
+    select(-era)
+}
+bc <- expand_grid(
+  gcm = unique(read_tsv("data/derived_data/projections_raw.tsv")$gcm),
+  month = 1:12
+) %>% 
+  rowwise() %>% 
+  mutate(bc_pr = list(bc_pr(gcm, month)))
+bc %>% 
+  select(-gcm, -month) %>% 
+  unnest(bc_pr) %>% 
+  unique() %>% 
+  write_tsv("data/derived_data/projections.tsv")
+```
+
+## Precipitation
+
+CMIP6 raw precipitation projections mostly underestimated annual precipitation with lower monthly values and unrealistic seasonal pattern showing lagged and more intense dry seasons for all GCMs. After bias-correction we obtained more realistic annual precipitation despite strongly variable among GCMs, good monthly precipitation correlations to ERA5-Land and a realistic seasonality with the June to November dry season below 100-mm (*maybe a bit too high for ITM-ESM and MPI-ESM1-2-LR*). Bias-correction using cumulative distribution function was applied on absolute precipitation value but might be improved considering relative daily precipitation volume in the month.
+
+```{r pr_an_raw}
+#| message: false
+#| warning: false
+#| fig-cap: "Annual CMIP6 raw precipitation projections for scenarii SSP1-2.6 and SSP5-8.5 compared to ERA5-Land reanalysis (black)."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "year"))) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
+  mutate(gcm = "ERA5-Land", experiment = "historical")
+read_tsv("data/derived_data/projections_raw.tsv") %>% 
+  group_by(gcm, experiment, date = floor_date(date, "year")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  ggplot(aes(date, pr, col = paste(gcm, experiment))) +
+  geom_line() +
+  geom_line(data = era, col = "black") +
+  theme_bw() +
+  xlab("") + ylab("Precipitation [ mm ]") +
+  scale_color_discrete("")
+```
+
+```{r pr_mon_raw}
+#| message: false
+#| warning: false
+#| fig-cap: "Evaluations of CMIP6 raw projections monthly precipitations against ERA5-Land."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "month"))) %>% 
+  summarise(era = sum(pr, na.rm = TRUE))
+read_tsv("data/derived_data/projections_raw.tsv") %>% 
+  group_by(gcm, experiment, date = floor_date(date, "month")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  left_join(era) %>% 
+  ggplot(aes(era, pr, col = gcm)) +
+  geom_abline() +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  ggpubr::stat_cor() +
+  scale_color_discrete("") +
+  ggtitle("Monthly total precipitation [ mm ]") +
+  xlab("ERA5-Land") + ylab("CMIP6 GCM raw projection")
+```
+
+```{r pr_seas_raw}
+#| message: false
+#| warning: false
+#| fig-cap: "Seasonal CMIP6 raw precipitation projections for scenarii SSP1-2.6 and SSP5-8.5 compared to ERA5-Land reanalysis (black)."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "month"))) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
+  mutate(gcm = "ERA5-Land") %>% 
+  group_by(gcm, date = month(date)) %>% 
+  summarise(pr = mean(pr))
+read_tsv("data/derived_data/projections_raw.tsv") %>% 
+  filter(experiment == "historical") %>% 
+  group_by(gcm, date = floor_date(date, "month")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  group_by(gcm, date = month(date)) %>% 
+  summarise(pr = mean(pr)) %>% 
+  ggplot(aes(date, pr, col = gcm)) +
+  geom_line() +
+  geom_line(data = era, col = "black") +
+  theme_bw() +
+  xlab("") + ylab("Precipitation [ mm ]") +
+  scale_color_discrete("") +
+  scale_x_continuous(breaks = 1:12,
+                     labels = c("J", "F", "M", "A", "M", "J", "J", "A",
+                                "S", "O", "N", "D"))
+```
+
+```{r pr_an_bc}
+#| message: false
+#| warning: false
+#| fig-cap: "Annual CMIP6 bias-corrected precipitation projections for scenarii SSP1-2.6 and SSP5-8.5 compared to ERA5-Land reanalysis (black)."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "year"))) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
+  mutate(gcm = "ERA5-Land", experiment = "historical")
+read_tsv("data/derived_data/projections.tsv") %>% 
+  group_by(gcm, experiment, date = floor_date(date, "year")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  ggplot(aes(date, pr, col = paste(gcm, experiment))) +
+  geom_line() +
+  geom_line(data = era, col = "black") +
+  theme_bw() +
+  xlab("") + ylab("Precipitation [ mm ]") +
+  scale_color_discrete("")
+```
+
+```{r pr_mon_bc}
+#| message: false
+#| warning: false
+#| fig-cap: "Evaluations of CMIP6 bias-corrected projections monthly precipitations against ERA5-Land."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "month"))) %>% 
+  summarise(era = sum(pr, na.rm = TRUE))
+read_tsv("data/derived_data/projections.tsv") %>% 
+  group_by(gcm, experiment, date = floor_date(date, "month")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  left_join(era) %>% 
+  ggplot(aes(era, pr, col = gcm)) +
+  geom_abline() +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  ggpubr::stat_cor() +
+  scale_color_discrete("") +
+  ggtitle("Monthly total precipitation [ mm ]") +
+  xlab("ERA5-Land") + ylab("CMIP6 GCM raw projection")
+```
+
+```{r pr_seas_bc}
+#| message: false
+#| warning: false
+#| fig-cap: "Seasonal CMIP6 bias-corrected precipitation projections for scenarii SSP1-2.6 and SSP5-8.5 compared to ERA5-Land reanalysis (black)."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "month"))) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
+  mutate(gcm = "ERA5-Land") %>% 
+  group_by(gcm, date = month(date)) %>% 
+  summarise(pr = mean(pr))
+read_tsv("data/derived_data/projections.tsv") %>% 
+  filter(experiment == "historical") %>% 
+  group_by(gcm, date = floor_date(date, "month")) %>% 
+  summarise(pr = sum(pr)) %>% 
+  group_by(gcm, date = month(date)) %>% 
+  summarise(pr = mean(pr)) %>% 
+  ggplot(aes(date, pr, col = gcm)) +
+  geom_line() +
+  geom_line(data = era, col = "black") +
+  theme_bw() +
+  xlab("") + ylab("Precipitation [ mm ]") +
+  scale_color_discrete("") +
+  scale_x_continuous(breaks = 1:12,
+                     labels = c("J", "F", "M", "A", "M", "J", "J", "A",
+                                "S", "O", "N", "D"))
+```
+
+## Temperature
+
+*ToDo from tas.*
+
+## Wind speed
+
+*ToDo from ws=sqrt(uas\^2+vas\^2).*
+
+## Vapour pressure deficit
+
+*ToDo from vpd=f(huss).*
+
+## Radiations
+
+Raditions will be considered constant as not available on most projections that we are collecting and because is not assume to change with climate change.

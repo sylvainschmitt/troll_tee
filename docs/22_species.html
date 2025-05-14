@@ -343,7 +343,7 @@ div.csl-indent {
 </header>
 
 <blockquote class="blockquote">
-<p><strong>Summary.</strong> Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO<span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, leaf, wood and hydraulic traits from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>, TRY [<span class="citation" data-cites="kattge2019">Kattge et al. (<a href="references.html#ref-kattge2019" role="doc-biblioref">2019</a>)</span>] and BIOMASS <span class="citation" data-cites="réjou-méchain2017">(<a href="references.html#ref-réjou-méchain2017" role="doc-biblioref">Réjou-Méchain et al. 2017</a>)</span>, and missing traits imputed using <code>missForest</code> with phylogeny <span class="citation" data-cites="10.1111/2041-210X.14339">(<a href="references.html#ref-10.1111/2041-210X.14339" role="doc-biblioref"><strong>10.1111/2041-210X.14339?</strong></a>)</span>.</p>
+<p><strong>Summary.</strong> Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO<span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, leaf, wood and hydraulic traits from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>, TRY <span class="citation" data-cites="kattge2019">(<a href="references.html#ref-kattge2019" role="doc-biblioref">Kattge et al. 2019</a>)</span> and BIOMASS <span class="citation" data-cites="réjou-méchain2017">(<a href="references.html#ref-réjou-méchain2017" role="doc-biblioref">Réjou-Méchain et al. 2017</a>)</span>, and missing traits imputed using <code>missForest</code> with phylogeny <span class="citation" data-cites="gendre2024">(<a href="references.html#ref-gendre2024" role="doc-biblioref">Gendre et al. 2024</a>)</span>.</p>
 </blockquote>
 <section id="taxonomy" class="level2">
 <h2 class="anchored" data-anchor-id="taxonomy">Taxonomy</h2>
@@ -737,7 +737,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<p>As the 8 TLP values from TRY from <span class="citation" data-cites="10.1002/ecy.2591">(<a href="references.html#ref-10.1002/ecy.2591" role="doc-biblioref"><strong>10.1002/ecy.2591?</strong></a>)</span> differed too much besides using the same method, we excluded them.</p>
+<p>As the 8 TLP values from TRY from <span class="citation" data-cites="mcfadden2019">McFadden et al. (<a href="references.html#ref-mcfadden2019" role="doc-biblioref">2019</a>)</span> differed too much besides using the same method, we excluded them.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -937,7 +937,7 @@ div.csl-indent {
 </section>
 <section id="imputation" class="level2">
 <h2 class="anchored" data-anchor-id="imputation">Imputation</h2>
-<p>Using <code>missForest</code> (<a href="https://cran.r-project.org/web/packages/missForest/index.html" class="uri">https://cran.r-project.org/web/packages/missForest/index.html</a>) with phylogeny Eigen vectors (<a href="https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005" class="uri">https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005</a>), see benchmarking in <span class="citation" data-cites="10.1111/2041-210X.14339">(<a href="references.html#ref-10.1111/2041-210X.14339" role="doc-biblioref"><strong>10.1111/2041-210X.14339?</strong></a>)</span>.</p>
+<p>Using <code>missForest</code> <span class="citation" data-cites="stekhoven2015">Stekhoven (<a href="references.html#ref-stekhoven2015" role="doc-biblioref">2015</a>)</span> with phylogeny Eigen vectors <span class="citation" data-cites="debastiani2021">Debastiani, Bastazini, and Pillar (<a href="references.html#ref-debastiani2021" role="doc-biblioref">2021</a>)</span>, see benchmarking in <span class="citation" data-cites="gendre2024">Gendre et al. (<a href="references.html#ref-gendre2024" role="doc-biblioref">2024</a>)</span>.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1036,17 +1036,29 @@ div.csl-indent {
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-debastiani2021" class="csl-entry" role="listitem">
+Debastiani, Vanderlei J, Vinicius AG Bastazini, and Valério D Pillar. 2021. <span>“Using Phylogenetic Information to Impute Missing Functional Trait Values in Ecological Databases.”</span> <em>Ecological Informatics</em> 63: 101315.
+</div>
+<div id="ref-gendre2024" class="csl-entry" role="listitem">
+Gendre, Matthieu, Torsten Hauffe, Catalina Pimiento, and Daniele Silvestro. 2024. <span>“Benchmarking Imputation Methods for Categorical Biological Data.”</span> <em>Methods in Ecology and Evolution</em> 15 (9): 1624–38.
+</div>
 <div id="ref-jucker2022" class="csl-entry" role="listitem">
 Jucker, Tommaso, Fabian Jörg Fischer, Jérôme Chave, David A. Coomes, John Caspersen, Arshad Ali, Grace Jopaul Loubota Panzou, et al. 2022. <span>“Tallo: A Global Tree Allometry and Crown Architecture Database.”</span> <em>Global Change Biology</em> 28 (17): 5254–68. <a href="https://doi.org/10.1111/gcb.16302">https://doi.org/10.1111/gcb.16302</a>.
 </div>
 <div id="ref-kattge2019" class="csl-entry" role="listitem">
 Kattge, Jens, Gerhard Bönisch, Sandra Díaz, Sandra Lavorel, Iain Colin Prentice, Paul Leadley, Susanne Tautenhahn, et al. 2019. <span>“TRY Plant Trait Database <span></span> Enhanced Coverage and Open Access.”</span> <em>Global Change Biology</em> 26 (1): 119–88. <a href="https://doi.org/10.1111/gcb.14904">https://doi.org/10.1111/gcb.14904</a>.
 </div>
+<div id="ref-mcfadden2019" class="csl-entry" role="listitem">
+McFadden, Ian R, Megan K Bartlett, Thorsten Wiegand, Benjamin L Turner, Lawren Sack, Renato Valencia, and Nathan JB Kraft. 2019. <span>“Disentangling the Functional Trait Correlates of Spatial Aggregation in Tropical Forest Trees.”</span> <em>Ecology</em> 100 (3): e02591.
+</div>
 <div id="ref-réjou-méchain2017" class="csl-entry" role="listitem">
 Réjou-Méchain, Maxime, Ariane Tanguy, Camille Piponiot, Jérôme Chave, and Bruno Hérault. 2017. <span>“Biomass: An r Package for Estimating Above<span>-</span>Ground Biomass and Its Uncertainty in Tropical Forests.”</span> Edited by Sarah Goslee. <em>Methods in Ecology and Evolution</em> 8 (9): 1163–67. <a href="https://doi.org/10.1111/2041-210x.12753">https://doi.org/10.1111/2041-210x.12753</a>.
 </div>
 <div id="ref-schmitt2024" class="csl-entry" role="listitem">
 Schmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. <span>“TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model <span></span> Part 2: Model Evaluation for Two Amazonian Sites.”</span> <a href="http://dx.doi.org/10.5194/egusphere-2024-3106">http://dx.doi.org/10.5194/egusphere-2024-3106</a>.
+</div>
+<div id="ref-stekhoven2015" class="csl-entry" role="listitem">
+Stekhoven, Daniel J. 2015. <span>“missForest: Nonparametric Missing Value Imputation Using Random Forest.”</span> <em>Astrophysics Source Code Library</em>, ascl–1505.
 </div>
 <div id="ref-vleminckx2021" class="csl-entry" role="listitem">
 Vleminckx, Jason, Claire Fortunel, Oscar Valverde-Barrantes, C. E. Timothy Paine, Julien Engel, Pascal Petronelli, Aurélie K. Dourdain, Juan Guevara, Solène Béroujon, and Christopher Baraloto. 2021. <span>“Resolving Whole<span>-</span>Plant Economics from Leaf, Stem and Root Traits of 1467 Amazonian Tree Species.”</span> <em>Oikos</em> 130 (7): 1193–1208. <a href="https://doi.org/10.1111/oik.08284">https://doi.org/10.1111/oik.08284</a>.

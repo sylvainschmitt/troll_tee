@@ -8,7 +8,7 @@ library(ggfortify)
 
 # Species {.unnumbered}
 
-> **Summary.** Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO[@jucker2022], leaf, wood and hydraulic traits from @schmitt2024, TRY \[@kattge2019\] and BIOMASS [@réjou-méchain2017], and missing traits imputed using `missForest` with phylogeny [@10.1111/2041-210X.14339].
+> **Summary.** Taxonomy and dbhmax taken from LBA inventories, ah, and hmax inferred from TALLO[@jucker2022], leaf, wood and hydraulic traits from @schmitt2024, TRY [@kattge2019] and BIOMASS [@réjou-méchain2017], and missing traits imputed using `missForest` with phylogeny [@gendre2024].
 
 ## Taxonomy
 
@@ -349,7 +349,7 @@ traits %>%
   ylab("")
 ```
 
-As the 8 TLP values from TRY from @10.1002/ecy.2591 differed too much besides using the same method, we excluded them.
+As the 8 TLP values from TRY from @mcfadden2019 differed too much besides using the same method, we excluded them.
 
 ```{r functional_stat}
 #| message: false
@@ -486,7 +486,7 @@ g1 + g2
 
 ## Imputation
 
-Using `missForest` (<https://cran.r-project.org/web/packages/missForest/index.html>) with phylogeny Eigen vectors (<https://www.sciencedirect.com/science/article/pii/S1574954121001060#f0005>), see benchmarking in @10.1111/2041-210X.14339.
+Using `missForest` @stekhoven2015 with phylogeny Eigen vectors @debastiani2021, see benchmarking in @gendre2024.
 
 ```{r sp_par_raw}
 #| message: false
