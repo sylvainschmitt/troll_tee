@@ -1,18 +1,24 @@
 # Raw data
 Sylvain Schmitt -
-Apr 17, 2025
+May 15, 2025
 
 All raw data for the analyses. They are all retrieved from the Lartge
 Scale Biosphere-Atmosphere Experiment (LBA-ECO,
 <https://daac.ornl.gov/cgi-bin/dataset_lister.pl?p=11>) available at the
 Oak Ridge National Laboratory Distributed Active Archive Center (ORNL
-DAAC). See the “Data” section.
+DAAC). See the “Data” section. CMIP6, ERA5-Land, TRY, TALLO, and WFO to
+describe.
 
 ``` r
 fs::dir_tree()
 ```
 
     .
+    ├── 40982_29042025105444
+    │   ├── 40982.txt
+    │   ├── TRY_6.0_Data_Release_Notes.pdf
+    │   └── TRY_Intellectual_Property_Guidelines.pdf
+    ├── Appendix_S2-6___S8-13.xlsx
     ├── CD02_Forest_Canopy_Structure_1009
     │   ├── comp
     │   │   └── CD02_Forest_Canopy_Structure.pdf
@@ -160,4 +166,66 @@ fs::dir_tree()
     │       └── Online_Version_ND30_REE_Water_Chemistry.html
     ├── README.md
     ├── README.qmd
-    └── README.rmarkdown
+    ├── README.rmarkdown
+    ├── Tallo.csv?download=1
+    ├── Tapajos_soil_troll.tsv
+    ├── TryAccSpecies.txt
+    ├── WFO_Backbone.zip
+    ├── cmip6
+    │   ├── get_cmip6.py
+    │   ├── get_cmip6.yml
+    │   ├── huss
+    │   ├── pr
+    │   │   ├── CMIP.CCCR-IITM.IITM-ESM.historical.day.gn_pr.nc
+    │   │   ├── CMIP.CCCma.CanESM5.historical.day.gn_pr.nc
+    │   │   ├── CMIP.CMCC.CMCC-CM2-SR5.historical.day.gn_pr.nc
+    │   │   ├── CMIP.CMCC.CMCC-ESM2.historical.day.gn_pr.nc
+    │   │   ├── CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.day.gn_pr.nc
+    │   │   ├── CMIP.MPI-M.MPI-ESM1-2-HR.historical.day.gn_pr.nc
+    │   │   ├── CMIP.MPI-M.MPI-ESM1-2-LR.historical.day.gn_pr.nc
+    │   │   ├── CMIP.NCC.NorESM2-MM.historical.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.AWI.AWI-CM-1-1-MR.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.AWI.AWI-CM-1-1-MR.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.BCC.BCC-CSM2-MR.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.BCC.BCC-CSM2-MR.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CCCR-IITM.IITM-ESM.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CCCR-IITM.IITM-ESM.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CCCma.CanESM5.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CCCma.CanESM5.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CMCC.CMCC-ESM2.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CMCC.CMCC-ESM2.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.day.gn_pr.nc
+    │   │   ├── ScenarioMIP.NCC.NorESM2-MM.ssp126.day.gn_pr.nc
+    │   │   └── ScenarioMIP.NCC.NorESM2-MM.ssp585.day.gn_pr.nc
+    │   ├── rsds
+    │   ├── rsus
+    │   ├── sfcWind
+    │   └── tas
+    │       ├── CMIP.CCCma.CanESM5.historical.day.gn_tas.nc
+    │       ├── ScenarioMIP.CCCR-IITM.IITM-ESM.ssp585.day.gn_tas.nc
+    │       ├── ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp585.day.gn_tas.nc
+    │       ├── ScenarioMIP.CMCC.CMCC-ESM2.ssp126.day.gn_tas.nc
+    │       ├── ScenarioMIP.CMCC.CMCC-ESM2.ssp585.day.gn_tas.nc
+    │       ├── ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.day.gn_tas.nc
+    │       ├── ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.day.gn_tas.nc
+    │       └── ScenarioMIP.NCC.NorESM2-MM.ssp585.day.gn_tas.nc
+    ├── era
+    │   ├── era5_tapajos.tsv
+    │   ├── get_era_ee.py
+    │   ├── get_era_ee.yml
+    │   ├── get_era_om.py
+    │   ├── get_era_om.yml
+    │   ├── log_ee.txt
+    │   └── log_om.txt
+    └── try_reqs
+        ├── req_1.txt
+        ├── req_2.txt
+        ├── req_3.txt
+        └── requests.txt

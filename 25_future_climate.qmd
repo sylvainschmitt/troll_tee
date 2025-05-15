@@ -5,68 +5,88 @@ library(tidyverse)
 
 # Future climate {.unnumbered}
 
-> **Summary.** Future climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 [@neill2016] statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt [@vrac2015].
+> **Summary.** Future climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 [@neill2016]. Daily values were statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt [@vrac2015]. Half-hourly values were downscaled using daily mean variations across years from ERA5-Land.
 
 ```{r assemble}
 #| eval: false
 library(ncdf4)
 get_var <- function(file, var) {
-  nc <- nc_open(file)
-  data <- tibble(
-    gcm = ncatt_get(nc, 0, "parent_source_id")$value,
-    experiment = ncatt_get(nc, 0, "experiment_id")$value,
-    date = as.character(as_date(ncatt_get(nc, "time", "units")$value) + 
-                       ncvar_get(nc, "time")),
-    "{var}" := as.numeric(ncvar_get(nc, var))
-    ) 
-  nc_close(nc)
-  return(data)
+  nc <- try(nc_open(file))
+  if(!inherits(nc, "try-error")){
+    data <- tibble(
+      gcm = ncatt_get(nc, 0, "parent_source_id")$value,
+      experiment = ncatt_get(nc, 0, "experiment_id")$value,
+      date = as.character(as_date(ncatt_get(nc, "time", "units")$value) + 
+                         ncvar_get(nc, "time")),
+      "{var}" := as.numeric(ncvar_get(nc, var))
+      ) 
+    nc_close(nc)
+    return(data)
+  } else {
+    warning(paste("Failed:", file))
+    return(tibble())
+  }
 }
 pr <- list.files("data/raw_data/cmip6/pr/", full.names = TRUE) %>% 
   lapply(get_var, "pr") %>% 
   bind_rows() %>% 
   mutate(pr = pr *60 * 60 * 24)
-write_tsv(pr, "data/derived_data/projections_raw.tsv")
+tas <- list.files("data/raw_data/cmip6/tas/", full.names = TRUE) %>%
+  lapply(get_var, "tas") %>%
+  bind_rows() %>%
+  mutate(tas = tas - 273.15)
+pr %>%  
+  full_join(tas) %>% 
+  filter(paste(month(date), day(date)) != "2 29") %>% 
+  arrange(gcm, experiment, date) %>% 
+  write_tsv("data/derived_data/projections_raw.tsv")
 ```
 
 ```{r bias-correct}
 #| eval: false
-library(CDFt)
-bc_pr <- function(gcm, month){
-  era <- read_tsv("data/derived_data/climate.tsv") %>% 
-    group_by(date = as_date(date)) %>%
-    filter(month(date) ==  month) %>%
-    summarise(era = sum(pr, na.rm = TRUE))
-  proj <- read_tsv("data/derived_data/projections_raw.tsv") %>%
-    filter(month(date) ==  month) %>%
-    filter(gcm == gcm) %>%
-    left_join(era)
-  train <- filter(proj, !is.na(era))
-  adjusted <- CDFt(
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  gather(variable, value, -date) %>% 
+  na.omit() %>% 
+  group_by(variable, date = as_date(date)) %>%
+  mutate(value = ifelse(variable %in% c("pr", "snet"), sum(value), value)) %>% 
+  summarise(era = mean(value)) %>% 
+  ungroup()
+proj <- read_tsv("data/derived_data/projections_raw.tsv") %>% 
+  gather(variable, value, -date, -gcm, -experiment)
+apply_bc <- function(model, month, var, era, proj){
+  era_sub <- era %>% 
+    filter(variable == var, month(date) ==  month)
+  proj_sub <- proj %>%
+    filter(gcm == model, variable == var, month(date) ==  month) %>%
+    left_join(era_sub)
+  train <- filter(proj_sub, !is.na(era))
+  adjusted <- CDFt::CDFt(
     ObsRp = train$era,
-    DataGp = train$pr,
-    DataGf = proj$pr
+    DataGp = train$value,
+    DataGf = proj_sub$value
   )
-  proj %>%
-    mutate(pr = adjusted$DS) %>%
+  proj_sub %>%
+    mutate(value = adjusted$DS) %>%
     select(-era)
 }
 bc <- expand_grid(
   gcm = unique(read_tsv("data/derived_data/projections_raw.tsv")$gcm),
-  month = 1:12
+  month = 1:12,
+  var = "pr"
 ) %>% 
   rowwise() %>% 
-  mutate(bc_pr = list(bc_pr(gcm, month)))
+  mutate(bc = list(apply_bc(gcm, month, var, era, proj))) 
 bc %>% 
-  select(-gcm, -month) %>% 
-  unnest(bc_pr) %>% 
-  unique() %>% 
+  unnest() %>% 
+  select(-gcm1, -var, -month) %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  arrange(gcm, experiment, date) %>% 
   write_tsv("data/derived_data/projections.tsv")
 ```
 
 ## Precipitation
 
-CMIP6 raw precipitation projections mostly underestimated annual precipitation with lower monthly values and unrealistic seasonal pattern showing lagged and more intense dry seasons for all GCMs. After bias-correction we obtained more realistic annual precipitation despite strongly variable among GCMs, good monthly precipitation correlations to ERA5-Land and a realistic seasonality with the June to November dry season below 100-mm (*maybe a bit too high for ITM-ESM and MPI-ESM1-2-LR*). Bias-correction using cumulative distribution function was applied on absolute precipitation value but might be improved considering relative daily precipitation volume in the month.
+CMIP6 raw precipitation projections mostly underestimated annual precipitation with lower monthly values and unrealistic seasonal pattern showing lagged and more intense dry seasons for all GCMs. After bias-correction we obtained more realistic annual precipitation, good monthly precipitation correlations to ERA5-Land above 0.6 and a realistic seasonality with the June to November dry season below 100-mm. Bias-correction using cumulative distribution function was applied on absolute precipitation value but might be improved considering relative daily precipitation volume in the month.
 
 ```{r pr_an_raw}
 #| message: false
@@ -78,8 +98,8 @@ era <- read_tsv("data/derived_data/climate.tsv") %>%
   mutate(gcm = "ERA5-Land", experiment = "historical")
 read_tsv("data/derived_data/projections_raw.tsv") %>% 
   group_by(gcm, experiment, date = floor_date(date, "year")) %>% 
-  summarise(pr = sum(pr)) %>% 
-  ggplot(aes(date, pr, col = paste(gcm, experiment))) +
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
+  ggplot(aes(date, pr, group = paste(gcm, experiment), col = gcm)) +
   geom_line() +
   geom_line(data = era, col = "black") +
   theme_bw() +
@@ -96,7 +116,7 @@ era <- read_tsv("data/derived_data/climate.tsv") %>%
   summarise(era = sum(pr, na.rm = TRUE))
 read_tsv("data/derived_data/projections_raw.tsv") %>% 
   group_by(gcm, experiment, date = floor_date(date, "month")) %>% 
-  summarise(pr = sum(pr)) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
   left_join(era) %>% 
   ggplot(aes(era, pr, col = gcm)) +
   geom_abline() +
@@ -122,7 +142,7 @@ era <- read_tsv("data/derived_data/climate.tsv") %>%
 read_tsv("data/derived_data/projections_raw.tsv") %>% 
   filter(experiment == "historical") %>% 
   group_by(gcm, date = floor_date(date, "month")) %>% 
-  summarise(pr = sum(pr)) %>% 
+  summarise(pr = sum(pr, na.rm = TRUE)) %>% 
   group_by(gcm, date = month(date)) %>% 
   summarise(pr = mean(pr)) %>% 
   ggplot(aes(date, pr, col = gcm)) +
@@ -147,12 +167,13 @@ era <- read_tsv("data/derived_data/climate.tsv") %>%
 read_tsv("data/derived_data/projections.tsv") %>% 
   group_by(gcm, experiment, date = floor_date(date, "year")) %>% 
   summarise(pr = sum(pr)) %>% 
-  ggplot(aes(date, pr, col = paste(gcm, experiment))) +
+  ggplot(aes(date, pr, group = paste(gcm, experiment), col = gcm)) +
   geom_line() +
   geom_line(data = era, col = "black") +
   theme_bw() +
   xlab("") + ylab("Precipitation [ mm ]") +
-  scale_color_discrete("")
+  scale_color_discrete("") +
+  theme(legend.key.size = unit(.8, "line"))
 ```
 
 ```{r pr_mon_bc}
@@ -208,6 +229,25 @@ read_tsv("data/derived_data/projections.tsv") %>%
 
 *ToDo from tas.*
 
+```{r tas_an_raw}
+#| message: false
+#| warning: false
+#| fig-cap: "Annual CMIP6 mean temperature projections for scenarii SSP1-2.6 and SSP5-8.5 compared to ERA5-Land reanalysis (black)."
+era <- read_tsv("data/derived_data/climate.tsv") %>% 
+  group_by(date = as_date(floor_date(date, "year"))) %>% 
+  summarise(tas = mean(tas, na.rm = TRUE)) %>% 
+  mutate(gcm = "ERA5-Land", experiment = "historical")
+read_tsv("data/derived_data/projections_raw.tsv") %>% 
+  group_by(gcm, experiment, date = floor_date(date, "year")) %>% 
+  summarise(tas = mean(tas, na.rm = TRUE)) %>% 
+  ggplot(aes(date, tas, group = paste(gcm, experiment), col = gcm)) +
+  geom_line() +
+  geom_line(data = era, col = "black") +
+  theme_bw() +
+  xlab("") + ylab("Temperature [ °C ]") +
+  scale_color_discrete("")
+```
+
 ## Wind speed
 
 *ToDo from ws=sqrt(uas\^2+vas\^2).*
@@ -218,4 +258,34 @@ read_tsv("data/derived_data/projections.tsv") %>%
 
 ## Radiations
 
-Raditions will be considered constant as not available on most projections that we are collecting and because is not assume to change with climate change.
+*ToDo from snet=rsdus-rsus.*
+
+## Half-hourly downscaling
+
+*ToDo using each day half-hourly mean variation across years.*
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-cap: "Half-hourly relative variation across 45 years from the first day of the month"
+read_tsv("data/derived_data/climate.tsv") %>% 
+  select(-pr) %>% 
+  gather(variable, value, -date) %>% 
+  filter(day(date) == 1) %>% 
+  mutate(time = minute(date)+60*hour(date),
+         month = month(date)) %>% 
+  group_by(variable, date2 = as_date(date)) %>% 
+  mutate(value = value/mean(value)) %>% 
+  select(-date2) %>% 
+  group_by(variable, month, time) %>% 
+  summarise(l = quantile(value, .05),
+            m  = quantile(value, .5),
+            h  = quantile(value, .95)) %>% 
+  ggplot(aes(time/60, m)) +
+  geom_ribbon(aes(ymin = l, ymax= h), fill = "lightgrey", col = NA) +
+  geom_line() +
+  facet_grid(variable ~ month, scales = "free") +
+  theme_bw() +
+  xlab("") + ylab("") +
+  theme(axis.text.x = element_text(angle = 90))
+```

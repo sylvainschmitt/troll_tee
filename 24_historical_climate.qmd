@@ -173,7 +173,7 @@ tower %>%
 
 ## Half-hourly downscaling
 
-We used spline interpolation for downscaling half hourly values of tas, vpd and ws and linear interpolation for snet.
+We used spline interpolation for downscaling half hourly values of tas, vpd and ws and linear interpolation for snet. 29th of February have been removed to keep only years with 365 days.
 
 ```{r downscaling}
 #| message: false
@@ -194,6 +194,7 @@ era_ds <- tibble(date =  seq(min(era$date),
   mutate(across(c(snet), ~ ifelse(. < 0, 0, .)))
 era_ds %>% 
   select(-raw) %>% 
+  filter(paste(month(date), day(date)) != "2 29") %>% 
   write_tsv("data/derived_data/climate.tsv")
 filter(era_ds, as_date(date) == "1980-01-01") %>% 
   gather(variable, value, -date, -raw) %>% 
