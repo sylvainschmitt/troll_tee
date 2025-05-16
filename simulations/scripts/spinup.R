@@ -4,61 +4,72 @@ sink(log_file, append = TRUE, type = "message")
 sink(log_file, append = TRUE)
 
 # snakemake vars
-filein <- snakemake@input[[1]]
-folderin <- snakemake@input[[2]]
+climate_file <- snakemake@input[[1]]
+species_file <- snakemake@input[[2]]
+soil_file <- snakemake@input[[3]]
 folderout <- snakemake@output[[1]]
-site <- as.character(snakemake@params$site)
-rep <- as.numeric(snakemake@params$rep)
+cra <- as.numeric(snakemake@params$cra)
+crb <- as.numeric(snakemake@params$crb)
+m <- as.numeric(snakemake@params$m)
 a0 <- as.numeric(snakemake@params$a0)
 b0 <- as.numeric(snakemake@params$b0)
 delta <- as.numeric(snakemake@params$delta)
-cra <- as.numeric(snakemake@params$cra)
-crberr <- as.numeric(snakemake@params$crberr)
-m <- as.numeric(snakemake@params$m)
-dstart <- as.numeric(snakemake@params$dstart)
-dend <- as.numeric(snakemake@params$dend)
-verbose <- snakemake@params$verbose
 test <- snakemake@params$test
-test_years <- snakemake@params$test_years
 
 # test
-# filein <- "results/run/GF-Guy_2004-2014_climate.tsv"
-# folderout <- "results/spinup//GF-Guy_2004-2014"
-# folderout <- "results/run/GF-Guy_2004-2014"
-# site <- "GF-Guy_2004-2014"
-# verbose <- TRUE
+# climate_file <- "data/derived_data/climate.tsv"
+# species_file <- "data/derived_data/species.tsv"
+# soil_file <- "data/derived_data/soil.tsv"
+# folderout <- "results/spinup/R1"
+# cra <- 2.45
+# crb <- 0.7565
+# m <- 0.040
+# a0 <- 0.2
+# b0 <- 0.015
+# delta <- 0.2
 # test <- TRUE
-# test_years <- 0.1
 
 # libraries
 library(tidyverse)
 library(rcontroll)
-library(vroom)
 
 # code
-name <- paste0(site, "_R", rep)
+name <- tail(str_split_1(folderout, "/"), 1)
 
-climate <- vroom(filein) %>% 
-  arrange(time) %>% 
-  filter(paste0(month(time), "-", day(time)) != "2-29") %>% 
+climate <- read_tsv(climate_file) %>% 
+  arrange(date) %>% 
+  filter(paste0(month(date), "-", day(date)) != "2-29") %>% 
   mutate(snet = ifelse(snet <= 1.1, 1.1, snet)) %>% 
   mutate(vpd = ifelse(vpd <= 0.011, 0.011, vpd)) %>% 
   mutate(ws = ifelse(ws <= 0.11, 0.11, ws))
-clim <- generate_climate(climate, 
-                         daytime_start = dstart, 
-                         daytime_end = dend)
-day <- generate_dailyvar(climate, 
-                         daytime_start = dstart, 
-                         daytime_end = dend)
 
-spinup <-  load_output(name = paste0(site, "_", a0, "_", b0, "_", delta),
-                       path = folderin)
+clim <-   climate %>%
+  mutate(time = hour(date)) %>%
+  mutate(date = date(date)) %>%
+  select(date, time, tas, pr) %>%
+  mutate(tas = ifelse(time < 6, NA, tas)) %>%
+  mutate(tas = ifelse(time >= 18, NA, tas)) %>%
+  group_by(date) %>%
+  summarise(
+    NightTemperature = mean(tas, na.rm = TRUE),
+    Rainfall = sum(pr, na.rm = TRUE)
+  ) %>%
+  select(-date)
+
+ndays <- length(unique(date(climate$date)))
+day <- climate %>% 
+  rename(Temp = tas, Snet = snet, VPD = vpd, WS = ws) %>%
+  mutate(time_hour = hour(date)) %>%
+  filter(time_hour >= 6, time_hour < 18) %>%
+  select(-time_hour) %>%
+  mutate(time_numeric = hour(date) + minute(date) / 60) %>%
+  mutate(DayJulian = rep(1:ndays, each = 24)) %>% 
+  select(DayJulian, time_numeric, Temp, Snet, VPD, WS)
 
 n <- as.numeric(nrow(clim))
 if(test)
-  n <- round(test_years*365)
+  n <- 10
 
-crb = -0.39 + 0.57*cra + crberr
 parameters <- generate_parameters(nbiter = n,
                                   klight = 0.5,
                                   phi = 0.10625,
@@ -84,20 +95,28 @@ parameters <- generate_parameters(nbiter = n,
                                   CR_b = crb,
                                   m = m,
                                   m1 = m)
+
 seed <- sample.int(.Machine$integer.max, 1)
 parameters <- mutate(parameters, value = ifelse(param == "Rseed", seed, value))
-  
+
+species <- read_tsv(species_file) %>% 
+  rename(name = scientific, dbhmax = dbhthres, hmax = hlim) %>% 
+  rename_all(~ paste0("s_", .)) %>% 
+  mutate(s_seedmass = 1, s_regionalfreq = 1/n()) %>% 
+  select(s_name, s_LMA, s_Nmass, s_Pmass, s_wsg, s_dbhmax, s_hmax, s_ah,
+         s_seedmass, s_regionalfreq, s_tlp, s_leafarea)
+
+soil <- read_tsv(soil_file)
+
 sim <- troll(
   name = name,
   path = gsub(name, "", folderout),
   global = parameters,
-  species = spinup@inputs$species, 
+  species = species, 
   climate = clim,
   daily = day,
-  pedology = spinup@inputs$pedology, 
-  forest = get_forest(spinup),
-  soil = get_soil(spinup), 
+  pedology = soil, 
   load = FALSE,
-  verbose = verbose,
+  verbose = TRUE,
   overwrite = TRUE
 )

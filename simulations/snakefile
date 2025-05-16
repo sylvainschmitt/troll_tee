@@ -27,9 +27,7 @@ rule spinup:
         a0=config["a0"],
         b0=config["b0"],
         delta=config["delta"],
-        verbose=config["verbose"],
-        test=config["test"],
-        test_years=config["test_years"]
+        test=config["test"]
     script:
         "scripts/spinup.R"
         
