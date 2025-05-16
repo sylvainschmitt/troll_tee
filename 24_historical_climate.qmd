@@ -22,30 +22,31 @@ esat <- function(t, p) {
   b <- 18.678 - (t / 234.5)
   c <- 257.14
   f <- 1.00072 + 10^-7 * p * (0.032 + 5.9 * 10^-6 * t^2)
-  return(f * a * (exp(b * t / (c + t))))
+  f * a * (exp(b * t / (c + t)))
 }
-era <- read_tsv("data/raw_data/era/era5_tapajos.tsv") %>% 
-  mutate(date = as_datetime(time) - 3*60*60, .before = 1) %>% 
-  select(-lat, -lon, -time) %>% 
-  mutate(ws = sqrt(u_component_of_wind_10m^2+v_component_of_wind_10m^2)) %>% 
-  mutate(snet = surface_net_solar_radiation/3600) %>% 
-  mutate(snet = snet - lag(snet)) %>% 
-  mutate(snet = ifelse(snet < 0, 0, snet)) %>% 
-  mutate(tas = temperature_2m-273.15) %>% 
-  mutate(pr = total_precipitation_hourly*1000) %>% 
-  mutate(vpd = (esat(temperature_2m-273.15, 101325) - 
-                  esat(dewpoint_temperature_2m-273.15, surface_pressure/1000))/1000) %>% 
-  select(date, pr, tas, snet, ws, vpd) %>% 
-  gather(variable, value, -date) %>% 
-  filter(year(date) %in% 1980:2024) 
-era %>% 
-  group_by(variable, date = floor_date(date, "month")) %>% 
+era <- read_tsv("data/raw_data/era/era5_tapajos.tsv") %>%
+  mutate(date = as_datetime(time) - 3 * 60 * 60, .before = 1) %>%
+  select(-lat, -lon, -time) %>%
+  mutate(ws = sqrt(u_component_of_wind_10m^2 + v_component_of_wind_10m^2)) %>%
+  mutate(snet = surface_net_solar_radiation / 3600) %>%
+  mutate(snet = snet - lag(snet)) %>%
+  mutate(snet = ifelse(snet < 0, 0, snet)) %>%
+  mutate(tas = temperature_2m - 273.15) %>%
+  mutate(pr = total_precipitation_hourly * 1000) %>%
+  mutate(vpd = (esat(temperature_2m - 273.15, 101325) -
+    esat(dewpoint_temperature_2m - 273.15, surface_pressure / 1000)) / 1000) %>%
+  select(date, pr, tas, snet, ws, vpd) %>%
+  gather(variable, value, -date) %>%
+  filter(year(date) %in% 1980:2024)
+era %>%
+  group_by(variable, date = floor_date(date, "month")) %>%
   mutate(value = ifelse(variable %in% c("pr"),
-                           sum(value, na.rm = T), value)) %>% 
-  summarise_all(mean) %>% 
+    sum(value, na.rm = TRUE), value
+  )) %>%
+  summarise_all(mean) %>%
   ggplot(aes(date, value)) +
   geom_line() +
-  facet_wrap(~ variable, scales = "free_y", nrow = 5) +
+  facet_wrap(~variable, scales = "free_y", nrow = 5) +
   theme_bw() +
   xlab("") +
   ylab("")
@@ -74,12 +75,12 @@ weather_station <- read_csv("data/raw_data/CD05_Micromet_1169/data/Rainfall_REE_
     "ppt_casa" = "Casa Onca (~1-km)",
     "ppt_ree_tower" = "Control plot tower"
   ))
-weather_station %>% 
-  pivot_wider(names_from = site, values_from = precipitation) %>% 
-  na.omit() %>% 
+weather_station %>%
+  pivot_wider(names_from = site, values_from = precipitation) %>%
+  na.omit() %>%
   ggplot(aes(`Casa Onca (~1-km)`, `Control plot tower`)) +
   geom_abline() +
-  geom_smooth(method = "lm", formula = ~0+x, se = FALSE) +
+  geom_smooth(method = "lm", formula = ~ 0 + x, se = FALSE) +
   geom_point(alpha = 0.2) +
   ggpubr::stat_cor() +
   theme_bw() +
@@ -90,38 +91,39 @@ weather_station %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Weather stations comparisons with ERA."
-day_comp <- era %>% 
-  filter(variable == "pr") %>% 
-  group_by(date = as_date(date)) %>% 
-  summarise(era = sum(value)) %>% 
-  left_join(weather_station) %>% 
+day_comp <- era %>%
+  filter(variable == "pr") %>%
+  group_by(date = as_date(date)) %>%
+  summarise(era = sum(value)) %>%
+  left_join(weather_station) %>%
   na.omit()
-make_fig <- function(data)
-  data %>% 
-  ggplot(aes(era, precipitation)) +
-  geom_abline() +
-  geom_smooth(method = "lm", formula = ~0+x, se = FALSE) +
-  geom_point(alpha = 0.2) +
-  ggpubr::stat_cor() +
-  theme_bw() +
-  ylab("Station [ mm ]") +
-  xlab("ERA [ mm ]")
-g_day <- day_comp %>% 
+make_fig <- function(data) {
+  data %>%
+    ggplot(aes(era, precipitation)) +
+    geom_abline() +
+    geom_smooth(method = "lm", formula = ~ 0 + x, se = FALSE) +
+    geom_point(alpha = 0.2) +
+    ggpubr::stat_cor() +
+    theme_bw() +
+    ylab("Station [ mm ]") +
+    xlab("ERA [ mm ]")
+}
+g_day <- day_comp %>%
   make_fig() +
   ggtitle("daily")
-g_week <- day_comp %>% 
-  group_by(site, date = floor_date(date, "week")) %>% 
-  summarise_all(sum) %>% 
+g_week <- day_comp %>%
+  group_by(site, date = floor_date(date, "week")) %>%
+  summarise_all(sum) %>%
   make_fig() +
   ggtitle("weekly")
-g_month <- day_comp %>% 
-  group_by(site, date = floor_date(date, "month")) %>% 
-  summarise_all(sum) %>% 
+g_month <- day_comp %>%
+  group_by(site, date = floor_date(date, "month")) %>%
+  summarise_all(sum) %>%
   make_fig() +
   ggtitle("monthly")
-g_year <- day_comp %>% 
-  group_by(site, date = floor_date(date, "year")) %>% 
-  summarise_all(sum) %>% 
+g_year <- day_comp %>%
+  group_by(site, date = floor_date(date, "year")) %>%
+  summarise_all(sum) %>%
   make_fig() +
   ggtitle("yearly")
 cowplot::plot_grid(g_day, g_week, g_month, g_year)
@@ -134,21 +136,21 @@ Similarly hourly values of radiation & temperature from ERA5-Land showed high co
 ```{r tower_comp}
 #| message: false
 #| warning: false
-#| fig-cap: "Flux tower comparisons with ERA for snet, tas, and ws at hourly timestep."
-era_sub <- era %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
+#| fig-cap: "Flux tower comparisons with ERA for snet, tas, and ws at hourly timestep." #nolint
+era_sub <- era %>%
+  pivot_wider(names_from = variable, values_from = value) %>%
   gather(variable, era, -date)
 tower <- read_csv("data/raw_data/CD10_EddyFlux_Tapajos_860/data/km67_eddyflux_2002_2006.txt") %>% # nolint
   rename_all(tolower) %>%
   mutate(date = as_datetime("2000/01/01") + hours * 60 * 60 - 2 * 60 * 60) %>%
   rename(tas = tamb, snet = netrad) %>%
-  select(date, tas, ws, snet) %>% 
-  gather(variable, tower, -date) %>% 
+  select(date, tas, ws, snet) %>%
+  gather(variable, tower, -date) %>%
   left_join(era_sub)
-tower %>% 
+tower %>%
   ggplot(aes(era, tower)) +
   geom_point(col = "lightgrey") +
-  facet_wrap(~ variable, scales = "free", nrow = 2) +
+  facet_wrap(~variable, scales = "free", nrow = 2) +
   theme_bw() +
   geom_abline() +
   geom_smooth(method = "lm", se = FALSE) +
@@ -159,13 +161,13 @@ tower %>%
 #| message: false
 #| warning: false
 #| fig-cap: "Flux tower daily variation of radiations comparison with ERA."
-tower %>% 
-  filter(variable == "snet") %>% 
-  na.omit() %>% 
-  mutate(hour = hour(date)) %>% 
-  group_by(hour) %>% 
-  summarise_all(mean) %>% 
-  gather(source, value, -hour, -date, -variable) %>% 
+tower %>%
+  filter(variable == "snet") %>%
+  na.omit() %>%
+  mutate(hour = hour(date)) %>%
+  group_by(hour) %>%
+  summarise_all(mean) %>%
+  gather(source, value, -hour, -date, -variable) %>%
   ggplot(aes(hour, value, col = source)) +
   geom_line() +
   theme_bw()
@@ -178,30 +180,35 @@ We used spline interpolation for downscaling half hourly values of tas, vpd and 
 ```{r downscaling}
 #| message: false
 #| warning: false
-era_ds <- tibble(date =  seq(min(era$date),
-                   max(era$date),
-                   by = 60 * 60 * 0.5)) %>% 
-  left_join(pivot_wider(era, names_from = variable, values_from = value) %>% 
-              mutate(raw = 1)) %>% 
+era_ds <- tibble(date = seq(min(era$date),
+  max(era$date),
+  by = 60 * 60 * 0.5
+)) %>%
+  left_join(pivot_wider(era, names_from = variable, values_from = value) %>%
+    mutate(raw = 1)) %>%
   group_by(day = as_date(date)) %>%
-  mutate(across(c(tas, vpd, ws),
-                ~ zoo::na.spline(., date, na.rm = FALSE))) %>% 
-  mutate(across(c(snet),
-                ~ zoo::na.approx(., date, na.rm = FALSE))) %>% 
-  ungroup() %>% 
-  select(-day) %>% 
-  mutate(across(c(snet), ~ ifelse(is.na(.), 0, .))) %>% 
+  mutate(across(
+    c(tas, vpd, ws),
+    ~ zoo::na.spline(., date, na.rm = FALSE)
+  )) %>%
+  mutate(across(
+    c(snet),
+    ~ zoo::na.approx(., date, na.rm = FALSE)
+  )) %>%
+  ungroup() %>%
+  select(-day) %>%
+  mutate(across(c(snet), ~ ifelse(is.na(.), 0, .))) %>%
   mutate(across(c(snet), ~ ifelse(. < 0, 0, .)))
-era_ds %>% 
-  select(-raw) %>% 
-  filter(paste(month(date), day(date)) != "2 29") %>% 
+era_ds %>%
+  select(-raw) %>%
+  filter(paste(month(date), day(date)) != "2 29") %>%
   write_tsv("data/derived_data/climate.tsv")
-filter(era_ds, as_date(date) == "1980-01-01") %>% 
-  gather(variable, value, -date, -raw) %>% 
+filter(era_ds, as_date(date) == "1980-01-01") %>%
+  gather(variable, value, -date, -raw) %>%
   ggplot(aes(date, value)) +
   geom_line() +
   geom_point(aes(col = as.factor(raw))) +
-  facet_wrap(~ variable, scales = "free_y", nrow = 5) +
+  facet_wrap(~variable, scales = "free_y", nrow = 5) +
   theme_bw() +
   ggtitle("1980-01-01")
 ```

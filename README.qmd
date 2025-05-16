@@ -10,9 +10,7 @@ format:
 bibliography: references.bib
 ---
 
-[![](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![lint](https://github.com/troll_tee/troll_tee/workflows/lint/badge.svg)](https://github.com/troll_tee/troll_tee/actions?query=workflow%3Alint)
-
-The general idea is to test the ability of TROLL 4.0 [@maréchaux2024; @schmitt2024] to simulate a Throughfall Exclusion Experiment (TEE) in Amazonia based on the Tapajos experiment [@nepstad2002] compared to previous model intercomparisons [@powell2013] to assess its ability to model the response of tropical moist forests (TMF) to climate change [@joetzjer2014]. Note: Water stress may be underrepresented due to the potential for pre-dawn drought, and this may be an opportunity to improve its representation with explicit tree hydraulic resistance.
+[![](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)The general idea is to test the ability of TROLL 4.0 [@maréchaux2024; @schmitt2024] to simulate a Throughfall Exclusion Experiment (TEE) in Amazonia based on the Tapajos experiment [@nepstad2002] compared to previous model intercomparisons [@powell2013] to assess its ability to model the response of tropical moist forests (TMF) to climate change [@joetzjer2014]. Note: Water stress may be underrepresented due to the potential for pre-dawn drought, and this may be an opportunity to improve its representation with explicit tree hydraulic resistance.
 
 ## Usage
 
@@ -27,6 +25,7 @@ The general idea is to test the ability of TROLL 4.0 [@maréchaux2024; @schmitt2
     -   Resulting pages in `docs/`
     -   Document structure definition in `_quarto.yml`
 -   All data in `data/`
+-   `simulations/` contain the snakemake and singularity workflow to run all simulations.
 -   Intermediary files in `outputs/`
 -   Figures in `figures/`
 -   R environment definition with [renv](https://rstudio.github.io/renv/articles/renv.html) in `renv/` and `renv/lock`

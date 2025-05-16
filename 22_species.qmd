@@ -223,7 +223,7 @@ prev <- rcontroll::TROLLv4_species %>%
   filter(species %in%
     read_tsv("data/derived_data/taxonomy.tsv")$scientific) %>%
   select(species, LMA, Nmass, Pmass, wsg, tlp, leafarea)
-print(paste("Number of common species available in Schmitt et al. 2025:", nrow(prev))) #nolint
+print(paste("Number of common species available in Schmitt et al. 2025:", nrow(prev))) # nolint
 ```
 
 ```{r n_vleminckx}
@@ -242,7 +242,7 @@ vleminckx <- readxl::read_xlsx("data/raw_data/Appendix_S2-6___S8-13.xlsx",
   mutate(LMA = ifelse(LMA > 200, NA, LMA)) %>%
   select(species, LMA, leafarea, Nmass, Pmass, wsg) %>%
   filter(species %in% read_tsv("data/derived_data/taxonomy.tsv")$scientific)
-print(paste("Number of common species available in Vleminckx et al. 2021:", nrow(vleminckx))) #nolint
+print(paste("Number of common species available in Vleminckx et al. 2021:", nrow(vleminckx))) # nolint
 ```
 
 ```{r n_biomass}
@@ -258,7 +258,7 @@ biomass <- BIOMASS::getWoodDensity(
   group_by(species) %>%
   summarise(wd = mean(meanWD)) %>%
   na.omit()
-print(paste("Number of common species available in BIOMASS (WSG):", nrow(biomass))) #nolint
+print(paste("Number of common species available in BIOMASS (WSG):", nrow(biomass))) # nolint
 ```
 
 ```{r n_all}
@@ -298,7 +298,7 @@ As almost all information comes from TRY [@kattge2019], with additional WSG in B
 try <- read_tsv("data/raw_data/40982_29042025105444/40982.txt") %>%
   filter(TraitID %in% all_codes) %>%
   filter(AccSpeciesName %in%
-           read_tsv("data/derived_data/taxonomy.tsv")$scientific) %>%
+    read_tsv("data/derived_data/taxonomy.tsv")$scientific) %>%
   select(AccSpeciesName, TraitID, TraitName, StdValue, OrigValueStr) %>%
   mutate(value = ifelse(TraitID %in% tlp_codes, as.numeric(OrigValueStr),
     StdValue
@@ -317,7 +317,8 @@ try <- read_tsv("data/raw_data/40982_29042025105444/40982.txt") %>%
   mutate(trait = ifelse(id %in% tlp_codes, "tlp", trait)) %>%
   select(-id) %>%
   mutate(value = ifelse(trait %in% c("Nmass", "Pmass"),
-                        value / 1000, value)) %>%
+    value / 1000, value
+  )) %>%
   mutate(value = ifelse(trait %in% "LMA", 1 / value * 1000, value)) %>%
   mutate(value = ifelse(trait %in% "leafarea", value / 100, value))
 traits <- bind_rows(
@@ -359,7 +360,7 @@ read_tsv("data/derived_data/functional.tsv") %>%
   na.omit() %>%
   group_by(trait) %>%
   summarise(n = n(), p = n() / 505 * 100) %>%
-  knitr::kable(caption = "Gathered species mean values per trait and corresponding coverage of the taxonomy.", digits = 2)  #nolint
+  knitr::kable(caption = "Gathered species mean values per trait and corresponding coverage of the taxonomy.", digits = 2) # nolint
 ```
 
 We thus obtained 37 (7%) to 505 (100%) of parametrised species depending on the trait with most having more than 50% data available. However, we will need still imputation as TROLL only uses non missing inputs.

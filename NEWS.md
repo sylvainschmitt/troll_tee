@@ -1,3 +1,4 @@
+-   troll_tee 0.1.0.9008: all future climate
 -   troll_tee 0.1.0.9007: future pr input and working code, switch to daily as 3-hr not reliable
 -   troll_tee 0.1.0.9006: future pr input (slow cmip6 retrieval to improve)
 -   troll_tee 0.1.0.9005: historical climate input

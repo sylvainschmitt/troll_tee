@@ -71,6 +71,16 @@
       ],
       "Hash": "3aec5928ca10897d7a0a1205aae64627"
     },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.20.0",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.20",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "3c70eb3b78929c0ee452350cea8432a5"
+    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.2.3",
@@ -1740,13 +1750,6 @@
         "methods"
       ],
       "Hash": "4fd8900853b746af55b81fda99da7695"
-    },
-    "ncdf4": {
-      "Package": "ncdf4",
-      "Version": "1.24",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2e2f7c6faeb943039f9f5793eab83482"
     },
     "nlme": {
       "Package": "nlme",

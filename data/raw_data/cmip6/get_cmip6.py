@@ -41,6 +41,5 @@ def get_var(var):
         else:
             print(file + " skipped.")
 
-for var in ['pr', 'sfcWind', 'tas', 'huss', 'rsus', "rsds"]:
+for var in ['pr', 'sfcWind', 'tas', 'hurs', 'rsus', "rsds"]:
     get_var(var)
-    
