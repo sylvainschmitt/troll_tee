@@ -317,6 +317,7 @@ div.csl-indent {
   <li><a href="#weather-stations" id="toc-weather-stations" class="nav-link" data-scroll-target="#weather-stations">Weather stations</a></li>
   <li><a href="#towers" id="toc-towers" class="nav-link" data-scroll-target="#towers">Towers</a></li>
   <li><a href="#half-hourly-downscaling" id="toc-half-hourly-downscaling" class="nav-link" data-scroll-target="#half-hourly-downscaling">Half-hourly downscaling</a></li>
+  <li><a href="#years-spin-up" id="toc-years-spin-up" class="nav-link" data-scroll-target="#years-spin-up">600-years spin-up</a></li>
   </ul>
 </nav>
     </div>
@@ -579,11 +580,45 @@ div.csl-indent {
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> <span class="fu">as.factor</span>(raw))) <span class="sc">+</span></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">nrow =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"1980-01-01"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"1980-01-01"</span>) <span class="sc">+</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="24_historical_climate_files/figure-html/downscaling-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+</section>
+<section id="years-spin-up" class="level2">
+<h2 class="anchored" data-anchor-id="years-spin-up">600-years spin-up</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sampled_years <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1980</span><span class="sc">:</span><span class="dv">2024</span>, <span class="dv">600</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>year_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">orig_year =</span> sampled_years) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sim_year =</span> (<span class="fu">max</span>(sampled_years)<span class="sc">-</span><span class="dv">600</span><span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span><span class="fu">max</span>(sampled_years))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(year_df, <span class="fu">aes</span>(sim_year, orig_year)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">"lightgrey"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Simulation year"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Original climate year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="24_historical_climate_files/figure-html/sel_years-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>era <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"data/derived_data/climate.tsv"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>spinup <span class="ot">&lt;-</span> year_df <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">mutate</span>(era, <span class="at">orig_year =</span> <span class="fu">year</span>(date)),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">relationship =</span> <span class="st">"many-to-many"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(orig_year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">months_diff =</span> (sim_year <span class="sc">-</span> orig_year)<span class="sc">*</span><span class="dv">12</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> date <span class="sc">%m+%</span> <span class="fu">months</span>(months_diff)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>months_diff)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(spinup, <span class="st">"data/derived_data/climate_spinup.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 
 

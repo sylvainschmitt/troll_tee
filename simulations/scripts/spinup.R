@@ -17,7 +17,7 @@ delta <- as.numeric(snakemake@params$delta)
 test <- snakemake@params$test
 
 # test
-# climate_file <- "data/derived_data/climate.tsv"
+# climate_file <- "data/derived_data/climate_spinup.tsv"
 # species_file <- "data/derived_data/species.tsv"
 # soil_file <- "data/derived_data/soil.tsv"
 # folderout <- "results/spinup/R1"
@@ -102,6 +102,7 @@ parameters <- mutate(parameters, value = ifelse(param == "Rseed", seed, value))
 species <- read_tsv(species_file) %>% 
   rename(name = scientific, dbhmax = dbhthres, hmax = hlim) %>% 
   rename_all(~ paste0("s_", .)) %>% 
+  mutate(s_name = gsub(" ", "_", s_name)) %>% 
   mutate(s_seedmass = 1, s_regionalfreq = 1/n()) %>% 
   select(s_name, s_LMA, s_Nmass, s_Pmass, s_wsg, s_dbhmax, s_hmax, s_ah,
          s_seedmass, s_regionalfreq, s_tlp, s_leafarea)
@@ -112,10 +113,10 @@ sim <- troll(
   name = name,
   path = gsub(name, "", folderout),
   global = parameters,
-  species = species, 
+  species = species,
   climate = clim,
   daily = day,
-  pedology = soil, 
+  pedology = soil,
   load = FALSE,
   verbose = TRUE,
   overwrite = TRUE

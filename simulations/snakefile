@@ -8,9 +8,9 @@ rule all:
 
 rule spinup:
     input:
-        "../data/derived_data/climate.tsv",
-        "../data/derived_data/species.tsv",
-        "../data/derived_data/soil.tsv"
+        "data/climate_spinup.tsv",
+        "data/species.tsv",
+        "data/soil.tsv"
     output:
         directory("results/spinup/{rep}")
     log:

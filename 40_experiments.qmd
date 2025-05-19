@@ -17,3 +17,12 @@ knitr::include_graphics("figures/tee_fig.png")
     2.  *effect of diversity?*
 
 Obviously limits reflecting other current developments should be mentioned or integrated if ready (microclimate, water table depth, computing efficiency, ...) and this could open on future works (forest on shallow water table depth, selectively logged forests).
+
+Bla
+
+``` bash
+snakemake -np
+sbatch job.sh
+```
+
+## 

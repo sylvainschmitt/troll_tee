@@ -210,5 +210,34 @@ filter(era_ds, as_date(date) == "1980-01-01") %>%
   geom_point(aes(col = as.factor(raw))) +
   facet_wrap(~variable, scales = "free_y", nrow = 5) +
   theme_bw() +
-  ggtitle("1980-01-01")
+  ggtitle("1980-01-01") +
+  xlab("") + ylab("")
+```
+
+## 600-years spin-up
+
+```{r sel_years}
+#| message: false
+#| warning: false
+sampled_years <- sample(1980:2024, 600, replace = TRUE)
+year_df <- data.frame(orig_year = sampled_years) %>% 
+  mutate(sim_year = (max(sampled_years)-600+1):max(sampled_years))
+ggplot(year_df, aes(sim_year, orig_year)) +
+  geom_line(col = "lightgrey") +
+  geom_point() +
+  theme_bw() +
+  xlab("Simulation year") + ylab("Original climate year")
+```
+
+```{r prep_spinup}
+#| eval: false
+era <- read_tsv("data/derived_data/climate.tsv")
+spinup <- year_df %>% 
+  left_join(mutate(era, orig_year = year(date)),
+            relationship = "many-to-many",
+            by = join_by(orig_year)) %>% 
+  mutate(months_diff = (sim_year - orig_year)*12) %>% 
+  mutate(date = date %m+% months(months_diff)) %>% 
+  select(-months_diff)
+write_tsv(spinup, "data/derived_data/climate_spinup.tsv")
 ```

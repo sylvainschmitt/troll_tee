@@ -4,61 +4,9 @@ __default__:
   cpus: 1
   time: "48:00:00"
 
-# spinup v4
-calib_str4:
-  jobname: "calib_str4"
+spinup:
+  jobname: "spinup"
   mem: "10G"
   cpus: 1
   time: "48:00:00"
-
-eval600:
-  jobname: "eval600"
-  mem: "10G"
-  cpus: 1
-  time: "48:00:00"
-  
-# run v4
-calib_pheno:
-  jobname: "calib_pheno"
-  mem: "10G"
-  cpus: 1
-  time: "24:00:00"
-  
-eval:
-  jobname: "eval"
-  mem: "10G"
-  cpus: 1
-  time: "24:00:00"
-  
-# run v3
-calib_str3:
-  jobname: "calib_str3"
-  mem: "10G"
-  cpus: 1
-  time: "2:00:00"
-  
-# short
-merge_str3:
-  jobname: "merge_str3"
-  mem: "10G"
-  cpus: 1
-  time: "01:00:00"
-  
-prepare_clim600:
-  jobname: "prepare_clim600"
-  mem: "10G"
-  cpus: 1
-  time: "01:00:00"
-  
-merge_str4:
-  jobname: "merge_str4"
-  mem: "10G"
-  cpus: 1
-  time: "01:00:00"
-  
-extract_pheno:
-  jobname: "extract_pheno"
-  mem: "10G"
-  cpus: 1
-  time: "01:00:00"  
   
