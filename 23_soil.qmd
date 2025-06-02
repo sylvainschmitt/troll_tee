@@ -18,3 +18,7 @@ read_tsv("data/raw_data/Tapajos_soil_troll.tsv") %>%
   summarise_all(mean) %>%
   knitr::kable(caption = "Soil parameters.", digits = 2)
 ```
+
+This is in agreement with the TFE description [@nepstad2002]:
+
+>  The Oxisol soil (Haplustox) is dominated by kaolinite clay minerals and is free of hardpan or iron oxide concretions in the upper 12 m. This soil is similar to the clay soils described for a study site located in the same forest, and on the same Belterra Clay terrace, ∼10 km from the throughfall exclusion experiment, where surface soil (0–10 cm depth) is 60% clay and 38% sand, bulk density is 1.02–1.23 (g cm^−3^), pH (H~2~O) is 4.2, and total C is 4.2–4.3% \[[*Silver et al.*, 2000](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2001JD000360#jgrd8768-bib-0068)\].

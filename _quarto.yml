@@ -29,7 +29,7 @@ book:
         - 32_fluxes.qmd
     - part: 40_experiments.qmd
       chapters: 
-        - 41_dummy.qmd
+        - 41_spinup.qmd
   appendices:
     - references.qmd
 

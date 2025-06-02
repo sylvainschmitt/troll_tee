@@ -1,0 +1,36 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Spinup {.unnumbered}
+
+```{r}
+read_tsv("simulations/results/spinup/R1/R1_0_final_pattern.txt") %>% 
+  filter(dbh > 10/1000) %>% 
+  group_by(s_name) %>% 
+  summarise(abundance = n()/4) %>% 
+  arrange(desc(abundance)) %>% 
+  mutate(rank = 1:n()) %>% 
+  ggplot(aes(rank, abundance)) +
+  geom_line() +
+  theme_bw() +
+  scale_y_log10()
+```
+
+```{r}
+read_tsv("simulations/results/spinup/R1/R1_0_sumstats.txt") %>% 
+  mutate(date = as_date("0000-01-01") + iter) %>% 
+  select(date, sum10, ba10, agb) %>% 
+  gather(variable, value, -date) %>% 
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~ variable, nrow = 3, scales = "free_y") +
+  theme_bw() +
+  geom_hline(aes(yintercept = value), col = "red",
+             data_frame(value = c(490, 359*10^3, 27.28),
+                        variable = c("sum10", "agb", "ba10"))) +
+  geom_hline(aes(yintercept = value), col = "blue",
+             data_frame(value = c(470, 2*143.7*10^3),
+                        variable = c("sum10", "agb")))
+```

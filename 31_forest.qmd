@@ -4,3 +4,145 @@ library(tidyverse)
 ```
 
 # Forest {.unnumbered}
+
+## Structure
+
+### Control
+
+```{r height}
+#| message: false
+#| warning: false
+terra::rast("data/raw_data/chm/chm_lspikefree_tapajos2012.tif") %>% 
+  as.data.frame(xy = FALSE) %>% 
+  rename(height = spat_A96aTkDLpl6EakG_7172) %>% 
+  group_by(height = round(height)) %>% 
+  summarise(n = n()) %>% 
+  ungroup() %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot(aes(height, p)) +
+  geom_line() +
+  theme_bw() +
+  coord_flip() +
+  ylab("Density [ % ]") +
+  xlab("Height [ m ]")
+```
+
+```{r inventory}
+#| message: false
+#| warning: false
+inventory <- read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv",
+  na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  select(trans, tag, sci_name, fam, x, y, dbh_99, dbh_01, dbh_05, wood_dens) %>%
+  gather(year, dbh, -trans, -tag, -sci_name, -fam, -x, -y, -wood_dens) %>%
+  mutate(year = as.numeric(recode(year,
+    "dbh_99" = "1999",
+    "dbh_01" = "2001", "dbh_05" = "2005"
+  ))) %>%
+  mutate(dbh = as.numeric(dbh)) %>% 
+  mutate(agb = exp(-2.023977 - 0.89563505 * -0.03088733 + 0.92023559 * log(wood_dens) + 
+                     2.79495823 * log(dbh) - 0.04606298 * (log(dbh)^2)) / 1000) %>% 
+  mutate(dbh_class = cut(dbh, breaks = seq(10, 250, by = 5), 
+                         labels = seq(10, 250-5, by = 5)+2.5)) %>% 
+  mutate(dbh_class = as.numeric(as.character(dbh_class))) %>% 
+  mutate(area = ifelse(dbh > 35, 5, 1)) %>% 
+  group_by(trans, year, dbh_class) %>% 
+  summarise(abundance = n()/mean(area),
+            ba = sum((dbh/2)^2*pi)/10^4/mean(area),
+            agb = sum(agb)/mean(area)) %>% 
+  gather(variable, value, -dbh_class, -trans, -year)
+inventory %>% 
+  ggplot(aes(dbh_class, value, group = paste(trans, year))) +
+  geom_line() +
+  facet_wrap(~ variable, scales = "free_y", nrow = 3) +
+  theme_bw() +
+  xlab("") + ylab("")
+```
+
+```{r}
+#| message: false
+#| warning: false
+inventory %>% 
+  group_by(trans, year, variable) %>% 
+  summarise(value = sum(value, na.rm = TRUE)) %>% 
+  group_by(variable) %>% 
+  summarise(mean = mean(value), sd = sd(value)) %>% 
+  knitr::kable()
+```
+
+### TEE
+
+## Composition
+
+### Control
+
+```{r}
+#| message: false
+#| warning: false
+taxo <- read_tsv("data/derived_data/taxonomy.tsv") %>% 
+  rename(sci_name = scientific_raw) %>% 
+  select(sci_name, scientific)
+read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv",
+  na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  select(trans, tag, sci_name, fam, x, y, dbh_99, dbh_01, dbh_05, wood_dens) %>%
+  gather(year, dbh, -trans, -tag, -sci_name, -fam, -x, -y, -wood_dens) %>%
+  mutate(year = as.numeric(recode(year,
+    "dbh_99" = "1999",
+    "dbh_01" = "2001", "dbh_05" = "2005"
+  ))) %>%
+  mutate(dbh = as.numeric(dbh)) %>% 
+  left_join(taxo) %>% 
+  select(-sci_name) %>% 
+  group_by(trans, year, scientific) %>% 
+  summarise(abundance = n()/5) %>% 
+  na.omit() %>% 
+  group_by(trans, year) %>% 
+  arrange(desc(abundance)) %>% 
+  mutate(rank = 1:n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(rank, abundance, group = paste(trans, year))) +
+  geom_line() +
+  theme_bw() +
+  scale_y_log10()
+```
+
+```{r}
+#| message: false
+#| warning: false
+func <- read_tsv("data/derived_data/species.tsv") %>% 
+  gather(trait, value, -scientific)
+taxo <- read_tsv("data/derived_data/taxonomy.tsv") %>% 
+  rename(sci_name = scientific_raw) %>% 
+  select(sci_name, scientific) %>% 
+  left_join(func)
+read_csv("data/raw_data/CD10_DBH_Tapajos_859/data/km_67_tree_surveys_99_05.csv",
+  na = "-9999"
+) %>%
+  rename_all(tolower) %>%
+  select(trans, tag, sci_name, fam, x, y, dbh_99, dbh_01, dbh_05, wood_dens) %>%
+  gather(year, dbh, -trans, -tag, -sci_name, -fam, -x, -y, -wood_dens) %>%
+  mutate(year = as.numeric(recode(year,
+    "dbh_99" = "1999",
+    "dbh_01" = "2001", "dbh_05" = "2005"
+  ))) %>%
+  mutate(dbh = as.numeric(dbh)) %>% 
+  left_join(taxo) %>% 
+  select(-sci_name) %>% 
+  na.omit() %>% 
+  ggplot(aes(value, group = paste(trans, year))) +
+  geom_density() +
+  theme_bw() +
+  facet_wrap(~ trait, scales = "free") +
+  xlab("") + ylab("")
+```
+
+### TEE
+
+## Dynamics
+
+### Control
+
+### TEE
