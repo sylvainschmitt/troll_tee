@@ -30,6 +30,8 @@ book:
     - part: 40_experiments.qmd
       chapters: 
         - 41_spinup.qmd
+        - 42_experiment.qmd
+        - 43_future.qmd
   appendices:
     - references.qmd
 

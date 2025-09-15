@@ -3,23 +3,15 @@
 library(tidyverse)
 ```
 
-# Spinup {.unnumbered}
+# Spin-up {.unnumbered}
 
-```{r}
-read_tsv("simulations/results/spinup/R1/R1_0_final_pattern.txt") %>% 
-  filter(dbh > 10/1000) %>% 
-  group_by(s_name) %>% 
-  summarise(abundance = n()/4) %>% 
-  arrange(desc(abundance)) %>% 
-  mutate(rank = 1:n()) %>% 
-  ggplot(aes(rank, abundance)) +
-  geom_line() +
-  theme_bw() +
-  scale_y_log10()
-```
+The first spin-up without calibration (using the one of @schmitt2024 based on @rice2004 ) gave acceptable but sub-optimal forest structure. The biomass is slightly under the one given by @nepstad2002, @powell2013 and @rice2004. The basal area is strongly underestimated according to @nepstad2002. And the number of stems is good according @rice2004, but logically as it is the data used for calibration. @rice2004 study site and inventory protocol differs from TEE and @nepstad2002. Thus it is possible that the calibration does not represent well the control forest from TEE. Nonetheless, we will proceed for the moment with this spin-up to develop the proof of concept, looking at relative hcange in biomass [@powell2013] and not absolute value.
 
-```{r}
-read_tsv("simulations/results/spinup/R1/R1_0_sumstats.txt") %>% 
+```{r spinup}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+read_tsv("simulations/results0/spinup/R1/R1_0_sumstats.txt") %>% 
   mutate(date = as_date("0000-01-01") + iter) %>% 
   select(date, sum10, ba10, agb) %>% 
   gather(variable, value, -date) %>% 
@@ -27,10 +19,15 @@ read_tsv("simulations/results/spinup/R1/R1_0_sumstats.txt") %>%
   geom_line() +
   facet_wrap(~ variable, nrow = 3, scales = "free_y") +
   theme_bw() +
-  geom_hline(aes(yintercept = value), col = "red",
-             data_frame(value = c(490, 359*10^3, 27.28),
-                        variable = c("sum10", "agb", "ba10"))) +
-  geom_hline(aes(yintercept = value), col = "blue",
+  geom_hline(aes(yintercept = value, col = "Nepstad et al. (2002)"),
+             data_frame(value = c(305*10^3, 30),
+                        variable = c("agb", "ba10"))) +
+  geom_hline(aes(yintercept = value, col = "Rice et al. (2004)"),
              data_frame(value = c(470, 2*143.7*10^3),
-                        variable = c("sum10", "agb")))
+                        variable = c("sum10", "agb"))) +
+  geom_hline(aes(yintercept = value, col = "Powell et al. (2013)"),
+             data_frame(value = c(2*144*10^3),
+                        variable = c("agb"))) +
+  scale_color_discrete("") +
+  theme(legend.position = "bottom", axis.title = element_blank())
 ```

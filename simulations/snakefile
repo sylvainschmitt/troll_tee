@@ -4,7 +4,9 @@ reps = ["R" + str(item) for item in list(range(1, config["rep"]+1))]
 
 rule all:
    input:
-        expand("results/spinup/{rep}", rep=reps)
+        # expand("results/spinup/{rep}", rep=reps)
+        expand("results/control/{rep}", rep=reps),
+        expand("results/experiment/{rep}", rep=reps)
 
 rule spinup:
     input:
@@ -31,3 +33,38 @@ rule spinup:
     script:
         "scripts/spinup.R"
         
+rule control:
+    input:
+        "results/spinup/{rep}",
+        "data/climate_control.tsv"
+    output:
+        directory("results/control/{rep}")
+    log:
+        "results/logs/control_{rep}.log"
+    benchmark:
+        "results/benchmarks/control_{rep}.benchmark.txt"
+    singularity:
+        config["troll"]
+    threads: 1
+    params:
+        test=config["test"]
+    script:
+        "scripts/control.R"
+        
+rule experiment:
+    input:
+        "results/spinup/{rep}",
+        "data/climate_experiment.tsv"
+    output:
+        directory("results/experiment/{rep}")
+    log:
+        "results/logs/experiment_{rep}.log"
+    benchmark:
+        "results/benchmarks/experiment_{rep}.benchmark.txt"
+    singularity:
+        config["troll"]
+    threads: 1
+    params:
+        test=config["test"]
+    script:
+        "scripts/experiment.R"

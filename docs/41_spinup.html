@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>TROLL TEE - Spinup</title>
+<title>TROLL TEE - Spin-up</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -64,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./42_experiment.html" rel="next">
 <link href="./40_experiments.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -108,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./40_experiments.html">Virtual experiments</a></li><li class="breadcrumb-item"><a href="./41_spinup.html">Spinup</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./40_experiments.html">Virtual experiments</a></li><li class="breadcrumb-item"><a href="./41_spinup.html">Spin-up</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -262,7 +281,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41_spinup.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Spinup</span></a>
+ <span class="menu-text">Spin-up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42_experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Experiment</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./43_future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Future</span></a>
   </div>
 </li>
       </ul>
@@ -297,7 +328,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Spinup</h1>
+<h1 class="title">Spin-up</h1>
 </div>
 
 
@@ -312,71 +343,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<p>The first spin-up without calibration (using the one of <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span> based on <span class="citation" data-cites="rice2004">Rice et al. (<a href="references.html#ref-rice2004" role="doc-biblioref">2004</a>)</span> ) gave acceptable but sub-optimal forest structure. The biomass is slightly under the one given by <span class="citation" data-cites="nepstad2002">Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span>, <span class="citation" data-cites="powell2013">Powell et al. (<a href="references.html#ref-powell2013" role="doc-biblioref">2013</a>)</span> and <span class="citation" data-cites="rice2004">Rice et al. (<a href="references.html#ref-rice2004" role="doc-biblioref">2004</a>)</span>. The basal area is strongly underestimated according to <span class="citation" data-cites="nepstad2002">Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span>. And the number of stems is good according <span class="citation" data-cites="rice2004">Rice et al. (<a href="references.html#ref-rice2004" role="doc-biblioref">2004</a>)</span>, but logically as it is the data used for calibration. <span class="citation" data-cites="rice2004">Rice et al. (<a href="references.html#ref-rice2004" role="doc-biblioref">2004</a>)</span> study site and inventory protocol differs from TEE and <span class="citation" data-cites="nepstad2002">Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span>. Thus it is possible that the calibration does not represent well the control forest from TEE. Nonetheless, we will proceed for the moment with this spin-up to develop the proof of concept, looking at relative hcange in biomass <span class="citation" data-cites="powell2013">(<a href="references.html#ref-powell2013" role="doc-biblioref">Powell et al. 2013</a>)</span> and not absolute value.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"simulations/results/spinup/R1/R1_0_final_pattern.txt"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dbh <span class="sc">&gt;</span> <span class="dv">10</span><span class="sc">/</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(s_name) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">abundance =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(abundance)) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rank, abundance)) <span class="sc">+</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"simulations/results0/spinup/R1/R1_0_sumstats.txt"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="st">"0000-01-01"</span>) <span class="sc">+</span> iter) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, sum10, ba10, agb) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, value, <span class="sc">-</span>date) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, value)) <span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> value, <span class="at">col =</span> <span class="st">"Nepstad et al. (2002)"</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>             <span class="fu">data_frame</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="dv">305</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>, <span class="dv">30</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"agb"</span>, <span class="st">"ba10"</span>))) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> value, <span class="at">col =</span> <span class="st">"Rice et al. (2004)"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>             <span class="fu">data_frame</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="dv">470</span>, <span class="dv">2</span><span class="sc">*</span><span class="fl">143.7</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"sum10"</span>, <span class="st">"agb"</span>))) <span class="sc">+</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> value, <span class="at">col =</span> <span class="st">"Powell et al. (2013)"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>             <span class="fu">data_frame</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">*</span><span class="dv">144</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                        <span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"agb"</span>))) <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>, <span class="at">axis.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 20314 Columns: 82
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: "\t"
-chr  (1): s_name
-dbl (81): iter, col, row, from_Data, sp_lab, site, CrownDisplacement, Pmass,...
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
 <div class="cell-output-display">
-<p><img src="41_spinup_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="41_spinup_files/figure-html/spinup-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Caption.</figcaption>
+</figure>
 </div>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"simulations/results/spinup/R1/R1_0_sumstats.txt"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="st">"0000-01-01"</span>) <span class="sc">+</span> iter) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, sum10, ba10, agb) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, value, <span class="sc">-</span>date) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, value)) <span class="sc">+</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> variable, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> value), <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>             <span class="fu">data_frame</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="dv">490</span>, <span class="dv">359</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>, <span class="fl">27.28</span>),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"sum10"</span>, <span class="st">"agb"</span>, <span class="st">"ba10"</span>))) <span class="sc">+</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> value), <span class="at">col =</span> <span class="st">"blue"</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>             <span class="fu">data_frame</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="dv">470</span>, <span class="dv">2</span><span class="sc">*</span><span class="fl">143.7</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>),</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"sum10"</span>, <span class="st">"agb"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 219000 Columns: 13
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: "\t"
-dbl (13): iter, sum1, sum10, sum30, ba, ba10, agb, gpp, npp, rday, rnight, r...
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: `data_frame()` was deprecated in tibble 1.1.0.
-ℹ Please use `tibble()` instead.</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="41_spinup_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-nepstad2002" class="csl-entry" role="listitem">
+Nepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot, D. Markewitz, R. Figueiredo, et al. 2002. <span>“The Effects of Partial Throughfall Exclusion on Canopy Processes, Aboveground Production, and Biogeochemistry of an Amazon Forest.”</span> <em>Journal of Geophysical Research: Atmospheres</em> 107 (D20). <a href="https://doi.org/10.1029/2001jd000360">https://doi.org/10.1029/2001jd000360</a>.
+</div>
+<div id="ref-powell2013" class="csl-entry" role="listitem">
+Powell, Thomas L., David R. Galbraith, Bradley O. Christoffersen, Anna Harper, Hewlley M. A. Imbuzeiro, Lucy Rowland, Samuel Almeida, et al. 2013. <span>“Confronting Model Predictions of Carbon Fluxes with Measurements of Amazon Forests Subjected to Experimental Drought.”</span> <em>New Phytologist</em> 200 (2): 350–65. <a href="https://doi.org/10.1111/nph.12390">https://doi.org/10.1111/nph.12390</a>.
+</div>
+<div id="ref-rice2004" class="csl-entry" role="listitem">
+Rice, Amy H., Elizabeth Hammond Pyle, Scott R. Saleska, Lucy Hutyra, Michael Palace, Michael Keller, Plínio B. de Camargo, Kleber Portilho, Dulcyana F. Marques, and Steven C. Wofsy. 2004. <span>“CARBON BALANCE AND VEGETATION DYNAMICS IN AN OLD<span>-</span>GROWTH AMAZONIAN FOREST.”</span> <em>Ecological Applications</em> 14 (sp4): 55–71. <a href="https://doi.org/10.1890/02-6006">https://doi.org/10.1890/02-6006</a>.
+</div>
+<div id="ref-schmitt2024" class="csl-entry" role="listitem">
+Schmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. <span>“TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model <span></span> Part 2: Model Evaluation for Two Amazonian Sites.”</span> <a href="http://dx.doi.org/10.5194/egusphere-2024-3106">http://dx.doi.org/10.5194/egusphere-2024-3106</a>.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -619,8 +634,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./42_experiment.html" class="pagination-link">
+        <span class="nav-page-text">Experiment</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

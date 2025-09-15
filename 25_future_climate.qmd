@@ -5,7 +5,7 @@ library(tidyverse)
 
 # Future climate {.unnumbered}
 
-> **Summary.** Future climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 [@neill2016]. Daily values were statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt [@vrac2015]. Half-hourly values were downscaled using daily mean variations across years from ERA5-Land.
+> **Summary.** Future climate forcing from CMIP6 GCM between 1980 and 2100 under low emission scenarii SSP1-2.6 and high emission scenarii SSP5-8.5 [@neill2016]. The daily values from the CMIP6 GCMs were statistically corrected for bias using the daily values of the ERA5-Land historical dataset via a cumulative distribution function transformation (CDFt; @vrac2015). This was done independently for each month to preserve the seasonal variations. The daily values from the CMIP6 GCMs were then statistically downscaled to half-hourly values using the daily mean variations from the half-hourly ERA5-Land values across years.
 
 ```{r assemble}
 #| eval: false

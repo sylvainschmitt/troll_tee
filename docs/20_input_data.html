@@ -247,7 +247,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41_spinup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Spinup</span></a>
+ <span class="menu-text">Spin-up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42_experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Experiment</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./43_future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Future</span></a>
   </div>
 </li>
       </ul>
@@ -298,7 +310,7 @@ div.csl-indent {
 </header>
 
 <blockquote class="blockquote">
-<p><strong>Summary</strong>. Global parameters were taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. Taxonomy and maximum diameter were taken from LBA inventories. Allometric height parameters were inferred from TALLO <span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, and leaf, wood, and hydraulic traits were taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>, TRY <span class="citation" data-cites="kattge2019">(<a href="references.html#ref-kattge2019" role="doc-biblioref">Kattge et al. 2019</a>)</span>, and BIOMASS <span class="citation" data-cites="réjou-méchain2017">(<a href="references.html#ref-réjou-méchain2017" role="doc-biblioref">Réjou-Méchain et al. 2017</a>)</span>. Missing traits were imputed using <code>missForest</code> with phylogeny <span class="citation" data-cites="gendre2024">(<a href="references.html#ref-gendre2024" role="doc-biblioref">Gendre et al. 2024</a>)</span>. Soil parameters were also taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. Historical climate forcing from ERA5-Land between 1980 and 2025 was used as it showed a good correlation with local measurements. Future climate forcing was obtained from CMIP6 GCMs between 1980 and 2100 under low-emission scenarios SSP1-2.6 and high-emission scenarios SSP5-8.5 <span class="citation" data-cites="neill2016">(<a href="references.html#ref-neill2016" role="doc-biblioref">O’Neill et al. 2016</a>)</span>. Daily values were statistically downscaled on ERA5-Land historical data per month using cumulative distribution function transformation CDFt <span class="citation" data-cites="vrac2015">(<a href="references.html#ref-vrac2015" role="doc-biblioref">Vrac 2015</a>)</span>. Half-hourly values were downscaled using daily mean variations across years from ERA5-Land.</p>
+<p><strong>Summary</strong>. Global parameters were taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. Taxonomy and maximum diameter were taken from LBA inventories. Allometric height parameters were inferred from TALLO <span class="citation" data-cites="jucker2022">(<a href="references.html#ref-jucker2022" role="doc-biblioref">Jucker et al. 2022</a>)</span>, and leaf, wood, and hydraulic traits were taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>, TRY <span class="citation" data-cites="kattge2019">(<a href="references.html#ref-kattge2019" role="doc-biblioref">Kattge et al. 2019</a>)</span>, and BIOMASS <span class="citation" data-cites="réjou-méchain2017">(<a href="references.html#ref-réjou-méchain2017" role="doc-biblioref">Réjou-Méchain et al. 2017</a>)</span>. Missing traits were imputed using <code>missForest</code> with phylogeny <span class="citation" data-cites="gendre2024">(<a href="references.html#ref-gendre2024" role="doc-biblioref">Gendre et al. 2024</a>)</span>. Soil parameters were also taken from <span class="citation" data-cites="schmitt2024">Schmitt et al. (<a href="references.html#ref-schmitt2024" role="doc-biblioref">2024</a>)</span>. Historical climate forcing from ERA5-Land between 1980 and 2025 was used as it showed a good correlation with local measurements. Future climate forcing was obtained from CMIP6 GCMs between 1980 and 2100 under low-emission scenarios SSP1-2.6 and high-emission scenarios SSP5-8.5 <span class="citation" data-cites="neill2016">(<a href="references.html#ref-neill2016" role="doc-biblioref">O’Neill et al. 2016</a>)</span>. The daily values from the CMIP6 GCMs were statistically corrected for bias using the daily values of the ERA5-Land historical dataset via a cumulative distribution function transformation (CDFt; @vrac2015). This was done independently for each month to preserve the seasonal variations. The daily values from the CMIP6 GCMs were then statistically downscaled to half-hourly values using the daily mean variations from the half-hourly ERA5-Land values across years.</p>
 </blockquote>
 
 
@@ -320,9 +332,6 @@ Réjou-Méchain, Maxime, Ariane Tanguy, Camille Piponiot, Jérôme Chave, and Br
 </div>
 <div id="ref-schmitt2024" class="csl-entry" role="listitem">
 Schmitt, Sylvain, Fabian Fischer, James Ball, Nicolas Barbier, Marion Boisseaux, Damien Bonal, Benoit Burban, et al. 2024. <span>“TROLL 4.0: Representing Water and Carbon Fluxes, Leaf Phenology, and Intraspecific Trait Variation in a Mixed-Species Individual-Based Forest Dynamics Model <span></span> Part 2: Model Evaluation for Two Amazonian Sites.”</span> <a href="http://dx.doi.org/10.5194/egusphere-2024-3106">http://dx.doi.org/10.5194/egusphere-2024-3106</a>.
-</div>
-<div id="ref-vrac2015" class="csl-entry" role="listitem">
-Vrac, Mathieu. 2015. <span>“Package <span>‘CDFt’</span>.”</span>
 </div>
 </div>
 

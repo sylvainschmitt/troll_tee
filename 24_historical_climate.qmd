@@ -241,3 +241,62 @@ spinup <- year_df %>%
   select(-months_diff)
 write_tsv(spinup, "data/derived_data/climate_spinup.tsv")
 ```
+
+## Experiment
+
+Similarly to @powell2013, we will simulate back the Tapajos TEE from 1999 to 2006 starting back from the spin-up.
+
+### Control
+
+For the control we simply need to extract the desired years.
+
+```{r prep_control}
+#| message: false
+#| warning: false
+read_tsv("data/derived_data/climate.tsv") %>% 
+  filter(year(date) %in% 1999:2006) %>% 
+  write_tsv("data/derived_data/climate_control.tsv")
+read_tsv("data/derived_data/climate_control.tsv") %>% 
+  gather(variable, value, -date) %>% 
+  group_by(variable, date = floor_date(date, "day")) %>%
+  mutate(value = ifelse(variable %in% c("pr"),
+    sum(value, na.rm = TRUE), value
+  )) %>%
+  summarise_all(mean) %>%
+  ggplot(aes(date, value)) +
+  geom_line() +
+  facet_wrap(~variable, scales = "free_y", nrow = 5) +
+  theme_bw() +
+  xlab("") +
+  ylab("")
+```
+
+### TEE - Throughfall Exclusion Experiment
+
+According to @nepstad2002 precipitation in excluded experiment can be computed from precipitation input as $pr_{exp}=0.484 \times pr_{in} + 0.073$ (Fig. 3 in @nepstad2002). In addition, exclusion must be simulated from 6 February to 7 August 2000 and from 7 January to 31 May 2001 [@nepstad2002].
+
+```{r}
+#| message: false
+#| warning: false
+read_tsv("data/derived_data/climate_control.tsv") %>% 
+  mutate(exclusion = (as_date(date) %in% c(seq(ymd("2000-02-06"), 
+                                               ymd("2000-08-07"), 
+                                               by = "day"),
+                                           seq(ymd("2001-01-07"), 
+                                               ymd("2001-05-31"), 
+                                               by = "day")))) %>% 
+  mutate(exclusion = as.numeric(exclusion)) %>% 
+  mutate(pr = ifelse(exclusion == 1, 0.484*pr+0.073, pr)) %>% 
+  write_tsv("data/derived_data/climate_experiment.tsv")
+  
+read_tsv("data/derived_data/climate_experiment.tsv") %>% 
+  group_by(exclusion, date = floor_date(date, "day")) %>%
+  summarise(pr = sum(pr, na.rm = TRUE)) %>%
+  ggplot(aes(date, pr, col = as.character(exclusion))) +
+  geom_line(aes(group = NA)) +
+  facet_wrap(~year(date), scales = "free") +
+  theme_bw() +
+  ylab("Precipitaiton [ mm ]") +
+  xlab("") +
+  scale_color_manual(guide = "none", values = c("black", "firebrick"))
+```

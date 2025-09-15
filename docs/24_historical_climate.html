@@ -115,6 +115,8 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -281,7 +283,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41_spinup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Spinup</span></a>
+ <span class="menu-text">Spin-up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./42_experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Experiment</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./43_future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Future</span></a>
   </div>
 </li>
       </ul>
@@ -318,6 +332,11 @@ div.csl-indent {
   <li><a href="#towers" id="toc-towers" class="nav-link" data-scroll-target="#towers">Towers</a></li>
   <li><a href="#half-hourly-downscaling" id="toc-half-hourly-downscaling" class="nav-link" data-scroll-target="#half-hourly-downscaling">Half-hourly downscaling</a></li>
   <li><a href="#years-spin-up" id="toc-years-spin-up" class="nav-link" data-scroll-target="#years-spin-up">600-years spin-up</a></li>
+  <li><a href="#experiment" id="toc-experiment" class="nav-link" data-scroll-target="#experiment">Experiment</a>
+  <ul class="collapse">
+  <li><a href="#control" id="toc-control" class="nav-link" data-scroll-target="#control">Control</a></li>
+  <li><a href="#tee---throughfall-exclusion-experiment" id="toc-tee---throughfall-exclusion-experiment" class="nav-link" data-scroll-target="#tee---throughfall-exclusion-experiment">TEE - Throughfall Exclusion Experiment</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -620,13 +639,84 @@ div.csl-indent {
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(spinup, <span class="st">"data/derived_data/climate_spinup.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="experiment" class="level2">
+<h2 class="anchored" data-anchor-id="experiment">Experiment</h2>
+<p>Similarly to <span class="citation" data-cites="powell2013">Powell et al. (<a href="references.html#ref-powell2013" role="doc-biblioref">2013</a>)</span>, we will simulate back the Tapajos TEE from 1999 to 2006 starting back from the spin-up.</p>
+<section id="control" class="level3">
+<h3 class="anchored" data-anchor-id="control">Control</h3>
+<p>For the control we simply need to extract the desired years.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/derived_data/climate.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(date) <span class="sc">%in%</span> <span class="dv">1999</span><span class="sc">:</span><span class="dv">2006</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">"data/derived_data/climate_control.tsv"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/derived_data/climate_control.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(variable, value, <span class="sc">-</span>date) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(variable, <span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"day"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">ifelse</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"pr"</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), value</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(mean) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, value)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">nrow =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="24_historical_climate_files/figure-html/prep_control-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="tee---throughfall-exclusion-experiment" class="level3">
+<h3 class="anchored" data-anchor-id="tee---throughfall-exclusion-experiment">TEE - Throughfall Exclusion Experiment</h3>
+<p>According to <span class="citation" data-cites="nepstad2002">Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span> precipitation in excluded experiment can be computed from precipitation input as <span class="math inline">\(pr_{exp}=0.484 \times pr_{in} + 0.073\)</span> (Fig. 3 in <span class="citation" data-cites="nepstad2002">Nepstad et al. (<a href="references.html#ref-nepstad2002" role="doc-biblioref">2002</a>)</span>). In addition, exclusion must be simulated from 6 February to 7 August 2000 and from 7 January to 31 May 2001 <span class="citation" data-cites="nepstad2002">(<a href="references.html#ref-nepstad2002" role="doc-biblioref">Nepstad et al. 2002</a>)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/derived_data/climate_control.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exclusion =</span> (<span class="fu">as_date</span>(date) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">ymd</span>(<span class="st">"2000-02-06"</span>), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                               <span class="fu">ymd</span>(<span class="st">"2000-08-07"</span>), </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">by =</span> <span class="st">"day"</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">seq</span>(<span class="fu">ymd</span>(<span class="st">"2001-01-07"</span>), </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                               <span class="fu">ymd</span>(<span class="st">"2001-05-31"</span>), </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">by =</span> <span class="st">"day"</span>)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exclusion =</span> <span class="fu">as.numeric</span>(exclusion)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pr =</span> <span class="fu">ifelse</span>(exclusion <span class="sc">==</span> <span class="dv">1</span>, <span class="fl">0.484</span><span class="sc">*</span>pr<span class="fl">+0.073</span>, pr)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">"data/derived_data/climate_experiment.tsv"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"data/derived_data/climate_experiment.tsv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(exclusion, <span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"day"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">pr =</span> <span class="fu">sum</span>(pr, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, pr, <span class="at">col =</span> <span class="fu">as.character</span>(exclusion))) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span><span class="fu">year</span>(date), <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Precipitaiton [ mm ]"</span>) <span class="sc">+</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">guide =</span> <span class="st">"none"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"firebrick"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="24_historical_climate_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-muñoz-sabater2021" class="csl-entry" role="listitem">
 Muñoz-Sabater, Joaquín, Emanuel Dutra, Anna Agustí-Panareda, Clément Albergel, Gabriele Arduini, Gianpaolo Balsamo, Souhail Boussetta, et al. 2021. <span>“ERA5-Land: A State-of-the-Art Global Reanalysis Dataset for Land Applications.”</span> <em>Earth System Science Data</em> 13 (9): 4349–83. <a href="https://doi.org/10.5194/essd-13-4349-2021">https://doi.org/10.5194/essd-13-4349-2021</a>.
 </div>
+<div id="ref-nepstad2002" class="csl-entry" role="listitem">
+Nepstad, D. C., P. Moutinho, M. B. Dias-Filho, E. Davidson, G. Cardinot, D. Markewitz, R. Figueiredo, et al. 2002. <span>“The Effects of Partial Throughfall Exclusion on Canopy Processes, Aboveground Production, and Biogeochemistry of an Amazon Forest.”</span> <em>Journal of Geophysical Research: Atmospheres</em> 107 (D20). <a href="https://doi.org/10.1029/2001jd000360">https://doi.org/10.1029/2001jd000360</a>.
 </div>
+<div id="ref-powell2013" class="csl-entry" role="listitem">
+Powell, Thomas L., David R. Galbraith, Bradley O. Christoffersen, Anna Harper, Hewlley M. A. Imbuzeiro, Lucy Rowland, Samuel Almeida, et al. 2013. <span>“Confronting Model Predictions of Carbon Fluxes with Measurements of Amazon Forests Subjected to Experimental Drought.”</span> <em>New Phytologist</em> 200 (2): 350–65. <a href="https://doi.org/10.1111/nph.12390">https://doi.org/10.1111/nph.12390</a>.
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->

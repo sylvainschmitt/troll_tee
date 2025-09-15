@@ -1,0 +1,73 @@
+```{r set}
+#| include: false
+library(tidyverse)
+```
+
+# Experiment {.unnumbered}
+
+A fast experiment to prove the concept revealed the expected drop in biomass, with a loss of between 2 and 4 $kgC~m^{-2}$, which is pretty similar to the loss observed in the data from Figure 1 of @powell2013, but with an earlier onset, starting in 2001 compared to 2002 in the observed data, and possibly faster recovery than expected. Furthermore, despite using the same weather data, the simulation of the experiment randomly produced a lower biomass prior to the reduction in simulated rainfall. This obviously needs to be replicated in both spin-up and experimental processes.
+
+```{r delta_agb}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+data <- list(
+  control = read_tsv("simulations/results0/control/R1/R1_0_sumstats.txt"),
+  experiment = read_tsv("simulations/results0/experiment/R1/R1_0_sumstats.txt")
+) %>% bind_rows(.id = "type") %>% 
+  mutate(date = as_date("1999-01-01") + iter) %>% 
+  select(type, date, agb) %>% 
+  mutate(agb = agb/10^3) %>% 
+  pivot_wider(names_from = type, values_from = agb) %>% 
+  mutate(delta_agb = experiment - control)
+data_y <- data %>% 
+  group_by(date = floor_date(date, "year")) %>% 
+  summarise(delta_agb = mean(delta_agb))
+data %>% 
+  ggplot(aes(date, delta_agb)) +
+  geom_rect(aes(xmin = date, xmax = end), fill  = "#fff4e0",
+           ymin = -Inf, ymax = Inf, alpha = 0.5,
+           data = data.frame(date = as_date(c("2000-02-06", "2001-01-07")),
+                             delta_agb = -Inf,
+                             end = as_date(c("2000-08-07", "2001-05-31")))) +
+  geom_line(linewidth = .1) +
+  geom_line(data = data_y) +
+  geom_point(data = data_y) +
+  theme_bw() +
+  xlab("") +
+  ylab(expression(Delta~AGB~"["~kgC~m^{-2}~"]")) 
+```
+
+```{r comp}
+#| message: false
+#| warning: false
+#| fig-cap: "Fig. 1 from @powell2013."
+knitr::include_graphics("figures/nph12390-fig-0001-m.jpg")
+```
+
+```{r deltapr}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+list(
+  control = read_tsv("simulations/results0/control/R1/R1_input_climate.txt") %>% 
+    mutate(iter = 1:n()),
+  experiment = read_tsv("simulations/results0/experiment/R1/R1_input_climate.txt") %>% 
+    mutate(iter = 1:n())
+) %>% 
+  bind_rows(.id = "type") %>% 
+  mutate(date = as_date("1999-01-01") + iter) %>% 
+  select(type, date, Rainfall) %>% 
+  pivot_wider(names_from = type, values_from = Rainfall) %>% 
+  mutate(delta_pr = experiment - control) %>% 
+  ggplot(aes(date, delta_pr)) +
+  geom_rect(aes(xmin = date, xmax = end), fill  = "#fff4e0",
+           ymin = -Inf, ymax = Inf, alpha = 0.5,
+           data = data.frame(date = as_date(c("2000-02-06", "2001-01-07")),
+                             delta_pr = -Inf,
+                             end = as_date(c("2000-08-07", "2001-05-31")))) +
+  geom_line(linewidth = .1) +
+  theme_bw()
+```
+
+> Add an ifelse pr \> 0 to avoid positive rainfall in exclusion with the intercept (0.073 mm).
