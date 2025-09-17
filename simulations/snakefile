@@ -6,7 +6,9 @@ rule all:
    input:
         # expand("results/spinup/{rep}", rep=reps)
         expand("results/control/{rep}", rep=reps),
-        expand("results/experiment/{rep}", rep=reps)
+        expand("results/experiment/{rep}", rep=reps),
+        expand("results/future/{scenario}/{gcm}/{rep}", rep=reps,
+                scenario=config["scenario"], gcm=config["gcm"])
 
 rule spinup:
     input:
@@ -68,3 +70,24 @@ rule experiment:
         test=config["test"]
     script:
         "scripts/experiment.R"
+        
+rule future:
+    input:
+        "results/spinup/{rep}",
+        "data/projections_hh.tsv"
+    output:
+        directory("results/future/{scenario}/{gcm}/{rep}")
+    log:
+        "results/logs/future_{scenario}_{gcm}_{rep}.log"
+    benchmark:
+        "results/benchmarks/future_{scenario}_{gcm}_{rep}.benchmark.txt"
+    singularity:
+        config["troll"]
+    threads: 1
+    params:
+        scenario="{scenario}",
+        gcm="{gcm}",
+        test=config["test"]
+    script:
+        "scripts/future.R"
+        

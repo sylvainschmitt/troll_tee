@@ -4,3 +4,57 @@ library(tidyverse)
 ```
 
 # Future {.unnumbered}
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+list(
+  "SSP1-2.6" = read_tsv("simulations/results0/future/SSP126/MPI-ESM1-2-LR/R1/R1_0_sumstats.txt"),
+  "SSP5-8.5" = read_tsv("simulations/results0/future/SSP585/MPI-ESM1-2-LR/R1/R1_0_sumstats.txt")
+) %>% bind_rows(.id = "type") %>% 
+  mutate(date = as_date("1979-01-01") + iter) %>% 
+  ggplot(aes(date, agb, col = type)) +
+  geom_line() +
+  theme_bw()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+list(
+  "SSP1-2.6" = read_tsv("simulations/results0/future/SSP126/MPI-ESM1-2-LR/R1/R1_input_climate.txt"),
+  "SSP5-8.5" = read_tsv("simulations/results0/future/SSP585/MPI-ESM1-2-LR/R1/R1_input_climate.txt")
+) %>% bind_rows(.id = "type") %>% 
+  group_by(type) %>% 
+  mutate(iter = 1:n()) %>% 
+  mutate(date = as_date("1979-01-01") + iter - 1) %>% 
+  group_by(type, date = floor_date(date, "year")) %>% 
+  summarise(pr = sum(Rainfall)) %>% 
+  ggplot(aes(date, pr, col = type)) +
+  geom_line() +
+  theme_bw()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-cap: "Caption."
+list(
+  "SSP1-2.6" = read_tsv("simulations/results0/future/SSP126/MPI-ESM1-2-LR/R1/R1_input_daily.txt"),
+  "SSP5-8.5" = read_tsv("simulations/results0/future/SSP585/MPI-ESM1-2-LR/R1/R1_input_daily.txt")
+) %>% bind_rows(.id = "type") %>% 
+  group_by(type, DayJulian) %>% 
+  summarise_all(mean) %>% 
+  mutate(iter = 1:n()) %>% 
+  mutate(date = as_date("1979-01-01") + iter - 1) %>% 
+  group_by(type, date = floor_date(date, "year")) %>% 
+  summarise_all(mean) %>% 
+  select(-DayJulian, -time_numeric, -iter) %>% 
+  gather(variable, value, -type, -date) %>% 
+  ggplot(aes(date, value, col = type)) +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~ variable, scales = "free")
+```
